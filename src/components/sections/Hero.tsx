@@ -29,7 +29,7 @@ export function Hero() {
   return (
     <section className="relative pt-32 pb-20 overflow-hidden">
       <motion.div
-        className="mx-auto max-w-[44rem] px-6 text-center"
+        className="mx-auto max-w-narrow px-6 text-center"
         variants={stagger}
         initial="hidden"
         animate="visible"
@@ -38,9 +38,7 @@ export function Hero() {
           className="text-5xl font-semibold tracking-tight text-text sm:text-6xl lg:text-[4.5rem] lg:leading-[1.05]"
           variants={fadeUp}
         >
-          Your database,
-          <br />
-          navigable.
+          Your database, navigable.
         </motion.h1>
 
         <motion.p

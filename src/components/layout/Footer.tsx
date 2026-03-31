@@ -28,18 +28,18 @@ const footerSections = [
 export function Footer() {
   return (
     <footer className="border-t border-border bg-surface-2">
-      <div className="mx-auto max-w-[68rem] px-6 py-16">
+      <div className="mx-auto max-w-content px-6 py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5">
-              <img src="/app-icon.png" alt="SlashTable" className="h-6 w-6" />
+              <img src="/app-icon.png" alt="slashtable" className="h-6 w-6" />
               <span className="font-mono text-sm font-semibold text-text">
-                SlashTable
+                slashtable
               </span>
             </div>
             <p className="mt-3 text-sm text-text-muted leading-relaxed">
-              A database browser for the age of agents.
+              A database browser for <span className="text-accent">developers</span>.
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export function Footer() {
 
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
           <p className="font-mono text-xs text-text-muted">
-            &copy; {new Date().getFullYear()} SlashTable
+            &copy; {new Date().getFullYear()} slashtable
           </p>
           <p className="font-mono text-xs text-text-muted">
             Built with Tauri, React, and Rust.

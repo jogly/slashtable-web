@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { NAME } from "../../lib/constants";
 
 const navItems = [
-  { label: "MCP", href: "#mcp", color: "#00d4ff" },
-  { label: "Plugins", href: "#plugins", color: "#cc44ff" },
   { label: "Features", href: "#features", color: "#44ff88" },
+  { label: "Plugins", href: "#plugins", color: "#cc44ff" },
+  { label: "MCP", href: "#mcp", color: "#00d4ff" },
 ];
 
 export function Nav() {
@@ -20,15 +21,15 @@ export function Nav() {
       <nav
         className={`flex items-center rounded-full border px-2 py-1.5 transition-all duration-300 ${
           scrolled
-            ? "border-border-strong bg-surface/95 shadow-lg shadow-black/50 backdrop-blur-md"
+            ? "border-border-strong bg-surface/50 shadow-lg shadow-black/50 backdrop-blur-md"
             : "border-border bg-surface/80 backdrop-blur-sm"
         }`}
       >
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 px-2 py-0.5">
-          <img src="/app-icon.png" alt="SlashTable" className="h-5 w-5" />
+        <a href="#" className="flex items-center gap-3 px-2 py-0.5">
+          <img src="/app-icon.png" alt="slashtable" className="h-5 w-5" />
           <span className="font-mono text-sm font-semibold tracking-tight text-text">
-            SlashTable
+            {NAME.short}
           </span>
         </a>
 
@@ -39,7 +40,7 @@ export function Nav() {
             <a
               key={item.href}
               href={item.href}
-              className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] tracking-widest uppercase text-text-muted transition-colors hover:text-text"
+              className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] tracking-widest uppercase text-text/70 transition-colors hover:text-text"
             >
               <span
                 className="h-1.5 w-1.5 flex-shrink-0"
