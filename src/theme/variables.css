@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Backgrounds ── */
+  --color-bg: #000000;
+  --color-surface: #0d0d0d;
+  --color-surface-2: #161616;
+  --color-surface-hover: #1a1a1a;
+
+  /* ── Text ── */
+  --color-text: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.55);
+  --color-text-muted: rgba(255, 255, 255, 0.3);
+
+  /* ── Borders ── */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.2);
+
+  /* ── Brand / Feature colors ── */
+  --color-orange: #c94a00;
+  --color-orange-bright: #ff5500;
+  --color-cyan: #00d4ff;
+  --color-magenta: #cc44ff;
+  --color-green: #44ff88;
+  --color-yellow: #ffcc00;
+
+  /* ── Primary accent (brand orange) ── */
+  --color-accent: #c94a00;
+
+  /* ── Font families ── */
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "Fira Code", "SF Mono", Menlo, monospace;
+
+  /* ── Type scale (web: 16px root) ── */
+  --text-xs: 0.6875rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 3.75rem;
+  --text-5xl--line-height: 1.05;
+  --text-6xl: 4.5rem;
+  --text-6xl--line-height: 1.0;
+
+  /* ── Layout ── */
+  --max-width-content: 68rem;
+  --max-width-narrow: 44rem;
+  --max-width-xs: 28rem;
+}
