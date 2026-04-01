@@ -5,7 +5,7 @@ import { McpSection } from "./components/sections/McpSection";
 import { NavigationSection } from "./components/sections/NavigationSection";
 import { PluginSection } from "./components/sections/PluginSection";
 import { FeaturesGrid } from "./components/sections/FeaturesGrid";
-import { DatabaseSupport } from "./components/sections/DatabaseSupport";
+import { EarlyAccessBanner } from "./components/sections/EarlyAccessBanner";
 
 export function App() {
   return (
@@ -13,11 +13,11 @@ export function App() {
       <Nav />
       <main>
         <Hero />
-        <McpSection />
+        <EarlyAccessBanner />
         <NavigationSection />
+        <McpSection />
         <PluginSection />
         <FeaturesGrid />
-        <DatabaseSupport />
       </main>
       <Footer />
     </>

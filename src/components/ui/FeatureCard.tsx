@@ -22,7 +22,7 @@ export function FeatureCard({
       )}
     >
       <Icon className="mb-4 h-5 w-5 text-accent" strokeWidth={1.5} />
-      <h3 className="mb-2 text-sm font-semibold text-text">{title}</h3>
+      <h3 className="mb-2 font-semibold text-sm text-text">{title}</h3>
       <p className="text-sm text-text-secondary leading-relaxed">{description}</p>
     </div>
   );

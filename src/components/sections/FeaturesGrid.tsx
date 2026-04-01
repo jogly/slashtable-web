@@ -80,13 +80,13 @@ export function FeaturesGrid() {
     <section className="py-24 lg:py-32">
       <div className="mx-auto max-w-[68rem] px-6">
         <div className="mb-16 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="mb-4 flex items-center justify-center gap-2">
             <span className="h-2 w-2 flex-shrink-0" style={{ backgroundColor: "#ffcc00" }} />
-            <span className="font-mono text-[10px] tracking-widest uppercase text-text-muted">
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
               Features
             </span>
           </div>
-          <h2 className="text-3xl font-semibold tracking-tight text-text lg:text-4xl">
+          <h2 className="font-semibold text-3xl text-text tracking-tight lg:text-4xl">
             Everything else you need.
           </h2>
         </div>
@@ -95,16 +95,16 @@ export function FeaturesGrid() {
           {features.map((feature, i) => (
             <FadeIn key={feature.title} delay={i * 0.04}>
               <div>
-                <div className="flex items-center gap-2 mb-2.5">
+                <div className="mb-2.5 flex items-center gap-2">
                   <span
                     className="h-1.5 w-1.5 flex-shrink-0"
                     style={{ backgroundColor: feature.color }}
                   />
-                  <h3 className="text-sm font-semibold text-text">
+                  <h3 className="font-semibold text-sm text-text">
                     {feature.title}
                   </h3>
                 </div>
-                <p className="text-sm text-text-secondary leading-relaxed pl-3.5">
+                <p className="pl-3.5 text-sm text-text-secondary leading-relaxed">
                   {feature.description}
                 </p>
               </div>

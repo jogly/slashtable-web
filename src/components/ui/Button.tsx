@@ -17,7 +17,7 @@ export function Button({
   return (
     <a
       className={cn(
-        "inline-flex items-center gap-2 px-5 py-2 font-mono text-xs tracking-widest uppercase transition-all cursor-pointer rounded-full",
+        "inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-2 font-mono text-xs uppercase tracking-widest transition-all",
         variant === "primary" && !color &&
           "bg-cyan text-black hover:bg-white",
         variant === "secondary" &&

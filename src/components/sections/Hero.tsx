@@ -27,7 +27,7 @@ const featureTags = [
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden">
+    <section className="relative overflow-hidden pt-32 pb-20">
       <motion.div
         className="mx-auto max-w-narrow px-6 text-center"
         variants={stagger}
@@ -35,7 +35,7 @@ export function Hero() {
         animate="visible"
       >
         <motion.h1
-          className="text-5xl font-semibold tracking-tight text-text sm:text-6xl lg:text-[4.5rem] lg:leading-[1.05]"
+          className="font-semibold text-5xl text-text tracking-tight sm:text-6xl lg:text-[4.5rem] lg:leading-[1.05]"
           variants={fadeUp}
         >
           Your database, navigable.
@@ -46,24 +46,18 @@ export function Hero() {
           variants={fadeUp}
         >
           Schema-aware browsing with an embedded MCP server, a plugin system,
-          and keyboard-first navigation. Built native with Tauri.
+          and keyboard-first navigation. Built native in Rust.
         </motion.p>
 
         <motion.div
-          className="mt-8 flex items-center justify-center gap-3 flex-wrap"
+          className="mt-8 flex flex-wrap items-center justify-center gap-3"
           variants={fadeUp}
         >
           <a
             href="#download"
-            className="inline-flex items-center rounded-full bg-cyan px-5 py-2 font-mono text-xs tracking-widest uppercase text-black transition-colors hover:bg-white"
+            className="inline-flex items-center rounded-full bg-accent px-5 py-2 font-mono text-black text-xs uppercase tracking-widest transition-colors hover:bg-white"
           >
             Download for macOS &rsaquo;
-          </a>
-          <a
-            href="#"
-            className="inline-flex items-center rounded-full border border-border-strong px-5 py-2 font-mono text-xs tracking-widest uppercase text-text-secondary transition-colors hover:border-white hover:text-white"
-          >
-            View Source
           </a>
         </motion.div>
 
@@ -81,7 +75,7 @@ export function Hero() {
                 className="h-1.5 w-1.5 flex-shrink-0"
                 style={{ backgroundColor: f.color }}
               />
-              <span className="font-mono text-[10px] tracking-widest uppercase text-text-muted">
+              <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                 {f.label}
               </span>
             </div>

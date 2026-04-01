@@ -34,7 +34,7 @@ export function Differentiators() {
                   className="mb-5 h-6 w-6 text-accent"
                   strokeWidth={1.5}
                 />
-                <h3 className="text-base font-semibold text-text">
+                <h3 className="font-semibold text-base text-text">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-sm text-text-secondary leading-relaxed">

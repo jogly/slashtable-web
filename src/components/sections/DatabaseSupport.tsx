@@ -47,13 +47,13 @@ export function DatabaseSupport() {
     <section className="bg-surface py-20 lg:py-24" id="download">
       <div className="mx-auto max-w-[68rem] px-6">
         <div className="mb-12 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="mb-4 flex items-center justify-center gap-2">
             <span className="h-2 w-2 flex-shrink-0" style={{ backgroundColor: "#c94a00" }} />
-            <span className="font-mono text-[10px] tracking-widest uppercase text-text-muted">
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
               Database Support
             </span>
           </div>
-          <h2 className="text-3xl font-semibold tracking-tight text-text lg:text-4xl">
+          <h2 className="font-semibold text-3xl text-text tracking-tight lg:text-4xl">
             PostgreSQL today. More coming.
           </h2>
         </div>
