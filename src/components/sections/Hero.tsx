@@ -35,10 +35,10 @@ export function Hero() {
         animate="visible"
       >
         <motion.h1
-          className="font-semibold text-5xl text-text tracking-tight sm:text-6xl lg:text-[4.5rem] lg:leading-[1.05]"
+          className="font-semibold text-5xl text-text tracking-tight sm:text-6xl lg:text-[4.5rem] leading-snug"
           variants={fadeUp}
         >
-          Your database, navigable.
+          Your database, <span className="font-display italic tracking-wide">navigable</span>
         </motion.h1>
 
         <motion.p

@@ -4,12 +4,12 @@ export function EarlyAccessBanner() {
       <div className="mx-auto flex max-w-[68rem] flex-col items-center gap-4 px-6 py-6 sm:flex-row sm:justify-center sm:gap-6">
         <div className="flex items-center gap-3">
           <span className="h-2 w-2 shrink-0 bg-cyan" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
             Early Access
-          </span>
+          </p>
           <span className="hidden h-px w-4 bg-border-strong sm:block" />
           <p className="text-sm text-text-secondary">
-            Free while in development. Like what you see?
+            <span className="text-green-600">Free</span>{' '}while in early development.
           </p>
         </div>
         <a

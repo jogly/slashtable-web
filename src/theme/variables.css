@@ -30,6 +30,7 @@
   /* ── Font families ── */
   --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "Fira Code", "SF Mono", Menlo, monospace;
+  --font-display: "Playfair Display Variable", "Playfair Display", Georgia, serif;
 
   /* ── Layout ── */
   --max-width-content: 68rem;
