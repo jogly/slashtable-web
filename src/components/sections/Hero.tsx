@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { AppWindowMockup } from "../ui/AppWindowMockup";
+import { Megaphone } from "lucide-react";
 
 const stagger = {
   hidden: {},
@@ -50,16 +51,20 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          className="mt-8 flex flex-wrap items-center justify-center gap-3"
+          className="mt-8 flex flex-col flex-wrap items-center justify-center gap-3"
           variants={fadeUp}
         >
           <a
             href="#download"
-            className="inline-flex items-center rounded-full bg-accent px-5 py-2 font-mono text-black text-xs uppercase tracking-widest transition-colors hover:bg-white"
+            className="mb-4 inline-flex items-center rounded-full bg-accent px-5 py-2 font-mono text-black text-xs uppercase tracking-widest transition-colors hover:bg-white"
           >
             Download for macOS &rsaquo;
           </a>
+          <div className="flex gap-2 items-center justify-center text-text italic font-display border border-border px-6 py-2 rounded-full">
+            <Megaphone className="h-4 w-4 inline-block mr-2" />
+            <span> It&rsquo;s early access, there be bugs!  </span> </div>
         </motion.div>
+
 
         {/* Feature tag strip */}
         <motion.div

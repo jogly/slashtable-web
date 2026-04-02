@@ -90,7 +90,7 @@ export function Nav() {
                 className="flex items-center gap-4 border border-border bg-surface px-5 py-4 font-mono text-sm text-text uppercase tracking-widest transition-colors hover:bg-surface-2"
               >
                 <span
-                  className="h-3 w-3 flex-shrink-0"
+                  className="h-3 w-3 shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
                 {item.label}
