@@ -1,4 +1,4 @@
 export const NAME = {
-    full: "slashtable",
-    short: "/table",
-}
+  full: "slashtable",
+  short: "/table",
+};

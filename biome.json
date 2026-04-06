@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
   "assist": {
     "enabled": true
   },
@@ -44,6 +44,6 @@
     }
   },
   "files": {
-    "includes": ["src/**", "*.json", "*.ts", "vite.config.ts"]
+    "includes": ["src/**", "*.json", "*.ts", "vite.config.ts", "!src/routeTree.gen.ts"]
   }
 }

@@ -35,5 +35,10 @@
   code,
   pre {
     font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+
+  .font-mono {
+    letter-spacing: 0.02em;
   }
 }

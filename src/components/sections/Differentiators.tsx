@@ -1,5 +1,5 @@
+import { Bot, Network, Puzzle } from "lucide-react";
 import { FadeIn } from "../ui/FadeIn";
-import { Network, Bot, Puzzle } from "lucide-react";
 
 const items = [
   {
@@ -30,16 +30,9 @@ export function Differentiators() {
           {items.map((item, i) => (
             <FadeIn key={item.title} delay={i * 0.08}>
               <div className="bg-bg p-8 lg:p-10">
-                <item.icon
-                  className="mb-5 h-6 w-6 text-accent"
-                  strokeWidth={1.5}
-                />
-                <h3 className="font-semibold text-base text-text">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm text-text-secondary leading-relaxed">
-                  {item.description}
-                </p>
+                <item.icon className="mb-5 h-6 w-6 text-accent" strokeWidth={1.5} />
+                <h3 className="font-semibold text-base text-text">{item.title}</h3>
+                <p className="mt-3 text-sm text-text-secondary leading-relaxed">{item.description}</p>
               </div>
             </FadeIn>
           ))}

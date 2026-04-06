@@ -7,17 +7,16 @@ interface CodeBlockProps {
 }
 
 function highlightSyntax(code: string): string {
-  // Single-pass tokenizer: string literals take priority, preventing
-  // keyword/number regexes from matching inside already-emitted spans.
-  return code.replace(
-    /("(?:[^"\\]|\\.)*")|(^>.*$)|\b(import|from|export|default|class|extends|const|let|var|function|return|new|if|else|true|false|null|undefined|type)\b|\b(\d+)\b/gm,
-    (_match, str, comment, keyword, num) => {
+  // Escape HTML entities first to prevent XSS, then apply syntax highlighting.
+  const escaped = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return escaped.replace(
+    /("(?:[^"\\]|\\.)*")|\b(import|from|export|default|class|extends|const|let|var|function|return|new|if|else|true|false|null|undefined|type)\b|\b(\d+)\b/gm,
+    (_match, str, keyword, num) => {
       if (str !== undefined) return `<span style="color:#44ff88">${str}</span>`;
-      if (comment !== undefined) return `<span style="color:rgba(255,255,255,0.3)">${comment}</span>`;
       if (keyword !== undefined) return `<span style="color:#c94a00">${keyword}</span>`;
       if (num !== undefined) return `<span style="color:#ffcc00">${num}</span>`;
       return _match;
-    }
+    },
   );
 }
 
@@ -37,6 +36,7 @@ export function CodeBlock({ code, filename, className }: CodeBlockProps) {
       <pre className="overflow-x-auto bg-surface-2 p-4">
         <code
           className="font-mono text-sm text-text-secondary leading-relaxed"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: content is HTML-escaped before highlighting
           dangerouslySetInnerHTML={{ __html: highlightSyntax(code) }}
         />
       </pre>
