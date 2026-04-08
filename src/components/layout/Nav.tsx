@@ -3,13 +3,6 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NAME } from "../../lib/constants";
 
-const navItems = [
-  { label: "Navigation", href: "#features", color: "#44ff88" },
-  { label: "Schema", href: "#schema", color: "#cc44ff" },
-  { label: "MCP", href: "#mcp", color: "#00d4ff" },
-  { label: "Plugins", href: "#plugins", color: "#a855f7" },
-];
-
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -65,17 +58,14 @@ export function Nav() {
       {menuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col bg-bg pt-12 sm:hidden">
           <div className="flex flex-col gap-3 px-4 py-4">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-4 border border-border bg-surface px-5 py-4 font-mono text-sm text-text uppercase tracking-widest transition-colors hover:bg-surface-2"
-              >
-                <span className="h-3 w-3 shrink-0" style={{ backgroundColor: item.color }} />
-                {item.label}
-              </a>
-            ))}
+            <a
+              href="#download"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-4 border border-border bg-surface px-5 py-4 font-mono text-sm text-text uppercase tracking-widest transition-colors hover:bg-surface-2"
+            >
+              <span className="h-3 w-3 shrink-0" style={{ backgroundColor: "#44ff88" }} />
+              Download
+            </a>
           </div>
         </div>
       )}
