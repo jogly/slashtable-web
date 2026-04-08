@@ -2,6 +2,7 @@ import heroDark from "@screenshots/hero-dark.png";
 import heroLight from "@screenshots/hero-light.png";
 import { Megaphone } from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { ImageCompare } from "../ui/ImageCompare";
 
 const stagger = {
@@ -21,6 +22,24 @@ const fadeUp = {
 };
 
 export function Hero() {
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent | TouchEvent) {
+      if (btnRef.current && !btnRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("touchstart", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("touchstart", handleClick);
+    };
+  }, [open]);
+
   return (
     <section className="relative overflow-hidden pt-32 pb-20">
       <motion.div
@@ -35,11 +54,15 @@ export function Hero() {
         >
           The database browser
           <button
+            ref={btnRef}
             type="button"
-            className="group relative inline-block cursor-default border-0 bg-transparent p-0 align-baseline outline-none"
+            onClick={() => setOpen((o) => !o)}
+            className="group relative inline-block border-0 bg-transparent align-baseline outline-none"
           >
-            <span className="ml-1 font-display text-accent">*</span>
-            <div className="pointer-events-none absolute top-1/2 left-1/2 z-20 mt-3 w-80 -translate-x-1/2 rounded-2xl border border-border-strong bg-surface p-5 text-left opacity-0 shadow-2xl transition-opacity duration-200 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100">
+            <span className="ml-1 cursor-pointer font-display text-accent">*</span>
+            <div
+              className={`absolute top-1/2 left-1/2 z-20 mt-3 w-80 -translate-x-1/2 rounded-2xl border border-border-strong bg-surface p-5 text-left shadow-2xl transition-opacity duration-200 ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100"}`}
+            >
               <p className="mb-3 font-mono text-text-muted text-xs uppercase">And also, </p>
               <ul className="space-y-3">
                 {[
