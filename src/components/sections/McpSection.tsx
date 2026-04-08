@@ -1,25 +1,17 @@
 import { CodeBlock } from "../ui/CodeBlock";
 import { FadeIn } from "../ui/FadeIn";
 
-const mcpExample = `> list_tables
-{ "tables": ["customers", "orders", "order_items", "products"] }
+const safetyExample = `> run_query "DROP TABLE orders"
+{ "error": "DROP statements are not allowed" }
 
-> describe_table orders
-{
-  "columns": [
-    { "name": "id",          "type": "integer", "pk": true },
-    { "name": "customer_id", "type": "uuid",    "fk": "customers.id" },
-    { "name": "status",      "type": "varchar", "nullable": false },
-    { "name": "total",       "type": "numeric" }
-  ]
-}
+> run_query "DELETE FROM orders WHERE id = 1"
+{ "error": "DELETE statements are not allowed" }
 
-> get_related_records
+> run_query "SELECT * FROM orders LIMIT 2"
 {
-  "table": "orders", "via": "customers.id → customers",
-  "records": [
+  "rows": [
     { "id": 42, "status": "shipped", "total": "149.00" },
-    { "id": 43, "status": "pending", "total": "32.50"  }
+    { "id": 43, "status": "pending", "total": "32.50" }
   ]
 }`;
 
@@ -29,7 +21,7 @@ export function McpSection() {
       <div className="mx-auto max-w-content px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <FadeIn className="min-w-0">
-            <CodeBlock filename="Claude Desktop" code={mcpExample} />
+            <CodeBlock filename="Claude Desktop" code={safetyExample} />
           </FadeIn>
 
           <FadeIn delay={0.12}>
@@ -38,23 +30,20 @@ export function McpSection() {
               <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">MCP Server</span>
             </div>
             <h2 className="font-semibold text-3xl text-text tracking-tight lg:text-4xl">
-              Give your AI agent a live connection to your database.
+              Three layers between your AI agent and a write query.
             </h2>
             <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
               <p>
-                SlashTable includes an embedded MCP server — no extra setup, no config files. Any MCP-compatible client
-                connects and gets eight tools: list tables, describe schemas, fetch records, get a single row by primary
-                key, traverse FK relationships, retrieve the full schema graph, and run SELECT queries.
+                SlashTable ships an embedded MCP server with eight read-only tools. Queries pass through keyword
+                validation that rejects INSERT, UPDATE, DELETE, DROP, and other mutation statements before they reach
+                Postgres. Anything that slips through hits a READ ONLY transaction that Postgres enforces at the wire
+                level. The transaction rolls back unconditionally.
               </p>
-              <p>
-                Your AI agent gets a complete picture of your data model from inside your database client. It can answer
-                questions about your data, write accurate queries, and follow foreign key paths — without you
-                copy-pasting DDL or writing glue scripts.
-              </p>
+              <p>All other tools use parameterized queries with bound values.</p>
               <p className="text-sm text-text-muted">
-                All eight tools are read-only. Query text is validated before execution, mutation keywords trigger a
-                secondary scan, and a final transaction-level check catches anything that slips through. Your data stays
-                safe.
+                The connection pool stays read-write so the UI can do cell edits. Read-only enforcement is per-query in
+                the application layer, not at the connection level. Works with Claude Desktop, Claude Code, Cursor, and
+                any MCP-compatible client.
               </p>
             </div>
           </FadeIn>

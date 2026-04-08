@@ -33,9 +33,9 @@ export function CodeBlock({ code, filename, className }: CodeBlockProps) {
           <span className="ml-2 font-mono text-text-muted text-xs">{filename}</span>
         </div>
       )}
-      <pre className="overflow-x-auto bg-surface-2 p-4">
+      <pre className="overflow-x-auto bg-surface-2 p-4" style={{ scrollbarWidth: "none" }}>
         <code
-          className="font-mono text-sm text-text-secondary leading-relaxed"
+          className="font-mono text-[11px] text-text-secondary leading-relaxed sm:text-sm"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: content is HTML-escaped before highlighting
           dangerouslySetInnerHTML={{ __html: highlightSyntax(code) }}
         />

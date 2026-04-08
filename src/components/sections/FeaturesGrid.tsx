@@ -11,7 +11,6 @@ import {
   LayoutPanelTop,
   Lock,
   PenLine,
-  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Sun,
@@ -38,7 +37,7 @@ const features: {
     color: "#00d4ff",
     title: "Multiple connections",
     description:
-      "Connect to many Postgres databases at once. Each connection keeps its own tabs, state, and query context — switch between them without losing your place.",
+      "Connect to many Postgres databases at once. Each connection keeps its own tabs, state, and query context. Switch between them without losing your place.",
   },
   {
     icon: PenLine,
@@ -48,18 +47,25 @@ const features: {
       "Edit rows inline. Changes queue up with a SQL diff preview before anything commits. Revert individual changes, run batch operations, or cancel everything at once.",
   },
   {
-    icon: Container,
+    icon: Lock,
     color: "#ffcc00",
+    title: "Read-only enforcement",
+    description:
+      "Three enforcement layers catch write attempts before they reach the database: query parsing, keyword scanning, and a transaction-level rollback. Nothing slips through.",
+  },
+  {
+    icon: Container,
+    color: "#c94a00",
     title: "Docker auto-detection",
     description:
-      "Automatically discovers running PostgreSQL containers, extracts credentials from their environment variables, and offers a one-click connection — no manual config needed.",
+      "Automatically discovers running PostgreSQL containers and extracts credentials from their environment variables. One click to connect.",
   },
   {
     icon: KeyRound,
     color: "#c94a00",
     title: "Secure credential vaults",
     description:
-      "Source database credentials in System Keychain or 1Password. Browse your vaults, select items, and auto-fill the connection form — no copy-pasting secrets.",
+      "Source database credentials from the System Keychain or 1Password. Browse vaults, select items, and auto-fill the connection form.",
   },
   {
     icon: Table2,
@@ -87,7 +93,7 @@ const features: {
     color: "#ffcc00",
     title: "Connection organization",
     description:
-      "Group connections in nested folders with drag-and-drop. Assign color indicators and environment badges — prod, dev, staging — to tell them apart at a glance.",
+      "Group connections in nested folders with drag-and-drop. Assign color indicators and environment badges (prod, dev, staging) to tell them apart at a glance.",
   },
   {
     icon: LayoutPanelTop,
@@ -97,18 +103,11 @@ const features: {
       "Explorer, SQL, and Schema Graph tabs each hold independent state. Drag to reorder, duplicate with context, rename, and navigate between them with keyboard shortcuts.",
   },
   {
-    icon: ShieldCheck,
-    color: "#44ff88",
-    title: "System keyring credentials",
-    description:
-      "Passwords stored in the macOS Keychain or Windows Credential Manager — never plaintext on disk, never sent to the frontend. Supports 1Password op:// references.",
-  },
-  {
     icon: Sparkles,
     color: "#00d4ff",
     title: "Semantic column types",
     description:
-      "Automatically detects emails, URLs, images, currency, color swatches, star ratings, phone numbers, and relative dates from column content and renders them accordingly.",
+      "Automatically detects emails, URLs, images, currency, phone numbers, and relative dates from column content and renders them accordingly.",
   },
   {
     icon: TerminalSquare,
@@ -120,16 +119,9 @@ const features: {
   {
     icon: Clock,
     color: "#ffcc00",
-    title: "Result caching",
+    title: "Instant tab restore",
     description:
-      "Caches up to 200 query results and persists them across sessions. Recent queries reload instantly on tab switch or restart.",
-  },
-  {
-    icon: Lock,
-    color: "#c94a00",
-    title: "Read-only enforcement",
-    description:
-      "Three enforcement layers catch write attempts before they reach the database: query parsing, keyword scanning, and a transaction-level rollback. Nothing slips through.",
+      "Switch tabs or restart the app. Your last query results are already there. No re-running queries, no loading spinners.",
   },
   {
     icon: BarChart2,
@@ -165,6 +157,7 @@ export function FeaturesGrid() {
                   <span className="h-1.5 w-1.5 shrink-0" style={{ backgroundColor: feature.color }} />
                   <h3 className="font-semibold text-sm text-text">{feature.title}</h3>
                 </div>
+                <p className="pl-3.5 text-sm text-text-secondary leading-relaxed">{feature.description}</p>
               </div>
             </FadeIn>
           ))}

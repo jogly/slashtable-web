@@ -25,7 +25,7 @@ export function SchemaGraphSection() {
             <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
               <p>
                 An interactive ER diagram that auto-layouts your entire schema. Tables arrange into a layered graph that
-                minimizes edge crossings — just open it and see the shape of your data. Pan and zoom freely.
+                minimizes edge crossings. Open it and see the shape of your data. Pan and zoom freely.
               </p>
               <p>
                 Pin multiple root tables to anchor the layout. Control depth to focus on just the relationships you care
@@ -33,8 +33,8 @@ export function SchemaGraphSection() {
                 centers on your result.
               </p>
               <p>
-                Pure join tables — exactly two foreign keys, no other columns — collapse automatically into direct
-                many-to-many relationships. The diagram reflects your data model, not your implementation details.
+                Pure join tables collapse automatically into direct many-to-many relationships. The diagram reflects
+                your data model, not your implementation details.
               </p>
             </div>
           </FadeIn>

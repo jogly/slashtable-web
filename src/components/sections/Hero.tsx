@@ -111,15 +111,6 @@ export function Hero() {
             <span> It&rsquo;s early access, there be bugs! </span>
           </div>
         </motion.div>
-        {/* Feature tag strip
-        <motion.div className="mt-10 flex flex-wrap items-center justify-center gap-2" variants={fadeUp}>
-          {featureTags.map((f) => (
-            <div key={f.label} className="flex items-center gap-2 rounded-full border border-border px-3 py-1">
-              <span className="h-1.5 w-1.5 flex-shrink-0" style={{ backgroundColor: f.color }} />
-              <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{f.label}</span>
-            </div>
-          ))}
-        </motion.div> */}
       </motion.div>
 
       {/* Hero screenshot */}
