@@ -448,6 +448,13 @@ export const FOOTER = {
 
 // ─── Pricing ────────────────────────────────────────────────────
 
+const SITE_URL = "https://slashtable.dev";
+
+export function polarCheckoutUrl(polarId: string) {
+  const successUrl = `${SITE_URL}/checkout/success?cid={CHECKOUT_ID}`;
+  return `https://buy.polar.sh/${polarId}?success_url=${encodeURIComponent(successUrl)}`;
+}
+
 export const PRICING = {
   eyebrow: "Pricing",
   heading: "Pay once. Or bring the team.",
@@ -468,6 +475,7 @@ export const PRICING = {
       features: ["3 connections", "Unlimited tabs", "Remote credential vaults"],
       role: { tag: "@supporter", color: "#00d4ff" },
       cta: "Buy Personal",
+      polarId: "polar_cl_kJYdwT8vY6W1YVXo4URTlgc30xiJYByWAcJvO0zrnze",
     },
     {
       name: "Pro",
@@ -476,6 +484,7 @@ export const PRICING = {
       features: ["Unlimited connections", "Unlimited tabs", "Remote credential vaults"],
       role: { tag: "@pro", color: "#ffcc00" },
       cta: "Buy Pro",
+      polarId: "polar_cl_1NN5jsryvYvCWHaUko29tm9ht29Apf8bFB3T21GLMEc",
     },
     {
       name: "Team",

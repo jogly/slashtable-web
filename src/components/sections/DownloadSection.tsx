@@ -164,7 +164,7 @@ function FlowIndicator() {
 
 /* ── Main section ───────────────────────────────────────────── */
 
-export function DownloadSection() {
+export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const { release, primary, secondary, label, altLabel, showThankYou, setShowThankYou, closeThankYou } = useDownload();
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
@@ -194,22 +194,24 @@ export function DownloadSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,74,0,0.08)_0%,transparent_60%)]" />
 
       <div className="relative mx-auto max-w-[68rem] px-6 text-center">
-        <FadeIn>
-          <h2 className="font-display text-3xl text-text tracking-tight lg:text-5xl">
-            {(() => {
-              const [before, after] = DOWNLOAD.heading;
-              return (
-                <>
-                  <span className="font-mono tracking-tighter">{before}</span>
-                  <span className="ml-2 font-display tracking-wide">{after}</span>
-                </>
-              );
-            })()}
-          </h2>
-          <p className="mx-auto mt-4 max-w-md text-text-secondary leading-relaxed">{DOWNLOAD.description}</p>
-        </FadeIn>
+        {!hideHeader && (
+          <FadeIn>
+            <h2 className="font-display text-3xl text-text tracking-tight lg:text-5xl">
+              {(() => {
+                const [before, after] = DOWNLOAD.heading;
+                return (
+                  <>
+                    <span className="font-mono tracking-tighter">{before}</span>
+                    <span className="ml-2 font-display tracking-wide">{after}</span>
+                  </>
+                );
+              })()}
+            </h2>
+            <p className="mx-auto mt-4 max-w-md text-text-secondary leading-relaxed">{DOWNLOAD.description}</p>
+          </FadeIn>
+        )}
 
-        <FadeIn delay={0.1}>
+        <FadeIn delay={hideHeader ? 0 : 0.1}>
           {/* DMG-style drag area — desktop */}
           <div className="mx-auto mt-10 hidden max-w-md rounded-md border border-border bg-surface-2/50 px-8 py-10 shadow-[0_0_80px_-20px_rgba(201,74,0,0.1)] backdrop-blur-sm lg:block">
             <DndContext onDragOver={handleDragOver} onDragEnd={handleDragEnd}>

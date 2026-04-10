@@ -1,8 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info } from "lucide-react";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useDownload } from "../hooks/useDownload";
-import { PRICING } from "../lib/copy";
+import {
+  usePolarDiscounts,
+  formatDiscount,
+  discountedPrice,
+  isDiscountActive,
+} from "../hooks/usePolarDiscounts";
+import { PRICING, polarCheckoutUrl } from "../lib/copy";
 import { cn } from "../lib/utils";
 import { ContactSalesModal } from "../components/ui/ContactSalesModal";
 import { ContentContainer } from "../components/ui/ContentContainer";
@@ -69,6 +75,12 @@ function PricingPage() {
   const { showThankYou, closeThankYou, triggerDownload } = useDownload();
   const [showContactSales, setShowContactSales] = useState(false);
 
+  const polarIds = useMemo(
+    () => PRICING.tiers.filter((t) => t.polarId).map((t) => t.polarId!),
+    [],
+  );
+  const { discounts } = usePolarDiscounts(polarIds);
+
   return (
     <div className="pt-32 pb-20">
       <ContentContainer>
@@ -83,6 +95,9 @@ function PricingPage() {
         <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-3">
           {PRICING.tiers.slice(0, 3).map((tier, i) => {
             const highlighted = i === 1;
+            const discount = tier.polarId ? discounts[tier.polarId] : null;
+            const hasDiscount = discount != null && isDiscountActive(discount);
+            const salePrice = hasDiscount ? discountedPrice(tier.price, discount) : null;
             return (
               <FadeIn key={tier.name} delay={i * 0.1}>
                 <div
@@ -95,11 +110,28 @@ function PricingPage() {
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
                   )}
 
+                  {hasDiscount && (
+                    <div className="absolute top-0 right-4 -translate-y-1/2 bg-accent px-3 py-1 font-mono text-[10px] text-black uppercase tracking-widest">
+                      {formatDiscount(discount)}
+                    </div>
+                  )}
+
                   <div className="flex-1">
                     <div className="mb-6">
                       <h2 className="font-mono text-xs text-text-muted uppercase tracking-widest">{tier.name}</h2>
                       <div className="mt-3 flex items-baseline gap-2">
-                        <span className="font-display text-4xl text-text">{tier.price}</span>
+                        {hasDiscount && salePrice != null ? (
+                          <>
+                            <span className="font-display text-4xl text-text">
+                              ${Math.round(salePrice / 100)}
+                            </span>
+                            <span className="font-display text-lg text-text-muted line-through">
+                              {tier.price}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-display text-4xl text-text">{tier.price}</span>
+                        )}
                         {tier.price !== "$0" && <span className="font-mono text-xs text-text-muted">one-time</span>}
                       </div>
                       <p className="mt-2 text-sm text-text-secondary">{tier.description}</p>
@@ -142,9 +174,8 @@ function PricingPage() {
                       {tier.cta}
                     </button>
                   ) : (
-                    <Link
-                      to="/"
-                      hash="download"
+                    <a
+                      href={polarCheckoutUrl(tier.polarId!)}
                       className={cn(
                         "flex items-center justify-center rounded-full px-5 py-2.5 font-mono text-xs uppercase tracking-widest transition-colors",
                         highlighted
@@ -153,7 +184,7 @@ function PricingPage() {
                       )}
                     >
                       {tier.cta}
-                    </Link>
+                    </a>
                   )}
                 </div>
               </FadeIn>
