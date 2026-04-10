@@ -56,7 +56,7 @@ export function ThankYouModal({ open, onClose }: ThankYouModalProps) {
     e.preventDefault();
     if (!email.trim()) return;
     // Fire-and-forget — we don't block on this
-    fetch("https://api.slashtable.dev/waitlist", {
+    fetch("https://api.slashtable.dev/mail/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.trim() }),
