@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { type DownloadSource, trackDownloadStarted } from "../lib/analytics";
 
 interface LatestRelease {
   version: string;
@@ -32,17 +33,25 @@ export function useDownload() {
   const label = isIntel ? "Intel" : "Silicon";
   const altLabel = isIntel ? "Silicon" : "Intel";
 
-  const triggerDownload = useCallback(() => {
-    if (!primary) return;
-    const a = document.createElement("a");
-    a.href = primary;
-    a.download = "";
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => setShowThankYou(true), 500);
-  }, [primary]);
+  const triggerDownload = useCallback(
+    (source: DownloadSource = "download_section_button") => {
+      if (!primary) return;
+      trackDownloadStarted({
+        architecture: isIntel ? "intel" : "silicon",
+        version: release?.version,
+        source,
+      });
+      const a = document.createElement("a");
+      a.href = primary;
+      a.download = "";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => setShowThankYou(true), 500);
+    },
+    [primary, isIntel, release],
+  );
 
   const closeThankYou = useCallback(() => setShowThankYou(false), []);
 
