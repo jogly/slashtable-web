@@ -5,6 +5,7 @@ import { Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
+import { trackDownloadStarted } from "../../lib/analytics";
 import { DOWNLOAD } from "../../lib/copy";
 import { FadeIn } from "../ui/FadeIn";
 import { NoiseTexture } from "../ui/NoiseTexture";
@@ -165,7 +166,7 @@ function FlowIndicator() {
 /* ── Main section ───────────────────────────────────────────── */
 
 export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
-  const { release, primary, secondary, label, altLabel, showThankYou, setShowThankYou, closeThankYou } = useDownload();
+  const { release, isIntel, primary, secondary, label, altLabel, showThankYou, setShowThankYou, closeThankYou } = useDownload();
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
   const downloadRef = useRef<HTMLAnchorElement>(null);
@@ -179,6 +180,11 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
     if (event.over?.id === "downloads-folder") {
       setDropped(true);
       setTimeout(() => {
+        trackDownloadStarted({
+          architecture: isIntel ? "intel" : "silicon",
+          version: release?.version,
+          source: "download_section_drag",
+        });
         if (primary) downloadRef.current?.click();
         setTimeout(() => {
           setDropped(false);
@@ -253,7 +259,14 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
             <a
               href={primary}
               {...(primary ? { download: true } : { "aria-disabled": true })}
-              onClick={() => setTimeout(() => setShowThankYou(true), 500)}
+              onClick={() => {
+                trackDownloadStarted({
+                  architecture: isIntel ? "intel" : "silicon",
+                  version: release?.version,
+                  source: "download_section_mobile",
+                });
+                setTimeout(() => setShowThankYou(true), 500);
+              }}
               className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
                 !primary ? "pointer-events-none opacity-50" : ""
               }`}
@@ -277,7 +290,14 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
             <a
               href={primary}
               {...(primary ? { download: true } : { "aria-disabled": true })}
-              onClick={() => setTimeout(() => setShowThankYou(true), 500)}
+              onClick={() => {
+                trackDownloadStarted({
+                  architecture: isIntel ? "intel" : "silicon",
+                  version: release?.version,
+                  source: "download_section_button",
+                });
+                setTimeout(() => setShowThankYou(true), 500);
+              }}
               className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
                 !primary ? "pointer-events-none opacity-50" : ""
               }`}

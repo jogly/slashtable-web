@@ -7,6 +7,7 @@ import { FadeIn } from "../components/ui/FadeIn";
 import { ThankYouModal } from "../components/ui/ThankYouModal";
 import { useDownload } from "../hooks/useDownload";
 import { discountedPrice, formatDiscount, isDiscountActive, usePolarDiscounts } from "../hooks/usePolarDiscounts";
+import { trackCheckoutClicked, trackContactSalesOpened } from "../lib/analytics";
 import { PRICING, polarCheckoutUrl } from "../lib/copy";
 import { cn } from "../lib/utils";
 
@@ -156,7 +157,7 @@ function PricingPage() {
                   {i === 0 ? (
                     <button
                       type="button"
-                      onClick={triggerDownload}
+                      onClick={() => triggerDownload("pricing_free_tier")}
                       className="flex items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-white hover:text-white"
                     >
                       {tier.cta}
@@ -164,6 +165,15 @@ function PricingPage() {
                   ) : (
                     <a
                       href={polarCheckoutUrl(tier.polarId as string)}
+                      onClick={() =>
+                        trackCheckoutClicked({
+                          tier: tier.name,
+                          price: tier.price,
+                          discount_active: hasDiscount,
+                          discount_amount: hasDiscount ? formatDiscount(discount) : null,
+                          polar_id: tier.polarId as string,
+                        })
+                      }
                       className={cn(
                         "flex items-center justify-center rounded-full px-5 py-2.5 font-mono text-xs uppercase tracking-widest transition-colors",
                         highlighted
@@ -209,7 +219,10 @@ function PricingPage() {
 
                   <button
                     type="button"
-                    onClick={() => setShowContactSales(true)}
+                    onClick={() => {
+                      trackContactSalesOpened({ source: "pricing_team_tier" });
+                      setShowContactSales(true);
+                    }}
                     className="flex shrink-0 items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-white hover:text-white"
                   >
                     {team.cta}

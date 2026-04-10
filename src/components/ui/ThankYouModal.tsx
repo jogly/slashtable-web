@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { trackWaitlistSignedUp } from "../../lib/analytics";
 import { THANK_YOU } from "../../lib/copy";
 
 interface ThankYouModalProps {
@@ -55,6 +56,7 @@ export function ThankYouModal({ open, onClose }: ThankYouModalProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.trim()) return;
+    trackWaitlistSignedUp({ email: email.trim() });
     // Fire-and-forget — we don't block on this
     fetch("https://api.slashtable.dev/mail/subscribe", {
       method: "POST",

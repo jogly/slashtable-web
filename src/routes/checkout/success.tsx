@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+import { useEffect } from "react";
 import { DownloadSection } from "../../components/sections/DownloadSection";
 import { ContentContainer } from "../../components/ui/ContentContainer";
 import { FadeIn } from "../../components/ui/FadeIn";
+import { trackCheckoutCompleted } from "../../lib/analytics";
 
 export const Route = createFileRoute("/checkout/success")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -13,6 +15,10 @@ export const Route = createFileRoute("/checkout/success")({
 
 function CheckoutSuccessPage() {
   const { cid } = Route.useSearch();
+
+  useEffect(() => {
+    trackCheckoutCompleted({ checkout_id: cid });
+  }, [cid]);
 
   return (
     <div className="pt-32">

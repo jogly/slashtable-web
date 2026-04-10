@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import type { ComponentProps } from "react";
+import { trackExternalLinkClicked } from "../../lib/analytics";
 import { COMMUNITY } from "../../lib/copy";
 import { ContentContainer } from "../ui/ContentContainer";
 import { FadeIn } from "../ui/FadeIn";
@@ -44,6 +45,13 @@ export function CommunitySection() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    trackExternalLinkClicked({
+                      url: href,
+                      label: link.title,
+                      source: "community_section",
+                    })
+                  }
                   className="group flex flex-col bg-bg p-6 transition-colors hover:bg-surface-2/60"
                 >
                   <div className="mb-4 flex items-center gap-3">
