@@ -14,7 +14,7 @@ export function NavigationSection() {
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
               <div className="min-w-0">
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#44ff88" }} />
+                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-green)" }} />
                   <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                     {NAVIGATION.eyebrow}
                   </span>

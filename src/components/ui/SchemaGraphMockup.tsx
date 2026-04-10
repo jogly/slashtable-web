@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { cn } from "../../lib/utils";
 
 /* ── Layout ── */
@@ -281,6 +281,7 @@ function TableCard({
 /* ── Main ── */
 
 export function SchemaGraphMockup({ className }: { className?: string }) {
+  const patternId = useId();
   const [selected, setSelected] = useState("order_items");
   const ps = findPath("customers", selected);
 
@@ -310,12 +311,12 @@ export function SchemaGraphMockup({ className }: { className?: string }) {
       <svg aria-hidden="true" viewBox={`0 0 ${VW} ${VH}`} className="w-full min-w-[640px]">
         {/* Dark background + dot grid */}
         <defs>
-          <pattern id="sgDots" width="16" height="16" patternUnits="userSpaceOnUse">
+          <pattern id={patternId} width="16" height="16" patternUnits="userSpaceOnUse">
             <circle cx="8" cy="8" r="1" fill="rgba(255,255,255,0.1)" />
           </pattern>
         </defs>
         <rect width={VW} height={VH} fill="var(--color-bg)" />
-        <rect width={VW} height={VH} fill="url(#sgDots)" />
+        <rect width={VW} height={VH} fill={`url(#${patternId})`} />
 
         {/* Column-level connection edges */}
         {edges.map((e) => (

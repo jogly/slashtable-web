@@ -7,6 +7,10 @@ import { imagetools } from "vite-imagetools";
 
 const CHANGELOG_URL = "https://downloads.slashtable.dev/changelog.json";
 
+/**
+ * Fetches the changelog at build time and inlines it as a virtual module.
+ * This keeps the page free of loading states but requires a redeploy to show new entries.
+ */
 function changelogPlugin(): Plugin {
   const virtualId = "virtual:changelog";
   const resolvedId = `\0${virtualId}`;

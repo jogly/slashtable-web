@@ -6,6 +6,12 @@ import { AnalyticsProvider } from "./components/providers/PostHogProvider";
 import "./theme/base.css";
 import { routeTree } from "./routeTree.gen";
 
+// GitHub Pages SPA redirect: restore the encoded path from the 404.html redirect.
+if (window.location.search.startsWith("?p=")) {
+  const path = decodeURIComponent(window.location.search.slice(3));
+  window.history.replaceState(null, "", path);
+}
+
 posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN, {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   person_profiles: "identified_only",

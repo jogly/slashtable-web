@@ -10,7 +10,7 @@ import { NoiseTexture } from "../ui/NoiseTexture";
 const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
   {
     icon: Network,
-    color: "#00d4ff",
+    color: "var(--color-cyan)",
     content: (
       <div className="space-y-4 text-[12px] leading-relaxed sm:text-[13px]">
         <div>
@@ -75,7 +75,7 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
   },
   {
     icon: Terminal,
-    color: "#44ff88",
+    color: "var(--color-green)",
     content: (
       <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
         <div>
@@ -125,7 +125,7 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
   },
   {
     icon: ShieldCheck,
-    color: "#ffcc00",
+    color: "var(--color-yellow)",
     content: (
       <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
         <div>
@@ -167,7 +167,7 @@ export function McpSection() {
             {/* Header */}
             <div className="mb-10 text-center">
               <div className="mb-5 flex items-center justify-center gap-2">
-                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#00d4ff" }} />
+                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-cyan)" }} />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{MCP.eyebrow}</span>
               </div>
               <h2 className="mx-auto max-w-2xl font-display text-3xl text-text tracking-tight lg:text-4xl">

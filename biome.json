@@ -10,8 +10,7 @@
       "a11y": {
         "noLabelWithoutControl": "off",
         "noStaticElementInteractions": "off",
-        "useKeyWithClickEvents": "off",
-        "useButtonType": "off"
+        "useKeyWithClickEvents": "off"
       },
       "style": {
         "noNonNullAssertion": "warn"

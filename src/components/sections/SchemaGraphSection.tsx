@@ -13,7 +13,7 @@ export function SchemaGraphSection() {
           <FeatureFrame accentColor="#cc44ff">
             <div className="mb-8">
               <div className="mb-5 flex items-center gap-2">
-                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#cc44ff" }} />
+                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-magenta)" }} />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                   {SCHEMA_GRAPH.eyebrow}
                 </span>

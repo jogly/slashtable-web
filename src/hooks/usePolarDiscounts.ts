@@ -42,9 +42,10 @@ async function fetchAllDiscounts(polarIds: string[]): Promise<Record<string, Pol
 
     const data = await res.json();
     const links: CheckoutLink[] = data.items ?? [];
+    const idSet = new Set(polarIds);
 
     for (const link of links) {
-      if (polarIds.includes(link.client_secret)) {
+      if (idSet.has(link.client_secret)) {
         map[link.client_secret] = link.discount ?? null;
       }
     }
@@ -58,27 +59,23 @@ async function fetchAllDiscounts(polarIds: string[]): Promise<Record<string, Pol
 /** Fetch discount info for a set of Polar checkout link client secrets (`polar_cl_...`). */
 export function usePolarDiscounts(polarIds: string[]) {
   const [discounts, setDiscounts] = useState<Record<string, PolarDiscount | null>>({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!TOKEN || polarIds.length === 0) {
-      setLoading(false);
-      return;
-    }
+    if (!TOKEN || polarIds.length === 0) return;
 
     let cancelled = false;
     fetchAllDiscounts(polarIds).then((result) => {
       if (cancelled) return;
       setDiscounts(result);
-      setLoading(false);
     });
 
     return () => {
       cancelled = true;
     };
-  }, [polarIds.length, polarIds]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [polarIds.join(",")]);
 
-  return { discounts, loading };
+  return { discounts };
 }
 
 /** Format a discount for display, e.g. "20% off" or "$10 off". */

@@ -3,10 +3,11 @@ import macosFolderFore from "@assets/macos-folder-fore.png";
 import { DndContext, type DragEndEvent, type DragOverEvent, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
 import { trackDownloadStarted } from "../../lib/analytics";
 import { DOWNLOAD } from "../../lib/copy";
+import { ContentContainer } from "../ui/ContentContainer";
 import { FadeIn } from "../ui/FadeIn";
 import { NoiseTexture } from "../ui/NoiseTexture";
 import { ThankYouModal } from "../ui/ThankYouModal";
@@ -166,10 +167,21 @@ function FlowIndicator() {
 /* ── Main section ───────────────────────────────────────────── */
 
 export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
-  const { release, isIntel, primary, secondary, label, altLabel, showThankYou, setShowThankYou, closeThankYou } = useDownload();
+  const { release, isIntel, primary, secondary, label, altLabel, showThankYou, openThankYou, closeThankYou } = useDownload();
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
   const downloadRef = useRef<HTMLAnchorElement>(null);
+  const t1Ref = useRef<number>(undefined);
+  const t2Ref = useRef<number>(undefined);
+  const t3Ref = useRef<number>(undefined);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(t1Ref.current);
+      window.clearTimeout(t2Ref.current);
+      window.clearTimeout(t3Ref.current);
+    };
+  }, []);
 
   function handleDragOver(event: DragOverEvent) {
     setIsOverFolder(event.over?.id === "downloads-folder");
@@ -179,16 +191,16 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
     setIsOverFolder(false);
     if (event.over?.id === "downloads-folder") {
       setDropped(true);
-      setTimeout(() => {
+      t1Ref.current = window.setTimeout(() => {
         trackDownloadStarted({
           architecture: isIntel ? "intel" : "silicon",
           version: release?.version,
           source: "download_section_drag",
         });
         if (primary) downloadRef.current?.click();
-        setTimeout(() => {
+        t2Ref.current = window.setTimeout(() => {
           setDropped(false);
-          setShowThankYou(true);
+          openThankYou();
         }, 1200);
       }, 350);
     }
@@ -199,7 +211,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
       <NoiseTexture variant="grain" opacity={0.45} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,74,0,0.08)_0%,transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-[68rem] px-6 text-center">
+      <ContentContainer className="relative text-center">
         {!hideHeader && (
           <FadeIn>
             <h2 className="font-display text-3xl text-text tracking-tight lg:text-5xl">
@@ -265,7 +277,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                   version: release?.version,
                   source: "download_section_mobile",
                 });
-                setTimeout(() => setShowThankYou(true), 500);
+                t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
               className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
                 !primary ? "pointer-events-none opacity-50" : ""
@@ -296,7 +308,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                   version: release?.version,
                   source: "download_section_button",
                 });
-                setTimeout(() => setShowThankYou(true), 500);
+                t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
               className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
                 !primary ? "pointer-events-none opacity-50" : ""
@@ -322,7 +334,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
             <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DOWNLOAD.platformNotice}</p>
           </div>
         </FadeIn>
-      </div>
+      </ContentContainer>
 
       <ThankYouModal open={showThankYou} onClose={closeThankYou} />
     </section>

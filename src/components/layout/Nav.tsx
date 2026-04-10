@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { NAME } from "../../lib/constants";
 import { NAV } from "../../lib/copy";
 
-const mobileColors = ["#44ff88", "#00d4ff", "#cc44ff"];
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -89,34 +88,18 @@ export function Nav() {
       {menuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col bg-bg pt-12 sm:hidden">
           <div className="flex flex-col gap-2 px-4 py-4">
-            {NAV.mobileLinks.map((link, i) => (
+            {NAV.mobileLinks.map((link) => (
               <Link
                 key={link.label}
-                to="/"
-                hash={link.hash}
+                to={link.to}
+                hash={"hash" in link ? link.hash : undefined}
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-4 border border-border bg-surface px-5 py-3.5 font-mono text-sm text-text-secondary uppercase tracking-widest transition-colors hover:bg-surface-2 hover:text-text"
               >
-                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: mobileColors[i] }} />
+                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: link.color }} />
                 {link.label}
               </Link>
             ))}
-            <Link
-              to="/pricing"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-4 border border-border bg-surface px-5 py-3.5 font-mono text-sm text-text-secondary uppercase tracking-widest transition-colors hover:bg-surface-2 hover:text-text"
-            >
-              <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#ffcc00" }} />
-              {NAV.pricing}
-            </Link>
-            <Link
-              to="/changelog"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-4 border border-border bg-surface px-5 py-3.5 font-mono text-sm text-text-secondary uppercase tracking-widest transition-colors hover:bg-surface-2 hover:text-text"
-            >
-              <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#c94a00" }} />
-              {NAV.changelog}
-            </Link>
             <Link
               to="/"
               hash="download"

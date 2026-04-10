@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // GitHub Pages SPA fallback.
+      // Encodes the current path/search/hash into a query param so index.html
+      // can restore it after the redirect. The leading slash is stripped so the
+      // path is portable regardless of the repo name / CNAME base.
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          "/?p=" +
+          encodeURIComponent(l.pathname + l.search + l.hash)
+      );
+    </script>
+  </head>
+</html>

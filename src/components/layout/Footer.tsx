@@ -5,37 +5,6 @@ import { ContentContainer } from "../ui/ContentContainer";
 import { NoiseTexture } from "../ui/NoiseTexture";
 import { SectionBorder } from "../ui/SectionBorder";
 
-type FooterLink =
-  | { label: string; href: string; to?: never; hash?: never }
-  | { label: string; to: string; hash?: string; href?: never };
-
-const footerRoutes: FooterLink[][] = [
-  [
-    { label: "", to: "/", hash: "features" },
-    { label: "", to: "/", hash: "mcp" },
-    { label: "", to: "/", hash: "schema" },
-    { label: "", to: "/", hash: "download" },
-    { label: "", to: "/pricing" },
-    { label: "", to: "/changelog" },
-  ],
-  [
-    { label: "", href: "#" },
-    { label: "", href: "#" },
-  ],
-  [
-    { label: "", href: "https://discord.gg/xR2VdkfnJQ" },
-    { label: "", href: "https://twitter.com/slashtable" },
-  ],
-];
-
-const footerSections = FOOTER.sections.map((section, si) => ({
-  title: section.title,
-  links: section.links.map((label, li) => ({
-    ...footerRoutes[si][li],
-    label,
-  })),
-}));
-
 export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-surface">
@@ -57,16 +26,16 @@ export function Footer() {
             <p className="mt-3 max-w-xs text-sm text-text-secondary leading-relaxed">{FOOTER.tagline}</p>
           </div>
 
-          {footerSections.map((section, i) => (
+          {FOOTER.sections.map((section, i) => (
             <div key={section.title} className={i === 0 ? "row-span-2 sm:row-span-1" : "col-start-2 sm:col-auto"}>
               <h3 className="mb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest">{section.title}</h3>
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    {link.to ? (
+                    {"to" in link ? (
                       <Link
                         to={link.to}
-                        hash={link.hash}
+                        hash={"hash" in link ? link.hash : undefined}
                         className="text-sm text-text-secondary transition-colors hover:text-text"
                       >
                         {link.label}

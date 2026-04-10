@@ -28,73 +28,6 @@ export const HERO = {
     "SlashTable main window showing a data table with foreign key relationships highlighted and breadcrumb navigation \u2014 dark mode left, light mode right",
 };
 
-// ─── Feature Showcase ────────────────────────────────────────────
-
-export const FEATURE_SHOWCASE = {
-  eyebrow: "Product",
-  heading: "Six reasons to close your current database tool",
-  description: "We rebuilt the database GUI because the existing ones felt like they were designed by committee.",
-  features: [
-    {
-      title: "Foreign Key Navigation",
-      description:
-        "Click a foreign key, land on the related record. A breadcrumb tracks your path. Every level is clickable.",
-    },
-    {
-      title: "Schema Graph",
-      description:
-        "Auto-layout ER diagram. Pin roots, control depth, search by name. Join tables collapse into the relationships they represent.",
-    },
-    {
-      title: "Command Palette",
-      description:
-        "Navigate tables, run queries, switch connections. All from the keyboard. The mouse is optional, but just as fun.",
-    },
-    {
-      title: "MCP Server for AI",
-      description:
-        "Read-only tools for Claude, Cursor, or any MCP client. Three safety layers between your agent and a write query.",
-    },
-    {
-      title: "Data Editing",
-      description:
-        "Edit rows inline. Changes queue with a SQL diff preview before anything commits. Revert one edit or blow them all away.",
-    },
-    {
-      title: "SQL Editor",
-      description:
-        "Autocomplete that knows your schema. Multi-statement execution with per-statement timing. Auto-format for the queries you\u2019re not proud of.",
-    },
-  ],
-};
-
-// ─── Social Proof ────────────────────────────────────────────────
-
-export const SOCIAL_PROOF = {
-  heading: "Totally real testimonials",
-  testimonials: [
-    {
-      quote: "My mass assignment vulnerability just needed a better GUI.",
-      name: "Bobby Tables",
-      role: "DROP TABLE users",
-      company: "'; -- Inc.",
-    },
-    {
-      quote:
-        "I asked Claude to check the orders table and it tried to DROP it. SlashTable said no. Claude said sorry. We all grew that day.",
-      name: "Dave from Platform",
-      role: "Incident Commander",
-      company: "That Was Close Ltd",
-    },
-    {
-      quote:
-        "I opened the schema graph on a Friday and found two circular foreign keys and a table called temp_final_v2_REAL. We don't deploy on Fridays anymore.",
-      name: "Anonymous",
-      role: "Staff Engineer",
-      company: "Legacy Codebase Survivors",
-    },
-  ],
-};
 
 // ─── Schema Graph Section ────────────────────────────────────────
 
@@ -137,9 +70,13 @@ export const PLUGIN = {
   eyebrow: "Plugins",
   heading: "BYOC: Bring Your Own Code.",
   pluginPath: "~/.slashtable/plugins/",
-  body: [
-    "Cell renderers, record enrichers, custom views, query hooks, toolbar actions, and themes. Write TypeScript, drop it in ~/.slashtable/plugins/. No build step.",
-    "Cell renderers change how columns look. Record enrichers attach external data to rows. Custom views add new tab types. Query hooks intercept SQL. Toolbar actions wire into the active connection.",
+  intro: "Cell renderers, record enrichers, custom views, query hooks, toolbar actions, and themes. Write TypeScript, drop it in ~/.slashtable/plugins/. No build step.",
+  capabilities: [
+    "Cell renderers change how columns look",
+    "Record enrichers attach external data to rows",
+    "Custom views add new tab types",
+    "Query hooks intercept SQL",
+    "Toolbar actions wire into the active connection",
   ],
   codeFilename: "status-badge/main.ts",
   codeExample: `import { Plugin } from "slashtable";
@@ -276,18 +213,6 @@ export const NAVIGATION = {
   cta: "Try it free",
 };
 
-// ─── Database Support ────────────────────────────────────────────
-
-export const DATABASE_SUPPORT = {
-  eyebrow: "Database Support",
-  heading: "PostgreSQL today. More coming.",
-  databases: [
-    { name: "PostgreSQL", active: true },
-    { name: "SQLite", active: false },
-    { name: "MySQL", active: false },
-  ],
-  comingSoon: "Coming soon",
-};
 
 // ─── Value Pillars ───────────────────────────────────────────────
 
@@ -308,27 +233,6 @@ export const VALUE_PILLARS = {
   ],
 };
 
-// ─── Differentiators ─────────────────────────────────────────────
-
-export const DIFFERENTIATORS = {
-  items: [
-    {
-      title: "Schema-aware navigation",
-      description:
-        "Foreign keys render as links. Click a customer_id, land on the customer. Join tables collapse into direct relationships automatically.",
-    },
-    {
-      title: "Built for AI agents",
-      description:
-        "Ships with an MCP server. Claude, Cursor, or any MCP client can query your schema and read your data. Read-only by default.",
-    },
-    {
-      title: "Extend everything",
-      description:
-        "Obsidian-style plugin system. Write cell renderers, custom views, data enrichers, query hooks, and themes in TypeScript.",
-    },
-  ],
-};
 
 // ─── Download Section ────────────────────────────────────────────
 
@@ -365,26 +269,6 @@ export const CONTACT_SALES = {
   close: "Close",
 };
 
-// ─── Filtering Section ───────────────────────────────────────────
-
-export const FILTERING = {
-  eyebrow: "Filtering",
-  heading: "Filter like you mean it.",
-  operatorsLabel: "15 operators",
-  body: [
-    "15 operators in six categories. Combine them with AND/OR logic, or drop in raw SQL when the UI isn\u2019t enough. Disable a filter without deleting it. Useful for toggling constraints while exploring.",
-    "Follow a foreign key and the context filter locks automatically. Visible, labeled, locked. You always know why you\u2019re seeing these specific rows. Stack more filters on top.",
-    "The filter UI reads your column stats and picks the right operator. Low-cardinality columns get in list, numeric columns get between, dates get date pickers.",
-  ],
-  operators: [
-    { group: "Equality", ops: ["equals", "not equals"] },
-    { group: "Comparison", ops: ["greater than", "\u2265", "less than", "\u2264"] },
-    { group: "Text", ops: ["contains", "starts with", "ends with", "matches regex"] },
-    { group: "Range", ops: ["between", "not between"] },
-    { group: "Multi-value", ops: ["in list"] },
-    { group: "Null", ops: ["is null", "is not null"] },
-  ],
-};
 
 // ─── Community Section ───────────────────────────────────────────
 
@@ -419,9 +303,11 @@ export const NAV = {
   changelog: "Changelog",
   download: "Download",
   mobileLinks: [
-    { label: "Features", hash: "features" },
-    { label: "MCP Server", hash: "mcp" },
-    { label: "Schema Graph", hash: "schema" },
+    { label: "Features", to: "/" as const, hash: "features", color: "var(--color-green)" },
+    { label: "MCP Server", to: "/" as const, hash: "mcp", color: "var(--color-cyan)" },
+    { label: "Schema Graph", to: "/" as const, hash: "schema", color: "var(--color-magenta)" },
+    { label: "Pricing", to: "/pricing" as const, color: "var(--color-yellow)" },
+    { label: "Changelog", to: "/changelog" as const, color: "var(--color-orange)" },
   ],
 };
 
@@ -432,15 +318,28 @@ export const FOOTER = {
   sections: [
     {
       title: "Product",
-      links: ["Features", "MCP Server", "Schema Graph", "Download", "Pricing", "Changelog"],
+      links: [
+        { label: "Features", to: "/", hash: "features" },
+        { label: "MCP Server", to: "/", hash: "mcp" },
+        { label: "Schema Graph", to: "/", hash: "schema" },
+        { label: "Download", to: "/", hash: "download" },
+        { label: "Pricing", to: "/pricing" },
+        { label: "Changelog", to: "/changelog" },
+      ],
     },
     {
       title: "Resources",
-      links: ["Documentation", "Plugin API"],
+      links: [
+        { label: "Documentation", href: "#" },
+        { label: "Plugin API", href: "#" },
+      ],
     },
     {
       title: "Community",
-      links: ["Discord", "Twitter / X"],
+      links: [
+        { label: "Discord", href: "https://discord.gg/xR2VdkfnJQ" },
+        { label: "Twitter / X", href: "https://twitter.com/slashtable" },
+      ],
     },
   ],
   copyright: "Make Toast LLC",

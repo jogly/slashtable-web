@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { type DownloadSource, trackDownloadStarted } from "../lib/analytics";
 
 interface LatestRelease {
@@ -20,18 +20,22 @@ export function useDownload() {
   const [release, setRelease] = useState<LatestRelease | null>(null);
   const [isIntel] = useState(() => detectIsIntel());
   const [showThankYou, setShowThankYou] = useState(false);
+  const timerRef = useRef<number>(undefined);
 
   useEffect(() => {
     fetch("https://downloads.slashtable.dev/latest.json")
       .then((r) => r.json())
       .then(setRelease)
       .catch(() => {});
+    return () => window.clearTimeout(timerRef.current);
   }, []);
 
   const primary = release ? (isIntel ? release.downloads.macos_x64 : release.downloads.macos_arm64) : undefined;
   const secondary = release ? (isIntel ? release.downloads.macos_arm64 : release.downloads.macos_x64) : undefined;
   const label = isIntel ? "Intel" : "Silicon";
   const altLabel = isIntel ? "Silicon" : "Intel";
+
+  const openThankYou = useCallback(() => setShowThankYou(true), []);
 
   const triggerDownload = useCallback(
     (source: DownloadSource = "download_section_button") => {
@@ -48,7 +52,7 @@ export function useDownload() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      setTimeout(() => setShowThankYou(true), 500);
+      timerRef.current = window.setTimeout(() => setShowThankYou(true), 500);
     },
     [primary, isIntel, release],
   );
@@ -63,7 +67,7 @@ export function useDownload() {
     label,
     altLabel,
     showThankYou,
-    setShowThankYou,
+    openThankYou,
     closeThankYou,
     triggerDownload,
   };

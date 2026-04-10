@@ -8,7 +8,7 @@ import { trackCheckoutCompleted } from "../../lib/analytics";
 
 export const Route = createFileRoute("/checkout/success")({
   validateSearch: (search: Record<string, unknown>) => ({
-    cid: (search.cid as string) || undefined,
+    cid: typeof search.cid === "string" ? search.cid : undefined,
   }),
   component: CheckoutSuccessPage,
 });
