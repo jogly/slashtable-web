@@ -22,10 +22,18 @@ function changelogPlugin(): Plugin {
     },
     async load(id) {
       if (id !== resolvedId) return;
-      const res = await fetch(CHANGELOG_URL);
-      if (!res.ok) throw new Error(`Failed to fetch changelog: ${res.statusText}`);
-      const json = await res.text();
-      return `export default ${json};`;
+      try {
+        const res = await fetch(CHANGELOG_URL);
+        if (!res.ok) {
+          console.warn(`[changelog] Fetch returned ${res.status} ${res.statusText} — building with empty changelog`);
+          return "export default { entries: [] };";
+        }
+        const json = await res.text();
+        return `export default ${json};`;
+      } catch (e) {
+        console.warn("[changelog] Fetch failed — building with empty changelog", e);
+        return "export default { entries: [] };";
+      }
     },
   };
 }

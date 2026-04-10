@@ -28,7 +28,6 @@ export const HERO = {
     "SlashTable main window showing a data table with foreign key relationships highlighted and breadcrumb navigation \u2014 dark mode left, light mode right",
 };
 
-
 // ─── Schema Graph Section ────────────────────────────────────────
 
 export const SCHEMA_GRAPH = {
@@ -68,9 +67,10 @@ export const MCP = {
 
 export const PLUGIN = {
   eyebrow: "Plugins",
-  heading: "BYOC: Bring Your Own Code.",
+  heading: "Bring Your Own Code.",
   pluginPath: "~/.slashtable/plugins/",
-  intro: "Cell renderers, record enrichers, custom views, query hooks, toolbar actions, and themes. Write TypeScript, drop it in ~/.slashtable/plugins/. No build step.",
+  intro:
+    "Cell renderers, record enrichers, custom views, query hooks, toolbar actions, and themes. Write TypeScript, drop it in ~/.slashtable/plugins/. No build step.",
   capabilities: [
     "Cell renderers change how columns look",
     "Record enrichers attach external data to rows",
@@ -213,7 +213,6 @@ export const NAVIGATION = {
   cta: "Try it free",
 };
 
-
 // ─── Value Pillars ───────────────────────────────────────────────
 
 export const VALUE_PILLARS = {
@@ -232,7 +231,6 @@ export const VALUE_PILLARS = {
     },
   ],
 };
-
 
 // ─── Download Section ────────────────────────────────────────────
 
@@ -268,7 +266,6 @@ export const CONTACT_SALES = {
   email: "sales@slashtable.dev",
   close: "Close",
 };
-
 
 // ─── Community Section ───────────────────────────────────────────
 
