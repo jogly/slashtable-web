@@ -15,17 +15,17 @@ export function NavigationSection() {
               <div className="min-w-0">
                 <div className="mb-5 flex items-center gap-2">
                   <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#44ff88" }} />
-                  <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{NAVIGATION.eyebrow}</span>
+                  <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                    {NAVIGATION.eyebrow}
+                  </span>
                 </div>
                 <div className="mb-8 lg:hidden">
                   <BreadcrumbMockup className="w-full" />
                 </div>
-                <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">
-                  {NAVIGATION.heading}
-                </h2>
+                <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{NAVIGATION.heading}</h2>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
-                  {NAVIGATION.body.map((p, i) => (
-                    <p key={i}>{p}</p>
+                  {NAVIGATION.body.map((p) => (
+                    <p key={p}>{p}</p>
                   ))}
                 </div>
                 <a

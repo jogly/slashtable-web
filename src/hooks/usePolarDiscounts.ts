@@ -30,9 +30,7 @@ interface CheckoutLink {
  * Fetch all checkout links and match by client_secret (the `polar_cl_...` slug).
  * The API only accepts UUIDs for individual lookups, so we list and filter.
  */
-async function fetchAllDiscounts(
-  polarIds: string[],
-): Promise<Record<string, PolarDiscount | null>> {
+async function fetchAllDiscounts(polarIds: string[]): Promise<Record<string, PolarDiscount | null>> {
   const map: Record<string, PolarDiscount | null> = {};
   for (const id of polarIds) map[id] = null;
 
@@ -75,8 +73,10 @@ export function usePolarDiscounts(polarIds: string[]) {
       setLoading(false);
     });
 
-    return () => { cancelled = true; };
-  }, [polarIds.join(",")]);
+    return () => {
+      cancelled = true;
+    };
+  }, [polarIds.length, polarIds]);
 
   return { discounts, loading };
 }
@@ -116,6 +116,7 @@ export function isDiscountActive(d: PolarDiscount): boolean {
   const now = Date.now();
   if (d.starts_at && new Date(d.starts_at).getTime() > now) return false;
   if (d.ends_at && new Date(d.ends_at).getTime() < now) return false;
-  if (d.max_redemptions != null && d.redemptions_count != null && d.redemptions_count >= d.max_redemptions) return false;
+  if (d.max_redemptions != null && d.redemptions_count != null && d.redemptions_count >= d.max_redemptions)
+    return false;
   return true;
 }

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef } from "react";
 import { X } from "lucide-react";
+import { useCallback, useEffect, useRef } from "react";
 import { CONTACT_SALES } from "../../lib/copy";
 
 interface ContactSalesModalProps {
@@ -49,15 +49,8 @@ export function ContactSalesModal({ open, onClose }: ContactSalesModalProps) {
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      role="presentation"
-    >
-      <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="presentation">
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
 
       <div
         ref={dialogRef}
@@ -77,19 +70,14 @@ export function ContactSalesModal({ open, onClose }: ContactSalesModalProps) {
           <X className="h-4 w-4" />
         </button>
 
-        <h2
-          id="contact-sales-heading"
-          className="font-display text-2xl text-text tracking-tight"
-        >
+        <h2 id="contact-sales-heading" className="font-display text-2xl text-text tracking-tight">
           {CONTACT_SALES.heading}
         </h2>
-        <p className="mt-4 text-sm text-text-secondary leading-relaxed">
-          {CONTACT_SALES.body}
-        </p>
+        <p className="mt-4 text-sm text-text-secondary leading-relaxed">{CONTACT_SALES.body}</p>
 
         <a
           href={`mailto:${CONTACT_SALES.email}`}
-          className="mt-6 inline-flex items-center rounded-full bg-accent px-6 py-2.5 font-mono text-xs text-black uppercase tracking-widest transition-colors hover:bg-white"
+          className="mt-6 inline-flex items-center rounded-full bg-accent px-6 py-2.5 font-mono text-black text-xs uppercase tracking-widest transition-colors hover:bg-white"
         >
           {CONTACT_SALES.email}
         </a>

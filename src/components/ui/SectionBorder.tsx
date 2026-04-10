@@ -29,7 +29,5 @@ export function SectionBorder({ position, className }: SectionBorderProps) {
 }
 
 export function Diamond({ className }: { className?: string }) {
-  return (
-    <div className={cn("h-[7px] w-[7px] rotate-45 border border-border bg-bg", className)} />
-  );
+  return <div className={cn("h-[7px] w-[7px] rotate-45 border border-border bg-bg", className)} />;
 }

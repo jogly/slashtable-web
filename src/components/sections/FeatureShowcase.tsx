@@ -17,12 +17,8 @@ export function FeatureShowcase() {
         <FadeIn>
           <div className="mb-16 text-center">
             <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">{FEATURE_SHOWCASE.eyebrow}</p>
-            <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">
-              {FEATURE_SHOWCASE.heading}
-            </h2>
-            <p className="mx-auto mt-4 max-w-lg text-text-secondary leading-relaxed">
-              {FEATURE_SHOWCASE.description}
-            </p>
+            <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{FEATURE_SHOWCASE.heading}</h2>
+            <p className="mx-auto mt-4 max-w-lg text-text-secondary leading-relaxed">{FEATURE_SHOWCASE.description}</p>
           </div>
         </FadeIn>
 

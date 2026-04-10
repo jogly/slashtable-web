@@ -48,7 +48,12 @@ const tree: DemoNode = {
   id: "customers",
   label: "customers",
   grid: {
-    columns: [{ name: "id", type: "#" }, { name: "email", type: "✉" }, { name: "full_name", type: "T" }, { name: "orders", type: "×", link: "orders" }],
+    columns: [
+      { name: "id", type: "#" },
+      { name: "email", type: "✉" },
+      { name: "full_name", type: "T" },
+      { name: "orders", type: "×", link: "orders" },
+    ],
     row: { id: "14d9e...", email: "karen139@icloud.com", full_name: "Karen Jones", orders: "orders (47)" },
   },
   children: [
@@ -57,7 +62,12 @@ const tree: DemoNode = {
       label: "orders",
       filter: { col: "customer_id", val: "14d9e..." },
       grid: {
-        columns: [{ name: "id", type: "#" }, { name: "order_number", type: "T" }, { name: "status", type: "T" }, { name: "order_items", type: "×", link: "order_items" }],
+        columns: [
+          { name: "id", type: "#" },
+          { name: "order_number", type: "T" },
+          { name: "status", type: "T" },
+          { name: "order_items", type: "×", link: "order_items" },
+        ],
         row: { id: "1657", order_number: "ORD-001657", status: "confirmed", order_items: "order_items (3)" },
       },
       children: [
@@ -66,7 +76,12 @@ const tree: DemoNode = {
           label: "shipments",
           filter: { col: "order_id", val: "1657" },
           grid: {
-            columns: [{ name: "id", type: "#" }, { name: "carrier", type: "T" }, { name: "tracking", type: "T" }, { name: "status", type: "T" }],
+            columns: [
+              { name: "id", type: "#" },
+              { name: "carrier", type: "T" },
+              { name: "tracking", type: "T" },
+              { name: "status", type: "T" },
+            ],
             row: { id: "891", carrier: "USPS", tracking: "9400111899223...", status: "in_transit" },
           },
           children: [],
@@ -76,7 +91,12 @@ const tree: DemoNode = {
           label: "order_items",
           filter: { col: "order_id", val: "1657" },
           grid: {
-            columns: [{ name: "id", type: "#" }, { name: "product_id", type: "⚿", link: "products-134" }, { name: "quantity", type: "#" }, { name: "unit_price", type: "$" }],
+            columns: [
+              { name: "id", type: "#" },
+              { name: "product_id", type: "⚿", link: "products-134" },
+              { name: "quantity", type: "#" },
+              { name: "unit_price", type: "$" },
+            ],
             row: { id: "3042", product_id: "134", quantity: "2", unit_price: "24.50" },
           },
           children: [
@@ -86,7 +106,11 @@ const tree: DemoNode = {
               pk: "#134",
               filter: { col: "id", val: "134" },
               grid: {
-                columns: [{ name: "sku", type: "T" }, { name: "name", type: "T" }, { name: "description", type: "T" }],
+                columns: [
+                  { name: "sku", type: "T" },
+                  { name: "name", type: "T" },
+                  { name: "description", type: "T" },
+                ],
                 row: { sku: "SKU-00134", name: "Water Bottle v9", description: "High quality product #134." },
               },
               children: [],
@@ -100,7 +124,12 @@ const tree: DemoNode = {
       label: "reviews",
       filter: { col: "customer_id", val: "14d9e..." },
       grid: {
-        columns: [{ name: "id", type: "#" }, { name: "product_id", type: "⚿", link: "products-142" }, { name: "rating", type: "#" }, { name: "body", type: "T" }],
+        columns: [
+          { name: "id", type: "#" },
+          { name: "product_id", type: "⚿", link: "products-142" },
+          { name: "rating", type: "#" },
+          { name: "body", type: "T" },
+        ],
         row: { id: "782", product_id: "142", rating: "4", body: "Solid build quality" },
       },
       children: [
@@ -110,7 +139,12 @@ const tree: DemoNode = {
           pk: "#142",
           filter: { col: "id", val: "142" },
           grid: {
-            columns: [{ name: "sku", type: "T" }, { name: "name", type: "T" }, { name: "price", type: "$" }, { name: "inventory_log", type: "×", link: "inventory_log" }],
+            columns: [
+              { name: "sku", type: "T" },
+              { name: "name", type: "T" },
+              { name: "price", type: "$" },
+              { name: "inventory_log", type: "×", link: "inventory_log" },
+            ],
             row: { sku: "SKU-00142", name: "Camping Stove", price: "89.00", inventory_log: "inventory_log (12)" },
           },
           children: [
@@ -119,7 +153,12 @@ const tree: DemoNode = {
               label: "inventory_log",
               filter: { col: "product_id", val: "142" },
               grid: {
-                columns: [{ name: "id", type: "#" }, { name: "delta", type: "#" }, { name: "reason", type: "T" }, { name: "created_at", type: "⏰" }],
+                columns: [
+                  { name: "id", type: "#" },
+                  { name: "delta", type: "#" },
+                  { name: "reason", type: "T" },
+                  { name: "created_at", type: "⏰" },
+                ],
                 row: { id: "4021", delta: "-3", reason: "Damaged in transit", created_at: "2025-12-14" },
               },
               children: [],
@@ -171,7 +210,6 @@ function buildActivePath(node: DemoNode, targetId: string): Set<string> {
   return path;
 }
 
-
 // ── SVG connectors (matching slashtable source exactly) ──
 
 function ArrowConnector({ accent }: { accent: boolean }) {
@@ -183,14 +221,23 @@ function ArrowConnector({ accent }: { accent: boolean }) {
   ].join(" ");
   return (
     <div className="shrink-0" style={{ height: ROW_H, width: NARROW_ARROW_W }}>
-      <svg aria-hidden style={{ display: "block", height: ROW_H, width: NARROW_ARROW_W }} viewBox={`0 0 ${NARROW_ARROW_W} ${ROW_H}`}>
+      <svg
+        aria-hidden="true"
+        style={{ display: "block", height: ROW_H, width: NARROW_ARROW_W }}
+        viewBox={`0 0 ${NARROW_ARROW_W} ${ROW_H}`}
+      >
         <path d={d} {...pathProps} stroke={accent ? STROKE_ACCENT : STROKE_MUTED} />
       </svg>
     </div>
   );
 }
 
-function BranchConnector({ childCount, childOffsets, totalHeight, activeChildren }: {
+function BranchConnector({
+  childCount,
+  childOffsets,
+  totalHeight,
+  activeChildren,
+}: {
   childCount: number;
   childOffsets: number[];
   totalHeight: number;
@@ -218,15 +265,21 @@ function BranchConnector({ childCount, childOffsets, totalHeight, activeChildren
 
   const viewBox = `0 0 ${ARROW_W} ${totalHeight}`;
   const svgStyle: React.CSSProperties = {
-    display: "block", height: totalHeight, left: 0, position: "absolute", top: 0, width: ARROW_W,
+    display: "block",
+    height: totalHeight,
+    left: 0,
+    position: "absolute",
+    top: 0,
+    width: ARROW_W,
   };
   return (
     <div className="shrink-0" style={{ height: totalHeight, position: "relative", width: ARROW_W }}>
-      <svg aria-hidden style={svgStyle} viewBox={viewBox}>
+      <svg aria-hidden="true" style={svgStyle} viewBox={viewBox}>
         <path d={inlineD} {...pathProps} stroke={activeChildren[0] ? STROKE_ACCENT : STROKE_MUTED} />
       </svg>
       {branchPaths.map(({ d, accent }, i) => (
-        <svg aria-hidden key={i} style={svgStyle} viewBox={viewBox}>
+        // biome-ignore lint/suspicious/noArrayIndexKey: static svg paths, index is stable
+        <svg aria-hidden="true" key={i} style={svgStyle} viewBox={viewBox}>
           <path d={d} {...pathProps} stroke={accent ? STROKE_ACCENT : STROKE_MUTED} />
         </svg>
       ))}
@@ -236,7 +289,13 @@ function BranchConnector({ childCount, childOffsets, totalHeight, activeChildren
 
 // ── Node pill ──
 
-function Pill({ label, pk, active, accent, onClick }: {
+function Pill({
+  label,
+  pk,
+  active,
+  accent,
+  onClick,
+}: {
   label: string;
   pk?: string;
   active: boolean;
@@ -258,7 +317,11 @@ function Pill({ label, pk, active, accent, onClick }: {
     >
       <span>{label}</span>
       {pk && <span className="opacity-50">{pk}</span>}
-      <span className={cn("ml-0.5 hidden text-[9px] sm:inline", active || accent ? "text-accent/40" : "text-text-muted/40")}>×</span>
+      <span
+        className={cn("ml-0.5 hidden text-[9px] sm:inline", active || accent ? "text-accent/40" : "text-text-muted/40")}
+      >
+        ×
+      </span>
     </button>
   );
 }
@@ -271,7 +334,12 @@ function rowCount(node: DemoNode): number {
   return node.children.reduce((sum, c) => sum + rowCount(c), 0);
 }
 
-function TreeNode({ node, activePath, activeId, onSelect }: {
+function TreeNode({
+  node,
+  activePath,
+  activeId,
+  onSelect,
+}: {
   node: DemoNode;
   activePath: Set<string>;
   activeId: string;
@@ -304,7 +372,10 @@ function TreeNode({ node, activePath, activeId, onSelect }: {
   const counts = node.children.map(rowCount);
   const offsets: number[] = [];
   let cum = 0;
-  for (const c of counts) { offsets.push(cum); cum += c * ROW_H; }
+  for (const c of counts) {
+    offsets.push(cum);
+    cum += c * ROW_H;
+  }
   const totalH = cum;
 
   const activeChildren = node.children.map((c) => isAccent && activePath.has(c.id));
@@ -312,7 +383,12 @@ function TreeNode({ node, activePath, activeId, onSelect }: {
   return (
     <div className="flex items-start" style={{ minHeight: ROW_H }}>
       <Pill label={node.label} pk={node.pk} active={isActive} accent={isAccent} onClick={() => onSelect(node.id)} />
-      <BranchConnector childCount={numChildren} childOffsets={offsets} totalHeight={totalH} activeChildren={activeChildren} />
+      <BranchConnector
+        childCount={numChildren}
+        childOffsets={offsets}
+        totalHeight={totalH}
+        activeChildren={activeChildren}
+      />
       <div className="flex flex-col">
         {node.children.map((child) => (
           <TreeNode key={child.id} node={child} activePath={activePath} activeId={activeId} onSelect={onSelect} />
@@ -327,20 +403,37 @@ function TreeNode({ node, activePath, activeId, onSelect }: {
 function FilterBar({ activeNode }: { activeNode: DemoNode }) {
   const filter = activeNode.filter;
   return (
-    <div className="flex h-7 items-center gap-2 overflow-hidden border-t border-border px-3 font-mono text-[10px] whitespace-nowrap">
+    <div className="flex h-7 items-center gap-2 overflow-hidden whitespace-nowrap border-border border-t px-3 font-mono text-[10px]">
       {/* view toggles */}
       <div className="flex items-center gap-1">
-        {[
-          "M1 1h4v4H1zM7 1h4v4H7zM1 7h4v4H1zM7 7h4v4H7z",
-          "M1 2h10M1 6h10M1 10h10",
-          "M1 1h4v10H1zM7 1h4v10H7z",
-        ].map((d, i) => (
-          <svg key={i} viewBox="0 0 12 12" className="h-3 w-3 text-text-muted" fill="none" stroke="currentColor" strokeWidth="1"><path d={d} /></svg>
-        ))}
+        {["M1 1h4v4H1zM7 1h4v4H7zM1 7h4v4H1zM7 7h4v4H7z", "M1 2h10M1 6h10M1 10h10", "M1 1h4v10H1zM7 1h4v10H7z"].map(
+          (d) => (
+            <svg
+              key={d}
+              aria-hidden="true"
+              viewBox="0 0 12 12"
+              className="h-3 w-3 text-text-muted"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+            >
+              <path d={d} />
+            </svg>
+          ),
+        )}
       </div>
       <div className="h-3 w-px bg-border" />
       {/* bookmark */}
-      <svg viewBox="0 0 12 14" className="h-3 w-3 text-text-muted" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M2 1h8v12L6 10 2 13z" /></svg>
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 12 14"
+        className="h-3 w-3 text-text-muted"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      >
+        <path d="M2 1h8v12L6 10 2 13z" />
+      </svg>
 
       {filter ? (
         <>
@@ -349,7 +442,14 @@ function FilterBar({ activeNode }: { activeNode: DemoNode }) {
             <span className="text-text-muted">=</span>
             <span className="text-accent">{filter.val}</span>
             {/* lock icon */}
-            <svg viewBox="0 0 10 12" className="ml-0.5 h-2.5 w-2.5 text-text-muted" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 10 12"
+              className="ml-0.5 h-2.5 w-2.5 text-text-muted"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+            >
               <rect x="1" y="5" width="8" height="6" rx="1" />
               <path d="M3 5V3a2 2 0 0 1 4 0v2" />
             </svg>
@@ -370,10 +470,16 @@ function DataGrid({ grid, onSelect }: { grid: GridData; onSelect: (id: string) =
   const { columns, row } = grid;
   const colTemplate = `repeat(${columns.length}, minmax(0, 1fr))`;
   return (
-    <div className="border-t border-border font-mono text-[10px]">
-      <div className="grid border-b border-border bg-surface" style={{ gridTemplateColumns: colTemplate }}>
+    <div className="border-border border-t font-mono text-[10px]">
+      <div className="grid border-border border-b bg-surface" style={{ gridTemplateColumns: colTemplate }}>
         {columns.map((col, i) => (
-          <div key={col.name} className={cn("truncate whitespace-nowrap px-2 py-1 text-text-muted", i < columns.length - 1 && "border-r border-border")}>
+          <div
+            key={col.name}
+            className={cn(
+              "truncate whitespace-nowrap px-2 py-1 text-text-muted",
+              i < columns.length - 1 && "border-border border-r",
+            )}
+          >
             <span className="text-text-muted/50">{col.type}</span> {col.name}
           </div>
         ))}
@@ -386,9 +492,20 @@ function DataGrid({ grid, onSelect }: { grid: GridData; onSelect: (id: string) =
           const hasLink = col.link != null;
 
           return (
-            <div key={col.name} className={cn("truncate whitespace-nowrap px-2 py-1", i < columns.length - 1 && "border-r border-border/50", hasLink ? "text-accent" : "text-text-secondary")}>
+            <div
+              key={col.name}
+              className={cn(
+                "truncate whitespace-nowrap px-2 py-1",
+                i < columns.length - 1 && "border-border/50 border-r",
+                hasLink ? "text-accent" : "text-text-secondary",
+              )}
+            >
               {hasLink ? (
-                <button type="button" onClick={() => onSelect(col.link!)} className="cursor-pointer hover:underline">
+                <button
+                  type="button"
+                  onClick={() => onSelect(col.link as string)}
+                  className="cursor-pointer hover:underline"
+                >
                   {val}
                   {isForwardFK && <span className="ml-0.5 text-accent/50">→</span>}
                   {isReverseFK && <span className="ml-0.5 text-accent/50">›</span>}
@@ -407,7 +524,11 @@ function DataGrid({ grid, onSelect }: { grid: GridData; onSelect: (id: string) =
 // ── Main component ──
 
 /** Flat single-row breadcrumb for mobile: shows a fixed path, highlights the active node. */
-function FlatBreadcrumb({ pathNodes, activeId, onSelect }: {
+function FlatBreadcrumb({
+  pathNodes,
+  activeId,
+  onSelect,
+}: {
   pathNodes: DemoNode[];
   activeId: string;
   onSelect: (id: string) => void;
@@ -421,7 +542,13 @@ function FlatBreadcrumb({ pathNodes, activeId, onSelect }: {
         return (
           <div key={node.id} className="flex items-center">
             {i > 0 && <ArrowConnector accent={isOnPath} />}
-            <Pill label={node.label} pk={node.pk} active={isActive} accent={isOnPath} onClick={() => onSelect(node.id)} />
+            <Pill
+              label={node.label}
+              pk={node.pk}
+              active={isActive}
+              accent={isOnPath}
+              onClick={() => onSelect(node.id)}
+            />
           </div>
         );
       })}

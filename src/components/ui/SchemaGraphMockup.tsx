@@ -97,13 +97,15 @@ function findPath(from: string, to: string): Set<string> {
   if (from === to) return new Set([from]);
   const adj: Record<string, string[]> = {};
   for (const r of refs) {
-    (adj[r.toTable] ??= []).push(r.fromTable);
-    (adj[r.fromTable] ??= []).push(r.toTable);
+    if (!adj[r.toTable]) adj[r.toTable] = [];
+    adj[r.toTable].push(r.fromTable);
+    if (!adj[r.fromTable]) adj[r.fromTable] = [];
+    adj[r.fromTable].push(r.toTable);
   }
   const q: string[][] = [[from]];
   const seen = new Set([from]);
   while (q.length) {
-    const p = q.shift()!;
+    const p = q.shift() as string[];
     for (const n of adj[p[p.length - 1]] ?? []) {
       if (n === to) return new Set([...p, n]);
       if (!seen.has(n)) {
@@ -130,6 +132,8 @@ function PkIcon({ x, y, color }: { x: number; y: number; color: string }) {
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
+      role="img"
+      aria-label="Primary key"
     >
       <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" />
       <path d="m21 2-9.6 9.6" />
@@ -151,6 +155,8 @@ function FkIcon({ x, y, color }: { x: number; y: number; color: string }) {
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
+      role="img"
+      aria-label="Foreign key"
     >
       <path d="M9 17H7A5 5 0 0 1 7 7h2" />
       <path d="M15 7h2a5 5 0 1 1 0 10h-2" />
@@ -228,13 +234,7 @@ function TableCard({
           <g key={col.name}>
             {col.pk && <PkIcon x={t.x + 7} y={rowY + (ROW_H - ICON_S) / 2} color={iconColor} />}
             {isFk && <FkIcon x={t.x + 7} y={rowY + (ROW_H - ICON_S) / 2} color={iconColor} />}
-            <text
-              x={t.x + 25}
-              y={textY}
-              fontSize={10.5}
-              fontFamily="var(--font-mono)"
-              fill="rgba(255,255,255,0.35)"
-            >
+            <text x={t.x + 25} y={textY} fontSize={10.5} fontFamily="var(--font-mono)" fill="rgba(255,255,255,0.35)">
               {col.name}
             </text>
             <text
@@ -307,7 +307,7 @@ export function SchemaGraphMockup({ className }: { className?: string }) {
 
   return (
     <div className={cn("overflow-x-auto overflow-y-hidden border border-border", className)}>
-      <svg viewBox={`0 0 ${VW} ${VH}`} className="w-full min-w-[640px]">
+      <svg aria-hidden="true" viewBox={`0 0 ${VW} ${VH}`} className="w-full min-w-[640px]">
         {/* Dark background + dot grid */}
         <defs>
           <pattern id="sgDots" width="16" height="16" patternUnits="userSpaceOnUse">

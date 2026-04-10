@@ -1,19 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import { useDownload } from "../hooks/useDownload";
-import {
-  usePolarDiscounts,
-  formatDiscount,
-  discountedPrice,
-  isDiscountActive,
-} from "../hooks/usePolarDiscounts";
-import { PRICING, polarCheckoutUrl } from "../lib/copy";
-import { cn } from "../lib/utils";
 import { ContactSalesModal } from "../components/ui/ContactSalesModal";
 import { ContentContainer } from "../components/ui/ContentContainer";
 import { FadeIn } from "../components/ui/FadeIn";
 import { ThankYouModal } from "../components/ui/ThankYouModal";
+import { useDownload } from "../hooks/useDownload";
+import { discountedPrice, formatDiscount, isDiscountActive, usePolarDiscounts } from "../hooks/usePolarDiscounts";
+import { PRICING, polarCheckoutUrl } from "../lib/copy";
+import { cn } from "../lib/utils";
 
 export const Route = createFileRoute("/pricing")({
   component: PricingPage,
@@ -48,7 +43,7 @@ function VaultTooltip() {
         <div
           onMouseEnter={show}
           onMouseLeave={hide}
-          className="absolute top-full left-0 z-10 mt-2 w-56 border border-border bg-surface-2 p-3 shadow-lg shadow-black/40"
+          className="absolute top-full left-0 z-10 mt-2 w-56 border border-border bg-surface-2 p-3 shadow-black/40 shadow-lg"
         >
           <ul className="space-y-2">
             {PRICING.vaults.providers.map((v) => (
@@ -75,10 +70,7 @@ function PricingPage() {
   const { showThankYou, closeThankYou, triggerDownload } = useDownload();
   const [showContactSales, setShowContactSales] = useState(false);
 
-  const polarIds = useMemo(
-    () => PRICING.tiers.filter((t) => t.polarId).map((t) => t.polarId!),
-    [],
-  );
+  const polarIds = useMemo(() => PRICING.tiers.filter((t) => t.polarId).map((t) => t.polarId as string), []);
   const { discounts } = usePolarDiscounts(polarIds);
 
   return (
@@ -86,7 +78,7 @@ function PricingPage() {
       <ContentContainer>
         {/* Header */}
         <div className="mb-16 text-center">
-          <p className="mb-3 font-mono text-xs text-accent uppercase tracking-widest">{PRICING.eyebrow}</p>
+          <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">{PRICING.eyebrow}</p>
           <h1 className="font-display text-4xl text-text tracking-tight lg:text-5xl">{PRICING.heading}</h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-text-secondary leading-relaxed">{PRICING.description}</p>
         </div>
@@ -118,27 +110,23 @@ function PricingPage() {
 
                   <div className="flex-1">
                     <div className="mb-6">
-                      <h2 className="font-mono text-xs text-text-muted uppercase tracking-widest">{tier.name}</h2>
+                      <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{tier.name}</h2>
                       <div className="mt-3 flex items-baseline gap-2">
                         {hasDiscount && salePrice != null ? (
                           <>
-                            <span className="font-display text-4xl text-text">
-                              ${Math.round(salePrice / 100)}
-                            </span>
-                            <span className="font-display text-lg text-text-muted line-through">
-                              {tier.price}
-                            </span>
+                            <span className="font-display text-4xl text-text">${Math.round(salePrice / 100)}</span>
+                            <span className="font-display text-lg text-text-muted line-through">{tier.price}</span>
                           </>
                         ) : (
                           <span className="font-display text-4xl text-text">{tier.price}</span>
                         )}
-                        {tier.price !== "$0" && <span className="font-mono text-xs text-text-muted">one-time</span>}
+                        {tier.price !== "$0" && <span className="font-mono text-text-muted text-xs">one-time</span>}
                       </div>
                       <p className="mt-2 text-sm text-text-secondary">{tier.description}</p>
                     </div>
 
                     {tier.price !== "$0" && (
-                      <p className="mb-6 font-mono text-xs text-text-muted">{PRICING.perpetual}</p>
+                      <p className="mb-6 font-mono text-text-muted text-xs">{PRICING.perpetual}</p>
                     )}
                   </div>
 
@@ -169,13 +157,13 @@ function PricingPage() {
                     <button
                       type="button"
                       onClick={triggerDownload}
-                      className="flex items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-xs uppercase tracking-widest text-text-secondary transition-colors hover:border-white hover:text-white"
+                      className="flex items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-white hover:text-white"
                     >
                       {tier.cta}
                     </button>
                   ) : (
                     <a
-                      href={polarCheckoutUrl(tier.polarId!)}
+                      href={polarCheckoutUrl(tier.polarId as string)}
                       className={cn(
                         "flex items-center justify-center rounded-full px-5 py-2.5 font-mono text-xs uppercase tracking-widest transition-colors",
                         highlighted
@@ -200,14 +188,14 @@ function PricingPage() {
               <div className="relative mx-auto mt-6 max-w-4xl border border-border bg-surface p-8 lg:p-10">
                 <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                   <div className="lg:max-w-xs">
-                    <h2 className="font-mono text-xs text-text-muted uppercase tracking-widest">{team.name}</h2>
+                    <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{team.name}</h2>
                     <div className="mt-3 flex items-baseline gap-2">
                       <span className="font-display text-4xl text-text">{team.price}</span>
-                      <span className="font-mono text-xs text-text-muted">{team.pricePer}</span>
+                      <span className="font-mono text-text-muted text-xs">{team.pricePer}</span>
                     </div>
                     <p className="mt-1 font-mono text-[10px] text-text-muted">{team.priceBilling}</p>
                     {team.description && <p className="mt-2 text-sm text-text-secondary">{team.description}</p>}
-                    <p className="mt-2 font-mono text-xs text-text-muted">{team.priceAlt}</p>
+                    <p className="mt-2 font-mono text-text-muted text-xs">{team.priceAlt}</p>
                   </div>
 
                   <ul className="flex-1 space-y-3">
@@ -222,7 +210,7 @@ function PricingPage() {
                   <button
                     type="button"
                     onClick={() => setShowContactSales(true)}
-                    className="flex shrink-0 items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-xs uppercase tracking-widest text-text-secondary transition-colors hover:border-white hover:text-white"
+                    className="flex shrink-0 items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-white hover:text-white"
                   >
                     {team.cta}
                   </button>
@@ -238,7 +226,7 @@ function PricingPage() {
           <div className="border-border border-t">
             {PRICING.faq.items.map((item) => (
               <div key={item.q} className="border-border border-b py-6">
-                <h3 className="font-mono text-sm font-medium text-text">{item.q}</h3>
+                <h3 className="font-medium font-mono text-sm text-text">{item.q}</h3>
                 <p className="mt-2 text-sm text-text-secondary leading-relaxed">{item.a}</p>
               </div>
             ))}

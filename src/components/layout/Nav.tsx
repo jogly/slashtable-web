@@ -121,7 +121,7 @@ export function Nav() {
               to="/"
               hash="download"
               onClick={() => setMenuOpen(false)}
-              className="mt-1 flex items-center justify-center gap-3 rounded-full bg-accent px-5 py-3.5 font-mono text-sm text-black uppercase tracking-widest transition-colors hover:bg-white"
+              className="mt-1 flex items-center justify-center gap-3 rounded-full bg-accent px-5 py-3.5 font-mono text-black text-sm uppercase tracking-widest transition-colors hover:bg-white"
             >
               {NAV.download}
             </Link>

@@ -1,7 +1,7 @@
-import { cn } from "../../lib/utils";
-import noiseGrain from "@assets/noise-grain.png";
 import noiseCrosshatch from "@assets/noise-crosshatch.png";
+import noiseGrain from "@assets/noise-grain.png";
 import noiseSpeckle from "@assets/noise-speckle.png";
+import { cn } from "../../lib/utils";
 
 const textures = {
   grain: noiseGrain,
@@ -25,11 +25,7 @@ interface NoiseTextureProps {
  * - crosshatch: 16px grid lines with noise — blueprint/data-table aesthetic
  * - speckle: Denser grain — more visible material texture for elevated surfaces
  */
-export function NoiseTexture({
-  variant = "grain",
-  opacity = 0.5,
-  className,
-}: NoiseTextureProps) {
+export function NoiseTexture({ variant = "grain", opacity = 0.5, className }: NoiseTextureProps) {
   return (
     <div
       className={cn("pointer-events-none absolute inset-0", className)}

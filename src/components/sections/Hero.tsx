@@ -35,8 +35,10 @@ export function Hero() {
     function handleClick(e: MouseEvent | TouchEvent) {
       const target = e.target as Node;
       if (
-        btnRef.current && !btnRef.current.contains(target) &&
-        tooltipRef.current && !tooltipRef.current.contains(target)
+        btnRef.current &&
+        !btnRef.current.contains(target) &&
+        tooltipRef.current &&
+        !tooltipRef.current.contains(target)
       ) {
         setOpen(false);
       }
@@ -92,10 +94,7 @@ export function Hero() {
             <ul className="space-y-3">
               {HERO.tooltipItems.map((item, i) => (
                 <li key={item.label} className="flex items-start gap-3">
-                  <span
-                    className="mt-2 h-2 w-2 shrink-0 rounded-full"
-                    style={{ backgroundColor: tooltipColors[i] }}
-                  />
+                  <span className="mt-2 h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: tooltipColors[i] }} />
                   <div className="flex flex-col font-mono text-xs">
                     <span className="text-text">{item.label}</span>
                     <span className="text-text-muted">{item.desc}</span>
@@ -107,16 +106,16 @@ export function Hero() {
         </div>
 
         <motion.p
-          className="text-balance mx-auto mt-6 max-w-sm font-display text-xl text-text leading-relaxed md:max-w-lg"
+          className="mx-auto mt-6 max-w-sm text-balance font-display text-text text-xl leading-relaxed md:max-w-lg"
           variants={fadeUp}
         >
           {HERO.leader}
         </motion.p>
         <div className="mt-6">
-          {HERO.description.map((p, i) => (
+          {HERO.description.map((p) => (
             <motion.p
-              key={i}
-              className="mt-4 md:mt-0 text-balance mx-auto max-w-2xs text-sm text-text-secondary leading-relaxed md:max-w-lg"
+              key={p}
+              className="mx-auto mt-4 max-w-2xs text-balance text-sm text-text-secondary leading-relaxed md:mt-0 md:max-w-lg"
               variants={fadeUp}
             >
               {p}
@@ -154,7 +153,7 @@ export function Hero() {
             <ImageCompare darkSrc={heroDark} lightSrc={heroLight} alt={HERO.screenshotAlt} />
           </div>
           {/* Inset ring masks 1px of image edges */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl z-50 ring-1 ring-white/10 ring-inset" />
+          <div className="pointer-events-none absolute inset-0 z-50 rounded-2xl ring-1 ring-white/10 ring-inset" />
         </div>
       </motion.div>
     </section>

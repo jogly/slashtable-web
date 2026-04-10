@@ -3,8 +3,8 @@ import {
   BarChart2,
   BookMarked,
   Clock,
-  Code2,
   Code,
+  Code2,
   Container,
   Folders,
   KeyRound,
@@ -72,7 +72,7 @@ export function FeaturesGrid() {
                   <FadeIn key={feature.title} delay={i * 0.03}>
                     <div className="group h-full bg-bg p-5 transition-colors hover:bg-surface-2/60">
                       <div className="mb-3 flex items-center gap-2.5">
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center border border-dashed border-border bg-surface-2">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center border border-border border-dashed bg-surface-2">
                           <Icon className="h-3.5 w-3.5" style={{ color }} strokeWidth={1.5} />
                         </span>
                         <h3 className="font-display text-sm text-text tracking-wide">{feature.title}</h3>

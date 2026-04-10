@@ -9,8 +9,8 @@ export function LayoutGuides() {
   return (
     <div className="pointer-events-none fixed inset-0 z-30">
       <div className="relative mx-auto h-full max-w-content">
-        <div className="absolute inset-y-0 left-0 border-l border-dashed border-white/[0.05]" />
-        <div className="absolute inset-y-0 right-0 border-r border-dashed border-white/[0.05]" />
+        <div className="absolute inset-y-0 left-0 border-white/[0.05] border-l border-dashed" />
+        <div className="absolute inset-y-0 right-0 border-white/[0.05] border-r border-dashed" />
       </div>
     </div>
   );

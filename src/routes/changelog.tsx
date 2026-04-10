@@ -15,15 +15,17 @@ function formatDate(dateStr: string): string {
 /** Turn backtick-wrapped segments into <code> elements. */
 function renderInlineCode(text: string): ReactNode[] {
   const parts = text.split(/(`[^`]+`)/);
-  return parts.map((part, i) =>
-    part.startsWith("`") && part.endsWith("`") ? (
-      <code key={i} className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-xs text-text">
-        {part.slice(1, -1)}
-      </code>
-    ) : (
-      part
-    ),
-  );
+  return parts.map((part, i) => {
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        // biome-ignore lint/suspicious/noArrayIndexKey: split may produce duplicate empty strings
+        <code key={i} className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-text text-xs">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
 }
 
 /** Parse a markdown-ish body (dash-prefixed lines) into bullet items. */
@@ -64,12 +66,15 @@ function ChangelogPage() {
 
             {/* Body as bullet list */}
             <ul className="space-y-2">
-              {parseBody(entry.body).map((item, j) => (
-                <li key={j} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-text-muted" />
-                  <span>{renderInlineCode(item)}</span>
-                </li>
-              ))}
+              {parseBody(entry.body).map((item, j) => {
+                return (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: parsed body items, index is stable
+                  <li key={j} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
+                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-text-muted" />
+                    <span>{renderInlineCode(item)}</span>
+                  </li>
+                );
+              })}
             </ul>
           </article>
         ))}

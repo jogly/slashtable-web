@@ -20,15 +20,16 @@ export function SocialProof() {
           <div className="grid gap-px overflow-hidden bg-border sm:grid-cols-3">
             {SOCIAL_PROOF.testimonials.map((t) => (
               <blockquote key={t.name} className="flex h-full flex-col bg-bg p-6">
-                <p className="flex-1 text-sm text-text-secondary leading-relaxed italic">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
+                <p className="flex-1 text-sm text-text-secondary italic leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
                 <footer className="mt-5 flex items-center gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-2 font-mono text-xs text-text-muted">
-                    {t.name.split(" ").map((n) => n[0]).join("")}
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-2 font-mono text-text-muted text-xs">
+                    {t.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate font-semibold text-xs text-text">{t.name}</p>
+                    <p className="truncate font-semibold text-text text-xs">{t.name}</p>
                     <p className="truncate font-mono text-[10px] text-text-muted">
                       {t.role} &middot; {t.company}
                     </p>

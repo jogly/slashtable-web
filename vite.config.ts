@@ -2,7 +2,7 @@ import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
-import { type Plugin, defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import { imagetools } from "vite-imagetools";
 
 const CHANGELOG_URL = "https://downloads.slashtable.dev/changelog.json";
@@ -19,8 +19,7 @@ function changelogPlugin(): Plugin {
     async load(id) {
       if (id !== resolvedId) return;
       const res = await fetch(CHANGELOG_URL);
-      if (!res.ok)
-        throw new Error(`Failed to fetch changelog: ${res.statusText}`);
+      if (!res.ok) throw new Error(`Failed to fetch changelog: ${res.statusText}`);
       const json = await res.text();
       return `export default ${json};`;
     },

@@ -34,7 +34,9 @@ export function DatabaseSupport() {
         <div className="mb-12 text-center">
           <div className="mb-4 flex items-center justify-center gap-2">
             <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#c94a00" }} />
-            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DATABASE_SUPPORT.eyebrow}</span>
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+              {DATABASE_SUPPORT.eyebrow}
+            </span>
           </div>
           <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{DATABASE_SUPPORT.heading}</h2>
         </div>
@@ -52,7 +54,9 @@ export function DatabaseSupport() {
                   <Icon />
                   <span className="font-mono text-xs tracking-wide">{db.name}</span>
                   {!db.active && (
-                    <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DATABASE_SUPPORT.comingSoon}</span>
+                    <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                      {DATABASE_SUPPORT.comingSoon}
+                    </span>
                   )}
                 </div>
               </FadeIn>

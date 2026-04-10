@@ -12,53 +12,53 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     icon: Network,
     color: "#00d4ff",
     content: (
-      <div className="space-y-4 text-[12px] sm:text-[13px] leading-relaxed">
+      <div className="space-y-4 text-[12px] leading-relaxed sm:text-[13px]">
         <div>
-          <p className="font-display text-text text-sm mb-2">
-            orders <span className="text-text-muted font-mono text-[11px]">~2,000 rows</span>
+          <p className="mb-2 font-display text-sm text-text">
+            orders <span className="font-mono text-[11px] text-text-muted">~2,000 rows</span>
           </p>
         </div>
         <table className="w-full text-left font-mono text-[11px]">
           <thead>
-            <tr className="text-text-muted border-b border-border">
-              <th className="pb-1.5 pr-4 font-normal">Column</th>
-              <th className="pb-1.5 pr-4 font-normal">Type</th>
+            <tr className="border-border border-b text-text-muted">
+              <th className="pr-4 pb-1.5 font-normal">Column</th>
+              <th className="pr-4 pb-1.5 font-normal">Type</th>
               <th className="pb-1.5 font-normal">Default</th>
             </tr>
           </thead>
           <tbody className="text-text-secondary">
-            <tr className="border-b border-white/[0.03]">
+            <tr className="border-white/[0.03] border-b">
               <td className="py-1 pr-4 text-cyan">id</td>
               <td className="py-1 pr-4">
                 integer <span className="text-text-muted">(PK)</span>
               </td>
               <td className="py-1 text-text-muted">auto</td>
             </tr>
-            <tr className="border-b border-white/[0.03]">
+            <tr className="border-white/[0.03] border-b">
               <td className="py-1 pr-4 text-cyan">order_number</td>
               <td className="py-1 pr-4">
                 text <span className="text-text-muted">(unique)</span>
               </td>
               <td className="py-1 text-text-muted">&mdash;</td>
             </tr>
-            <tr className="border-b border-white/[0.03]">
+            <tr className="border-white/[0.03] border-b">
               <td className="py-1 pr-4 text-cyan">customer_id</td>
               <td className="py-1 pr-4">
                 uuid <span className="text-text-muted">(FK)</span>
               </td>
               <td className="py-1 text-text-muted">&mdash;</td>
             </tr>
-            <tr className="border-b border-white/[0.03]">
+            <tr className="border-white/[0.03] border-b">
               <td className="py-1 pr-4 text-cyan">status</td>
               <td className="py-1 pr-4">text</td>
               <td className="py-1 text-yellow">'pending'</td>
             </tr>
-            <tr className="border-b border-white/[0.03]">
+            <tr className="border-white/[0.03] border-b">
               <td className="py-1 pr-4 text-cyan">total</td>
               <td className="py-1 pr-4">numeric</td>
               <td className="py-1 text-yellow">0</td>
             </tr>
-            <tr className="border-b border-white/[0.03]">
+            <tr className="border-white/[0.03] border-b">
               <td className="py-1 pr-4 text-cyan">shipping_address</td>
               <td className="py-1 pr-4">jsonb</td>
               <td className="py-1 text-text-muted">&mdash;</td>
@@ -77,22 +77,22 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     icon: Terminal,
     color: "#44ff88",
     content: (
-      <div className="space-y-5 font-mono text-[11px] sm:text-[12px] leading-relaxed">
+      <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
         <div>
-          <p className="text-text-muted mb-2">&gt; SELECT status, count(*) FROM orders GROUP BY status</p>
+          <p className="mb-2 text-text-muted">&gt; SELECT status, count(*) FROM orders GROUP BY status</p>
           <table className="w-full text-left">
             <thead>
-              <tr className="text-text-muted border-b border-border">
-                <th className="pb-1.5 pr-6 font-normal">status</th>
-                <th className="pb-1.5 font-normal text-right">count</th>
+              <tr className="border-border border-b text-text-muted">
+                <th className="pr-6 pb-1.5 font-normal">status</th>
+                <th className="pb-1.5 text-right font-normal">count</th>
               </tr>
             </thead>
             <tbody className="text-text-secondary">
-              <tr className="border-b border-white/[0.03]">
+              <tr className="border-white/[0.03] border-b">
                 <td className="py-1 pr-6 text-green">shipped</td>
                 <td className="py-1 text-right text-yellow">1,247</td>
               </tr>
-              <tr className="border-b border-white/[0.03]">
+              <tr className="border-white/[0.03] border-b">
                 <td className="py-1 pr-6 text-green">pending</td>
                 <td className="py-1 text-right text-yellow">84</td>
               </tr>
@@ -104,12 +104,12 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
           </table>
         </div>
         <div>
-          <p className="text-text-muted mb-2">
+          <p className="mb-2 text-text-muted">
             &gt; SELECT avg(total) FROM orders WHERE placed_at &gt; now() - interval '30d'
           </p>
           <table className="w-full text-left">
             <thead>
-              <tr className="text-text-muted border-b border-border">
+              <tr className="border-border border-b text-text-muted">
                 <th className="pb-1.5 font-normal">avg</th>
               </tr>
             </thead>
@@ -127,25 +127,26 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     icon: ShieldCheck,
     color: "#ffcc00",
     content: (
-      <div className="space-y-5 font-mono text-[11px] sm:text-[12px] leading-relaxed">
+      <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
         <div>
-          <p className="text-text-muted mb-2">&gt; DROP TABLE orders</p>
-          <div className="border-l border-orange pl-3 py-1">
+          <p className="mb-2 text-text-muted">&gt; DROP TABLE orders</p>
+          <div className="border-orange border-l py-1 pl-3">
             <p className="text-orange">Blocked: DDL statement rejected</p>
             <p className="text-text-muted">Detail: DROP is not allowed</p>
           </div>
         </div>
         <div>
-          <p className="text-text-muted mb-2">&gt; DELETE FROM orders WHERE id = 1</p>
-          <div className="border-l border-orange pl-3 py-1">
+          <p className="mb-2 text-text-muted">&gt; DELETE FROM orders WHERE id = 1</p>
+          <div className="border-orange border-l py-1 pl-3">
             <p className="text-orange">Blocked: DML mutation rejected</p>
             <p className="text-text-muted">Detail: DELETE is not allowed</p>
           </div>
         </div>
-        <div className="space-y-1 text-text-secondary pt-1">
+        <div className="space-y-1 pt-1 text-text-secondary">
           <p>
             <span className="text-green">&#10003;</span> SELECT * FROM orders{" "}
-            <span className="text-orange">LIMIT 100</span>;
+            <span className="text-orange">LIMIT 100</span>
+            {";"}
           </p>
         </div>
       </div>
@@ -176,9 +177,9 @@ export function McpSection() {
             </div>
 
             {/* Accordion + Code panel */}
-            <div className="flex flex-col lg:flex-row overflow-hidden rounded-sm border border-border">
+            <div className="flex flex-col overflow-hidden rounded-sm border border-border lg:flex-row">
               {/* Accordion items */}
-              <div className="flex flex-col lg:w-[340px] shrink-0 border-b lg:border-b-0 lg:border-r border-border bg-bg">
+              <div className="flex shrink-0 flex-col border-border border-b bg-bg lg:w-[340px] lg:border-r lg:border-b-0">
                 {MCP.callouts.map((item, i) => {
                   const isActive = activeIndex === i;
                   const { icon: Icon, color } = calloutMeta[i];
@@ -188,19 +189,19 @@ export function McpSection() {
                       type="button"
                       onClick={() => setActiveIndex(i)}
                       className={`group relative w-full text-left transition-colors ${
-                        i > 0 ? "border-t border-border" : ""
+                        i > 0 ? "border-border border-t" : ""
                       } ${isActive ? "bg-surface-2" : "bg-bg hover:bg-surface"}`}
                     >
                       {/* Active accent bar — vertical on desktop, horizontal on mobile */}
                       {isActive && (
                         <div
-                          className="absolute left-0 top-0 bottom-0 w-0.5 hidden lg:block"
+                          className="absolute top-0 bottom-0 left-0 hidden w-0.5 lg:block"
                           style={{ backgroundColor: color }}
                         />
                       )}
                       {isActive && (
                         <div
-                          className="absolute left-0 right-0 top-0 h-0.5 lg:hidden"
+                          className="absolute top-0 right-0 left-0 h-0.5 lg:hidden"
                           style={{ backgroundColor: color }}
                         />
                       )}
@@ -215,7 +216,7 @@ export function McpSection() {
                             <h3 className="font-display text-sm text-text tracking-wide">{item.title}</h3>
                           </div>
                           <ChevronRight
-                            className={`h-3.5 w-3.5 text-text-muted shrink-0 ${
+                            className={`h-3.5 w-3.5 shrink-0 text-text-muted ${
                               isActive ? "rotate-90 lg:rotate-0" : ""
                             }`}
                             strokeWidth={1.5}
@@ -233,7 +234,7 @@ export function McpSection() {
               </div>
 
               {/* Content panel */}
-              <div className="flex-1 min-w-0 bg-surface-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+              <div className="min-w-0 flex-1 overflow-x-auto bg-surface-2" style={{ scrollbarWidth: "none" }}>
                 {MCP.callouts.map((item, i) => (
                   <div key={item.title} className={activeIndex === i ? "block h-full p-5" : "hidden"}>
                     {calloutMeta[i].content}

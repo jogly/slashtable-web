@@ -33,7 +33,7 @@ function AppIcon({ dropped, isOverFolder }: { dropped: boolean; isOverFolder: bo
         style={style}
         {...listeners}
         {...attributes}
-        className={`cursor-grab touch-none active:cursor-grabbing transition-opacity duration-150 ${
+        className={`cursor-grab touch-none transition-opacity duration-150 active:cursor-grabbing ${
           isDragging && !isOverFolder ? "drop-shadow-[0_0_40px_rgba(201,74,0,0.5)]" : ""
         } ${isOverFolder ? "opacity-0" : ""}`}
       >
@@ -82,7 +82,7 @@ function DownloadsFolder({ dropped, isOverFolder }: { dropped: boolean; isOverFo
             <motion.img
               src="/app-icon.png"
               alt=""
-              className="pointer-events-none absolute left-1/2 top-0 h-10 w-10 lg:h-12 lg:w-12"
+              className="pointer-events-none absolute top-0 left-1/2 h-10 w-10 lg:h-12 lg:w-12"
               style={{ zIndex: 2 }}
               initial={{ opacity: 0, scale: 0.3, x: "-50%", y: "-30%" }}
               animate={{ opacity: 1, scale: 1, x: "-50%", y: "-30%" }}
@@ -255,7 +255,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
               {...(primary ? { download: true } : { "aria-disabled": true })}
               onClick={() => setTimeout(() => setShowThankYou(true), 500)}
               className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
-                !primary ? " pointer-events-none opacity-50" : ""
+                !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
               <Download className="h-4 w-4" />
@@ -268,6 +268,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
           </div>
 
           {/* Hidden download trigger */}
+          {/* biome-ignore lint/a11y/useAnchorContent: hidden programmatic download trigger */}
           <a ref={downloadRef} href={primary} download className="hidden" tabIndex={-1} aria-hidden="true" />
 
           {/* Button fallback — desktop */}
@@ -278,7 +279,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
               {...(primary ? { download: true } : { "aria-disabled": true })}
               onClick={() => setTimeout(() => setShowThankYou(true), 500)}
               className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
-                !primary ? " pointer-events-none opacity-50" : ""
+                !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
               <Download className="h-4 w-4" />
@@ -289,7 +290,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
               href={secondary}
               {...(secondary ? { download: true } : { "aria-disabled": true })}
               className={`font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text${
-                !secondary ? " pointer-events-none invisible" : ""
+                !secondary ? "pointer-events-none invisible" : ""
               }`}
             >
               {DOWNLOAD.altAvailableLabel} {altLabel}
@@ -298,9 +299,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
 
           {/* Secondary links */}
           <div className="mt-4 flex flex-col items-center gap-2 lg:mt-6">
-            <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-              {DOWNLOAD.platformNotice}
-            </p>
+            <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DOWNLOAD.platformNotice}</p>
           </div>
         </FadeIn>
       </div>
