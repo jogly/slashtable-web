@@ -391,7 +391,7 @@ export const FILTERING = {
 export const COMMUNITY = {
   eyebrow: "Community",
   heading: "Build with us",
-  description: "We build in the open. Come watch, or come help.",
+  description: "Come watch, or come help. Let me know what you think.",
   links: [
     {
       title: "Discord",
