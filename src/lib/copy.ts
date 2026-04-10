@@ -167,7 +167,7 @@ export default class StatusBadge extends Plugin {
 
 export const FEATURES_GRID = {
   eyebrow: "No premium tier",
-  heading: "Everything ships.",
+  heading: "Batteries included.",
   description: "No extensions to install. No upgrade to unlock. If it\u2019s on this list, it\u2019s in the app.",
   features: [
     {
