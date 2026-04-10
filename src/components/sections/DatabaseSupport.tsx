@@ -1,3 +1,5 @@
+import { DATABASE_SUPPORT } from "../../lib/copy";
+import { ContentContainer } from "../ui/ContentContainer";
 import { FadeIn } from "../ui/FadeIn";
 
 function PostgresIcon() {
@@ -23,44 +25,41 @@ function GenericDbIcon() {
   );
 }
 
-const databases = [
-  { name: "PostgreSQL", Icon: PostgresIcon, active: true },
-  { name: "SQLite", Icon: GenericDbIcon, active: false },
-  { name: "MySQL", Icon: GenericDbIcon, active: false },
-];
+const dbIcons = [PostgresIcon, GenericDbIcon, GenericDbIcon];
 
 export function DatabaseSupport() {
   return (
     <section className="bg-surface py-20 lg:py-24" id="download">
-      <div className="mx-auto max-w-content px-6">
+      <ContentContainer>
         <div className="mb-12 text-center">
           <div className="mb-4 flex items-center justify-center gap-2">
             <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#c94a00" }} />
-            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Database Support</span>
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DATABASE_SUPPORT.eyebrow}</span>
           </div>
-          <h2 className="font-semibold text-3xl text-text tracking-tight lg:text-4xl">
-            PostgreSQL today. More coming.
-          </h2>
+          <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{DATABASE_SUPPORT.heading}</h2>
         </div>
 
         <div className="flex items-center justify-center gap-4 sm:gap-6">
-          {databases.map((db) => (
-            <FadeIn key={db.name}>
-              <div
-                className={`flex flex-col items-center gap-3 border px-8 py-6 transition-colors ${
-                  db.active ? "border-cyan/40 text-cyan" : "border-border text-text-muted"
-                }`}
-              >
-                <db.Icon />
-                <span className="font-mono text-xs tracking-wide">{db.name}</span>
-                {!db.active && (
-                  <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Coming soon</span>
-                )}
-              </div>
-            </FadeIn>
-          ))}
+          {DATABASE_SUPPORT.databases.map((db, i) => {
+            const Icon = dbIcons[i];
+            return (
+              <FadeIn key={db.name}>
+                <div
+                  className={`flex flex-col items-center gap-3 border px-8 py-6 transition-colors ${
+                    db.active ? "border-cyan/40 text-cyan" : "border-border text-text-muted"
+                  }`}
+                >
+                  <Icon />
+                  <span className="font-mono text-xs tracking-wide">{db.name}</span>
+                  {!db.active && (
+                    <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DATABASE_SUPPORT.comingSoon}</span>
+                  )}
+                </div>
+              </FadeIn>
+            );
+          })}
         </div>
-      </div>
+      </ContentContainer>
     </section>
   );
 }

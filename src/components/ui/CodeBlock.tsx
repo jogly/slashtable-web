@@ -22,7 +22,7 @@ function highlightSyntax(code: string): string {
 
 export function CodeBlock({ code, filename, className }: CodeBlockProps) {
   return (
-    <div className={cn("overflow-hidden border border-border", className)}>
+    <div className={cn("overflow-hidden rounded-sm border border-border shadow-lg shadow-black/20", className)}>
       {filename && (
         <div className="flex items-center gap-2 border-border border-b bg-surface px-4 py-2.5">
           <div className="flex gap-1.5">

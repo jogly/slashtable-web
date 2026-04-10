@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Backgrounds ── */
-  --color-bg: #000000;
-  --color-surface: #0d0d0d;
-  --color-surface-2: #161616;
-  --color-surface-hover: #1a1a1a;
+  /* ── Backgrounds (warm-shifted, lifted for texture visibility) ── */
+  --color-bg: #111114;
+  --color-surface: #18171b;
+  --color-surface-2: #1e1d22;
+  --color-surface-3: #252429;
+  --color-surface-hover: #2c2b30;
 
   /* ── Text ── */
   --color-text: #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.55);
-  --color-text-muted: rgba(255, 255, 255, 0.3);
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-text-muted: rgba(255, 255, 255, 0.5);
 
   /* ── Borders ── */
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-border-strong: rgba(255, 255, 255, 0.2);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
 
   /* ── Brand / Feature colors ── */
   --color-orange: #c94a00;

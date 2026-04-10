@@ -4,6 +4,7 @@ import {
   BookMarked,
   Clock,
   Code2,
+  Code,
   Container,
   Folders,
   KeyRound,
@@ -16,152 +17,74 @@ import {
   Sun,
   Table2,
   TerminalSquare,
+  Undo2,
 } from "lucide-react";
+import { FEATURES_GRID } from "../../lib/copy";
 import { FadeIn } from "../ui/FadeIn";
+import { FeatureFrame } from "../ui/FeatureFrame";
+import { NoiseTexture } from "../ui/NoiseTexture";
 
-const features: {
-  icon: LucideIcon;
-  color: string;
-  title: string;
-  description: string;
-}[] = [
-  {
-    icon: Code2,
-    color: "#44ff88",
-    title: "SQL editor",
-    description:
-      "Full-featured editor with contextual autocomplete for schemas, tables, and columns. Auto-formats queries, runs multiple statements at once, and shows per-statement results and timing.",
-  },
-  {
-    icon: Layers,
-    color: "#00d4ff",
-    title: "Multiple connections",
-    description:
-      "Connect to many Postgres databases at once. Each connection keeps its own tabs, state, and query context. Switch between them without losing your place.",
-  },
-  {
-    icon: PenLine,
-    color: "#cc44ff",
-    title: "Safe data mutations",
-    description:
-      "Edit rows inline. Changes queue up with a SQL diff preview before anything commits. Revert individual changes, run batch operations, or cancel everything at once.",
-  },
-  {
-    icon: Lock,
-    color: "#ffcc00",
-    title: "Read-only enforcement",
-    description:
-      "Three enforcement layers catch write attempts before they reach the database: query parsing, keyword scanning, and a transaction-level rollback. Nothing slips through.",
-  },
-  {
-    icon: Container,
-    color: "#c94a00",
-    title: "Docker auto-detection",
-    description:
-      "Automatically discovers running PostgreSQL containers and extracts credentials from their environment variables. One click to connect.",
-  },
-  {
-    icon: KeyRound,
-    color: "#c94a00",
-    title: "Secure credential vaults",
-    description:
-      "Source database credentials from the System Keychain or 1Password. Browse vaults, select items, and auto-fill the connection form.",
-  },
-  {
-    icon: Table2,
-    color: "#44ff88",
-    title: "Virtual scrolling",
-    description:
-      "Renders only the visible rows in the viewport. Browse tables with millions of rows smoothly, with no pagination, no memory bloat, and no artificial row cap.",
-  },
-  {
-    icon: BookMarked,
-    color: "#00d4ff",
-    title: "Saved views",
-    description:
-      "Save any combination of filters, sorts, and column configuration as a named view. Organized in folders, recalled instantly with full state restored.",
-  },
-  {
-    icon: Sun,
-    color: "#cc44ff",
-    title: "Dark & light themes",
-    description:
-      "Dark mode by default with a one-click light toggle. CSS variable-based theming means plugins can register entirely custom themes.",
-  },
-  {
-    icon: Folders,
-    color: "#ffcc00",
-    title: "Connection organization",
-    description:
-      "Group connections in nested folders with drag-and-drop. Assign color indicators and environment badges (prod, dev, staging) to tell them apart at a glance.",
-  },
-  {
-    icon: LayoutPanelTop,
-    color: "#c94a00",
-    title: "Tab management",
-    description:
-      "Explorer, SQL, and Schema Graph tabs each hold independent state. Drag to reorder, duplicate with context, rename, and navigate between them with keyboard shortcuts.",
-  },
-  {
-    icon: Sparkles,
-    color: "#00d4ff",
-    title: "Semantic column types",
-    description:
-      "Automatically detects emails, URLs, images, currency, phone numbers, and relative dates from column content and renders them accordingly.",
-  },
-  {
-    icon: TerminalSquare,
-    color: "#cc44ff",
-    title: "SQL execution logging",
-    description:
-      "Every query logged with timing, row count, parameters, and status. Browse SQL and app logs in a dedicated panel with per-level filtering.",
-  },
-  {
-    icon: Clock,
-    color: "#ffcc00",
-    title: "Instant tab restore",
-    description:
-      "Switch tabs or restart the app. Your last query results are already there. No re-running queries, no loading spinners.",
-  },
-  {
-    icon: BarChart2,
-    color: "#44ff88",
-    title: "Table statistics",
-    description:
-      "Column-level stats pulled from the database: distinct value counts, null fractions, most common values with frequencies, and min/max ranges.",
-  },
-  {
-    icon: SlidersHorizontal,
-    color: "#00d4ff",
-    title: "Column configuration",
-    description:
-      "Show or hide columns per table, drag to reorder, resize by dragging dividers, and auto-fit to content. Preferences persist across sessions.",
-  },
+const featureMeta: { icon: LucideIcon; color: string }[] = [
+  { icon: Code2, color: "#44ff88" },
+  { icon: Layers, color: "#00d4ff" },
+  { icon: PenLine, color: "#cc44ff" },
+  { icon: Lock, color: "#ffcc00" },
+  { icon: Container, color: "#c94a00" },
+  { icon: KeyRound, color: "#c94a00" },
+  { icon: Table2, color: "#44ff88" },
+  { icon: BookMarked, color: "#00d4ff" },
+  { icon: Sun, color: "#cc44ff" },
+  { icon: Folders, color: "#ffcc00" },
+  { icon: LayoutPanelTop, color: "#c94a00" },
+  { icon: Sparkles, color: "#00d4ff" },
+  { icon: TerminalSquare, color: "#cc44ff" },
+  { icon: Clock, color: "#ffcc00" },
+  { icon: BarChart2, color: "#44ff88" },
+  { icon: SlidersHorizontal, color: "#00d4ff" },
+  { icon: Undo2, color: "#cc44ff" },
+  { icon: Code, color: "#c94a00" },
 ];
 
 export function FeaturesGrid() {
   return (
-    <section className="py-24 lg:py-32">
-      <div className="mx-auto max-w-content px-6">
-        <div className="mb-16 text-center">
-          <h2 className="underline-dashed font-semibold text-3xl text-text tracking-tight underline decoration-dashed underline-offset-4 lg:text-4xl">
-            Featuring
-          </h2>
-        </div>
-
-        <div className="grid gap-x-3 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, i) => (
-            <FadeIn key={feature.title} delay={i * 0.03}>
-              <div>
-                <div className="mb-2.5 flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 shrink-0" style={{ backgroundColor: feature.color }} />
-                  <h3 className="font-semibold text-sm text-text">{feature.title}</h3>
-                </div>
-                <p className="pl-3.5 text-sm text-text-secondary leading-relaxed">{feature.description}</p>
+    <section className="relative py-24 lg:py-32">
+      <NoiseTexture variant="grain" opacity={0.35} />
+      <div className="relative mx-auto max-w-content">
+        <FadeIn>
+          <FeatureFrame accentColor="#c94a00">
+            <div className="mb-12 text-center">
+              <div className="mb-4 flex items-center justify-center gap-2">
+                <span className="h-2 w-2 shrink-0 bg-accent" />
+                <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                  {FEATURES_GRID.eyebrow}
+                </span>
               </div>
-            </FadeIn>
-          ))}
-        </div>
+              <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{FEATURES_GRID.heading}</h2>
+              <p className="mx-auto mt-3 max-w-lg text-sm text-text-secondary leading-relaxed">
+                {FEATURES_GRID.description}
+              </p>
+            </div>
+
+            <div className="grid gap-px overflow-hidden bg-border sm:grid-cols-2 lg:grid-cols-3">
+              {FEATURES_GRID.features.map((feature, i) => {
+                const { icon: Icon, color } = featureMeta[i];
+                return (
+                  <FadeIn key={feature.title} delay={i * 0.03}>
+                    <div className="group h-full bg-bg p-5 transition-colors hover:bg-surface-2/60">
+                      <div className="mb-3 flex items-center gap-2.5">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center border border-dashed border-border bg-surface-2">
+                          <Icon className="h-3.5 w-3.5" style={{ color }} strokeWidth={1.5} />
+                        </span>
+                        <h3 className="font-display text-sm text-text tracking-wide">{feature.title}</h3>
+                      </div>
+                      <p className="text-[13px] text-text-secondary leading-relaxed">{feature.description}</p>
+                    </div>
+                  </FadeIn>
+                );
+              })}
+            </div>
+          </FeatureFrame>
+        </FadeIn>
       </div>
     </section>
   );

@@ -1,53 +1,257 @@
-import { CodeBlock } from "../ui/CodeBlock";
+import type { LucideIcon } from "lucide-react";
+import { ChevronRight, Network, ShieldCheck, Terminal } from "lucide-react";
+import type { ReactNode } from "react";
+import { useState } from "react";
+import { MCP } from "../../lib/copy";
 import { FadeIn } from "../ui/FadeIn";
+import { FeatureFrame } from "../ui/FeatureFrame";
+import { NoiseTexture } from "../ui/NoiseTexture";
 
-const safetyExample = `> run_query "DROP TABLE orders"
-{ "error": "DROP statements are not allowed" }
-
-> run_query "DELETE FROM orders WHERE id = 1"
-{ "error": "DELETE statements are not allowed" }
-
-> run_query "SELECT * FROM orders LIMIT 2"
-{
-  "rows": [
-    { "id": 42, "status": "shipped", "total": "149.00" },
-    { "id": 43, "status": "pending", "total": "32.50" }
-  ]
-}`;
+const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
+  {
+    icon: Network,
+    color: "#00d4ff",
+    content: (
+      <div className="space-y-4 text-[12px] sm:text-[13px] leading-relaxed">
+        <div>
+          <p className="font-display text-text text-sm mb-2">
+            orders <span className="text-text-muted font-mono text-[11px]">~2,000 rows</span>
+          </p>
+        </div>
+        <table className="w-full text-left font-mono text-[11px]">
+          <thead>
+            <tr className="text-text-muted border-b border-border">
+              <th className="pb-1.5 pr-4 font-normal">Column</th>
+              <th className="pb-1.5 pr-4 font-normal">Type</th>
+              <th className="pb-1.5 font-normal">Default</th>
+            </tr>
+          </thead>
+          <tbody className="text-text-secondary">
+            <tr className="border-b border-white/[0.03]">
+              <td className="py-1 pr-4 text-cyan">id</td>
+              <td className="py-1 pr-4">
+                integer <span className="text-text-muted">(PK)</span>
+              </td>
+              <td className="py-1 text-text-muted">auto</td>
+            </tr>
+            <tr className="border-b border-white/[0.03]">
+              <td className="py-1 pr-4 text-cyan">order_number</td>
+              <td className="py-1 pr-4">
+                text <span className="text-text-muted">(unique)</span>
+              </td>
+              <td className="py-1 text-text-muted">&mdash;</td>
+            </tr>
+            <tr className="border-b border-white/[0.03]">
+              <td className="py-1 pr-4 text-cyan">customer_id</td>
+              <td className="py-1 pr-4">
+                uuid <span className="text-text-muted">(FK)</span>
+              </td>
+              <td className="py-1 text-text-muted">&mdash;</td>
+            </tr>
+            <tr className="border-b border-white/[0.03]">
+              <td className="py-1 pr-4 text-cyan">status</td>
+              <td className="py-1 pr-4">text</td>
+              <td className="py-1 text-yellow">'pending'</td>
+            </tr>
+            <tr className="border-b border-white/[0.03]">
+              <td className="py-1 pr-4 text-cyan">total</td>
+              <td className="py-1 pr-4">numeric</td>
+              <td className="py-1 text-yellow">0</td>
+            </tr>
+            <tr className="border-b border-white/[0.03]">
+              <td className="py-1 pr-4 text-cyan">shipping_address</td>
+              <td className="py-1 pr-4">jsonb</td>
+              <td className="py-1 text-text-muted">&mdash;</td>
+            </tr>
+            <tr>
+              <td className="py-1 pr-4 text-cyan">placed_at</td>
+              <td className="py-1 pr-4">timestamptz</td>
+              <td className="py-1 text-yellow">now()</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    ),
+  },
+  {
+    icon: Terminal,
+    color: "#44ff88",
+    content: (
+      <div className="space-y-5 font-mono text-[11px] sm:text-[12px] leading-relaxed">
+        <div>
+          <p className="text-text-muted mb-2">&gt; SELECT status, count(*) FROM orders GROUP BY status</p>
+          <table className="w-full text-left">
+            <thead>
+              <tr className="text-text-muted border-b border-border">
+                <th className="pb-1.5 pr-6 font-normal">status</th>
+                <th className="pb-1.5 font-normal text-right">count</th>
+              </tr>
+            </thead>
+            <tbody className="text-text-secondary">
+              <tr className="border-b border-white/[0.03]">
+                <td className="py-1 pr-6 text-green">shipped</td>
+                <td className="py-1 text-right text-yellow">1,247</td>
+              </tr>
+              <tr className="border-b border-white/[0.03]">
+                <td className="py-1 pr-6 text-green">pending</td>
+                <td className="py-1 text-right text-yellow">84</td>
+              </tr>
+              <tr>
+                <td className="py-1 pr-6 text-green">cancelled</td>
+                <td className="py-1 text-right text-yellow">12</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <p className="text-text-muted mb-2">
+            &gt; SELECT avg(total) FROM orders WHERE placed_at &gt; now() - interval '30d'
+          </p>
+          <table className="w-full text-left">
+            <thead>
+              <tr className="text-text-muted border-b border-border">
+                <th className="pb-1.5 font-normal">avg</th>
+              </tr>
+            </thead>
+            <tbody className="text-text-secondary">
+              <tr>
+                <td className="py-1 text-yellow">$142.38</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ),
+  },
+  {
+    icon: ShieldCheck,
+    color: "#ffcc00",
+    content: (
+      <div className="space-y-5 font-mono text-[11px] sm:text-[12px] leading-relaxed">
+        <div>
+          <p className="text-text-muted mb-2">&gt; DROP TABLE orders</p>
+          <div className="border-l border-orange pl-3 py-1">
+            <p className="text-orange">Blocked: DDL statement rejected</p>
+            <p className="text-text-muted">Detail: DROP is not allowed</p>
+          </div>
+        </div>
+        <div>
+          <p className="text-text-muted mb-2">&gt; DELETE FROM orders WHERE id = 1</p>
+          <div className="border-l border-orange pl-3 py-1">
+            <p className="text-orange">Blocked: DML mutation rejected</p>
+            <p className="text-text-muted">Detail: DELETE is not allowed</p>
+          </div>
+        </div>
+        <div className="space-y-1 text-text-secondary pt-1">
+          <p>
+            <span className="text-green">&#10003;</span> SELECT * FROM orders{" "}
+            <span className="text-orange">LIMIT 100</span>;
+          </p>
+        </div>
+      </div>
+    ),
+  },
+];
 
 export function McpSection() {
-  return (
-    <section className="bg-surface py-24 lg:py-32" id="mcp">
-      <div className="mx-auto max-w-content px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <FadeIn className="min-w-0">
-            <CodeBlock filename="Claude Desktop" code={safetyExample} />
-          </FadeIn>
+  const [activeIndex, setActiveIndex] = useState(0);
 
-          <FadeIn delay={0.12}>
-            <div className="mb-5 flex items-center gap-2">
-              <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#00d4ff" }} />
-              <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">MCP Server</span>
+  return (
+    <section className="relative py-24 lg:py-32" id="mcp">
+      <NoiseTexture variant="grain" opacity={0.35} />
+
+      <div className="relative mx-auto max-w-content">
+        <FadeIn>
+          <FeatureFrame accentColor="#00d4ff">
+            {/* Header */}
+            <div className="mb-10 text-center">
+              <div className="mb-5 flex items-center justify-center gap-2">
+                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "#00d4ff" }} />
+                <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{MCP.eyebrow}</span>
+              </div>
+              <h2 className="mx-auto max-w-2xl font-display text-3xl text-text tracking-tight lg:text-4xl">
+                {MCP.heading}
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-text-secondary leading-relaxed">{MCP.description}</p>
             </div>
-            <h2 className="font-semibold text-3xl text-text tracking-tight lg:text-4xl">
-              Three layers between your AI agent and a write query.
-            </h2>
-            <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
-              <p>
-                SlashTable ships an embedded MCP server with eight read-only tools. Queries pass through keyword
-                validation that rejects INSERT, UPDATE, DELETE, DROP, and other mutation statements before they reach
-                Postgres. Anything that slips through hits a READ ONLY transaction that Postgres enforces at the wire
-                level. The transaction rolls back unconditionally.
-              </p>
-              <p>All other tools use parameterized queries with bound values.</p>
-              <p className="text-sm text-text-muted">
-                The connection pool stays read-write so the UI can do cell edits. Read-only enforcement is per-query in
-                the application layer, not at the connection level. Works with Claude Desktop, Claude Code, Cursor, and
-                any MCP-compatible client.
-              </p>
+
+            {/* Accordion + Code panel */}
+            <div className="flex flex-col lg:flex-row overflow-hidden rounded-sm border border-border">
+              {/* Accordion items */}
+              <div className="flex flex-col lg:w-[340px] shrink-0 border-b lg:border-b-0 lg:border-r border-border bg-bg">
+                {MCP.callouts.map((item, i) => {
+                  const isActive = activeIndex === i;
+                  const { icon: Icon, color } = calloutMeta[i];
+                  return (
+                    <button
+                      key={item.title}
+                      type="button"
+                      onClick={() => setActiveIndex(i)}
+                      className={`group relative w-full text-left transition-colors ${
+                        i > 0 ? "border-t border-border" : ""
+                      } ${isActive ? "bg-surface-2" : "bg-bg hover:bg-surface"}`}
+                    >
+                      {/* Active accent bar — vertical on desktop, horizontal on mobile */}
+                      {isActive && (
+                        <div
+                          className="absolute left-0 top-0 bottom-0 w-0.5 hidden lg:block"
+                          style={{ backgroundColor: color }}
+                        />
+                      )}
+                      {isActive && (
+                        <div
+                          className="absolute left-0 right-0 top-0 h-0.5 lg:hidden"
+                          style={{ backgroundColor: color }}
+                        />
+                      )}
+
+                      <div className="px-5 py-4">
+                        {/* Title row */}
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2.5">
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-border bg-surface-2">
+                              <Icon className="h-3.5 w-3.5" style={{ color }} strokeWidth={1.5} />
+                            </span>
+                            <h3 className="font-display text-sm text-text tracking-wide">{item.title}</h3>
+                          </div>
+                          <ChevronRight
+                            className={`h-3.5 w-3.5 text-text-muted shrink-0 ${
+                              isActive ? "rotate-90 lg:rotate-0" : ""
+                            }`}
+                            strokeWidth={1.5}
+                          />
+                        </div>
+
+                        {/* Expanded description */}
+                        {isActive && (
+                          <p className="mt-3 text-[13px] text-text-secondary leading-relaxed">{item.description}</p>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Content panel */}
+              <div className="flex-1 min-w-0 bg-surface-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                {MCP.callouts.map((item, i) => (
+                  <div key={item.title} className={activeIndex === i ? "block h-full p-5" : "hidden"}>
+                    {calloutMeta[i].content}
+                  </div>
+                ))}
+              </div>
             </div>
-          </FadeIn>
-        </div>
+
+            <div className="mt-6 text-center">
+              <a
+                href="#download"
+                className="inline-flex items-center gap-1 font-mono text-[11px] text-accent uppercase tracking-widest transition-colors hover:text-white"
+              >
+                {MCP.cta} &rsaquo;
+              </a>
+            </div>
+          </FeatureFrame>
+        </FadeIn>
       </div>
     </section>
   );
