@@ -47,17 +47,17 @@ export const MCP = {
     "MCP tools give Claude, Cursor, or any MCP client live access to your schema and regulated access to data. Credentials never leave the app.",
   callouts: [
     {
+      title: "AI guardrails",
+      description:
+        "Keyword validation blocks mutations. Parameterized queries prevent injection. Engine-level READ ONLY transactions catch everything else.",
+    },
+    {
       title: "Schema introspection",
       description: "Your agent sees every table, column, type, and foreign key. Credentials stay in the vault.",
     },
     {
       title: "Live data queries",
       description: "SELECT against your actual database. Real rows, real answers.",
-    },
-    {
-      title: "AI guardrails",
-      description:
-        "Keyword validation blocks mutations. Parameterized queries prevent injection. Engine-level READ ONLY transactions catch everything else.",
     },
   ],
   cta: "Try it free",

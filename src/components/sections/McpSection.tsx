@@ -9,6 +9,35 @@ import { NoiseTexture } from "../ui/NoiseTexture";
 
 const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
   {
+    icon: ShieldCheck,
+    color: "var(--color-yellow)",
+    content: (
+      <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
+        <div>
+          <p className="mb-2 text-text-muted">&gt; DROP TABLE orders</p>
+          <div className="border-orange border-l py-1 pl-3">
+            <p className="text-orange">Blocked: DDL statement rejected</p>
+            <p className="text-text-muted">Detail: DROP is not allowed</p>
+          </div>
+        </div>
+        <div>
+          <p className="mb-2 text-text-muted">&gt; DELETE FROM orders WHERE id = 1</p>
+          <div className="border-orange border-l py-1 pl-3">
+            <p className="text-orange">Blocked: DML mutation rejected</p>
+            <p className="text-text-muted">Detail: DELETE is not allowed</p>
+          </div>
+        </div>
+        <div className="space-y-1 pt-1 text-text-secondary">
+          <p>
+            <span className="text-green">&#10003;</span> SELECT * FROM orders{" "}
+            <span className="text-orange">LIMIT 100</span>
+            {";"}
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  {
     icon: Network,
     color: "var(--color-cyan)",
     content: (
@@ -119,35 +148,6 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-    ),
-  },
-  {
-    icon: ShieldCheck,
-    color: "var(--color-yellow)",
-    content: (
-      <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
-        <div>
-          <p className="mb-2 text-text-muted">&gt; DROP TABLE orders</p>
-          <div className="border-orange border-l py-1 pl-3">
-            <p className="text-orange">Blocked: DDL statement rejected</p>
-            <p className="text-text-muted">Detail: DROP is not allowed</p>
-          </div>
-        </div>
-        <div>
-          <p className="mb-2 text-text-muted">&gt; DELETE FROM orders WHERE id = 1</p>
-          <div className="border-orange border-l py-1 pl-3">
-            <p className="text-orange">Blocked: DML mutation rejected</p>
-            <p className="text-text-muted">Detail: DELETE is not allowed</p>
-          </div>
-        </div>
-        <div className="space-y-1 pt-1 text-text-secondary">
-          <p>
-            <span className="text-green">&#10003;</span> SELECT * FROM orders{" "}
-            <span className="text-orange">LIMIT 100</span>
-            {";"}
-          </p>
         </div>
       </div>
     ),
