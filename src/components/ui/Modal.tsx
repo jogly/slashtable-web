@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useCallback, useEffect, useRef, type ReactNode } from "react";
+import { type ReactNode, useCallback, useEffect, useRef } from "react";
 
 interface ModalProps {
   open: boolean;
@@ -13,7 +13,14 @@ interface ModalProps {
 
 const DEFAULT_FOCUSABLE = 'button, [href], input, [tabindex]:not([tabindex="-1"])';
 
-export function Modal({ open, onClose, labelId, closeLabel, focusableSelector = DEFAULT_FOCUSABLE, children }: ModalProps) {
+export function Modal({
+  open,
+  onClose,
+  labelId,
+  closeLabel,
+  focusableSelector = DEFAULT_FOCUSABLE,
+  children,
+}: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);

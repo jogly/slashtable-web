@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { NAME } from "../../lib/constants";
 import { NAV } from "../../lib/copy";
 
-
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,6 +75,7 @@ export function Nav() {
 
           {/* Mobile hamburger */}
           <button
+            type="button"
             className="ml-auto p-1 text-text-muted transition-colors hover:text-text sm:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >

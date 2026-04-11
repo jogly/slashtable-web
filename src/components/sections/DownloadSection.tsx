@@ -167,7 +167,8 @@ function FlowIndicator() {
 /* ── Main section ───────────────────────────────────────────── */
 
 export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
-  const { release, isIntel, primary, secondary, label, altLabel, showThankYou, openThankYou, closeThankYou } = useDownload();
+  const { release, isIntel, primary, secondary, label, altLabel, showThankYou, openThankYou, closeThankYou } =
+    useDownload();
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
   const downloadRef = useRef<HTMLAnchorElement>(null);

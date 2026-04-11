@@ -60,11 +60,15 @@ async function fetchAllDiscounts(polarIds: string[]): Promise<Record<string, Pol
 export function usePolarDiscounts(polarIds: string[]) {
   const [discounts, setDiscounts] = useState<Record<string, PolarDiscount | null>>({});
 
+  // Serialize the array to a string so the effect only re-runs when IDs actually change,
+  // not on every render when the caller passes a new array reference.
+  const polarIdsKey = polarIds.join(",");
+
   useEffect(() => {
-    if (!TOKEN || polarIds.length === 0) return;
+    if (!TOKEN || !polarIdsKey) return;
 
     let cancelled = false;
-    fetchAllDiscounts(polarIds).then((result) => {
+    fetchAllDiscounts(polarIdsKey.split(",")).then((result) => {
       if (cancelled) return;
       setDiscounts(result);
     });
@@ -72,8 +76,7 @@ export function usePolarDiscounts(polarIds: string[]) {
     return () => {
       cancelled = true;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [polarIds.join(",")]);
+  }, [polarIdsKey]);
 
   return { discounts };
 }
