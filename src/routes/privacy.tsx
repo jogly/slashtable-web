@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
-const PRIVACY_URL = "https://downloads.slashtable.dev/privacy.json";
+const PRIVACY_URL = "https://downloads.slashtable.dev/legal/privacy.md";
 
 const markdownComponents: Components = {
   a: ({ href, children }) => (
@@ -47,11 +47,11 @@ function PrivacyPage() {
     fetch(PRIVACY_URL)
       .then((r) => {
         if (!r.ok) throw new Error(r.statusText);
-        return r.json();
+        return r.text();
       })
-      .then((data) => {
+      .then((text) => {
         if (cancelled) return;
-        setBody(data.body ?? "");
+        setBody(text);
       })
       .catch(() => {
         if (!cancelled) setError(true);
