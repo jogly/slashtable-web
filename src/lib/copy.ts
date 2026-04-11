@@ -8,19 +8,14 @@
 // ─── Hero ────────────────────────────────────────────────────────
 
 export const HERO = {
-  heading: "The database browser for product engineers.",
-  tooltipLabel: "And also,",
+  tooltipLabel: "Includes",
   tooltipItems: [
     { label: "A Data Editor", desc: "insert, update, and delete rows inline" },
     { label: "An SQL Editor", desc: "write and run queries with full results" },
     { label: "A Schema Graph Viewer", desc: "explore relationships visually" },
     { label: "An MCP Server", desc: "safe AI access to your live schema and data" },
   ],
-  leader: "Everything about data, nothing about management.",
-  description: [
-    "Navigate 1:M, M:1, and M:N relationships without writing a single JOIN.",
-    "Give your AI agent a live read connection to your database, or don\u2019t.",
-  ],
+  leader: "Your job isn\u2019t database administration, so use the right tool for the job.",
   ctaDownload: "Download for macOS",
   ctaFeatures: "See features",
   availability: "Available for macOS \u00b7 PostgreSQL only",

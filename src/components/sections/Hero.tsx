@@ -8,6 +8,8 @@ import { ImageCompare } from "../ui/ImageCompare";
 import { NoiseTexture } from "../ui/NoiseTexture";
 
 const tooltipColors = ["#44ff88", "#ffcc00", "#cc44ff", "#00d4ff"];
+const TOOLTIP_W = 320;
+const MARGIN = 12;
 
 const stagger = {
   hidden: {},
@@ -27,6 +29,7 @@ const fadeUp = {
 
 export function Hero() {
   const [open, setOpen] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const openTimerRef = useRef<number>(undefined);
@@ -61,9 +64,21 @@ export function Hero() {
     };
   }, []);
 
+  function computePosition() {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    // Center on the * button, then clamp so the tooltip stays within the viewport
+    const ideal = rect.left + rect.width / 2 - TOOLTIP_W / 2;
+    const left = Math.max(MARGIN, Math.min(ideal, window.innerWidth - TOOLTIP_W - MARGIN));
+    setTooltipPos({ top: rect.bottom + 8, left });
+  }
+
   function startOpen() {
     window.clearTimeout(closeTimerRef.current);
-    openTimerRef.current = window.setTimeout(() => setOpen(true), 100);
+    openTimerRef.current = window.setTimeout(() => {
+      computePosition();
+      setOpen(true);
+    }, 100);
   }
 
   function startClose() {
@@ -86,48 +101,23 @@ export function Hero() {
         animate="visible"
       >
         <motion.h1
-          className="text-balance font-semibold text-5xl text-text leading-snug tracking-tight sm:text-6xl lg:text-[4.5rem]"
+          className="text-balance font-semibold text-5xl text-text leading-snug tracking-tight sm:text-6xl"
           variants={fadeUp}
         >
-          The database{" "}
-          <span className="inline-flex whitespace-nowrap">
-            browser
-            {/* Asterisk + tooltip — self-contained, tooltip anchored to the * */}
-            <span className="relative">
-              <button
-                ref={btnRef}
-                type="button"
-                onClick={() => setOpen((o) => !o)}
-                onMouseEnter={startOpen}
-                onMouseLeave={startClose}
-                className="inline-block border-0 bg-transparent align-baseline outline-none"
-              >
-                <span className="ml-1 cursor-pointer font-display text-accent">*</span>
-              </button>
-              <div
-                ref={tooltipRef}
-                onMouseEnter={startOpen}
-                onMouseLeave={startClose}
-                className={`absolute top-full left-1/2 z-20 mt-3 w-72 -translate-x-1/2 rounded-md border border-border-strong bg-surface p-5 text-left shadow-2xl transition-opacity duration-200 sm:w-80 ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-              >
-                <p className="mb-3 font-mono text-text-muted text-xs uppercase">{HERO.tooltipLabel}</p>
-                <ul className="space-y-3">
-                  {HERO.tooltipItems.map((item, i) => (
-                    <li key={item.label} className="flex items-start gap-3">
-                      <span
-                        className="mt-2 h-2 w-2 shrink-0 rounded-full"
-                        style={{ backgroundColor: tooltipColors[i] }}
-                      />
-                      <div className="flex flex-col font-mono text-xs">
-                        <span className="text-text">{item.label}</span>
-                        <span className="text-text-muted">{item.desc}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </span>
-          </span>{" "}
+          The database app
+          <button
+            ref={btnRef}
+            type="button"
+            onClick={() => {
+              computePosition();
+              setOpen((o) => !o);
+            }}
+            onMouseEnter={startOpen}
+            onMouseLeave={startClose}
+            className="inline-block border-0 bg-transparent align-baseline outline-none"
+          >
+            <span className="ml-1 cursor-pointer font-display text-accent">*</span>
+          </button>{" "}
           for <span className="font-display italic tracking-wide">product engineers.</span>
         </motion.h1>
 
@@ -137,17 +127,6 @@ export function Hero() {
         >
           {HERO.leader}
         </motion.p>
-        <div className="mt-6">
-          {HERO.description.map((p) => (
-            <motion.p
-              key={p}
-              className="mx-auto mt-4 max-w-2xs text-balance text-sm text-text-secondary leading-relaxed md:mt-0 md:max-w-lg"
-              variants={fadeUp}
-            >
-              {p}
-            </motion.p>
-          ))}
-        </div>
         <motion.div className="mt-8 flex flex-col items-center gap-4" variants={fadeUp}>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -166,6 +145,28 @@ export function Hero() {
           <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{HERO.availability}</p>
         </motion.div>
       </motion.div>
+
+      {/* Tooltip — fixed so it escapes any overflow context; position clamped to viewport */}
+      <div
+        ref={tooltipRef}
+        onMouseEnter={startOpen}
+        onMouseLeave={startClose}
+        style={{ top: tooltipPos.top, left: tooltipPos.left, width: TOOLTIP_W }}
+        className={`fixed z-[200] rounded-md border border-border-strong bg-surface p-5 text-left shadow-2xl transition-opacity duration-200 ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+      >
+        <p className="mb-3 font-mono text-text-muted text-xs uppercase">{HERO.tooltipLabel}</p>
+        <ul className="space-y-3">
+          {HERO.tooltipItems.map((item, i) => (
+            <li key={item.label} className="flex items-start gap-3">
+              <span className="mt-2 h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: tooltipColors[i] }} />
+              <div className="flex flex-col font-mono text-xs">
+                <span className="text-text">{item.label}</span>
+                <span className="text-text-muted">{item.desc}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* Hero screenshot */}
       <motion.div

@@ -123,9 +123,7 @@ function ChangelogPage() {
                   {formatDate(entry.date)}
                 </time>
               </div>
-              {entry.image && (
-                <img src={entry.image} alt="" className="mb-4 w-full rounded object-cover" />
-              )}
+              {entry.image && <img src={entry.image} alt="" className="mb-4 w-full rounded object-cover" />}
               <ReactMarkdown components={markdownComponents}>{entry.body}</ReactMarkdown>
             </article>
           ))
