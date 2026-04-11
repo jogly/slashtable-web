@@ -338,6 +338,13 @@ export const FOOTER = {
         { label: "Twitter / X", href: "https://twitter.com/slashtable" },
       ],
     },
+    {
+      title: "Legal",
+      links: [
+        { label: "Privacy", to: "/privacy" },
+        { label: "Terms", to: "/terms" },
+      ],
+    },
   ],
   copyright: "Make Toast LLC",
 };
