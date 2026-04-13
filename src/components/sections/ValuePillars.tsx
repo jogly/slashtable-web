@@ -1,9 +1,14 @@
+import { GitFork, Network, ShieldCheck } from "lucide-react";
 import { VALUE_PILLARS } from "../../lib/copy";
 import { FadeIn } from "../ui/FadeIn";
 import { NoiseTexture } from "../ui/NoiseTexture";
 import { SectionBorder } from "../ui/SectionBorder";
 
-const pillarColors = ["#44ff88", "#00d4ff", "#cc44ff"];
+const pillarMeta = [
+  { color: "#44ff88", icon: GitFork, href: "#features" },
+  { color: "#00d4ff", icon: ShieldCheck, href: "#mcp" },
+  { color: "#cc44ff", icon: Network, href: "#schema" },
+];
 
 export function ValuePillars() {
   return (
@@ -11,23 +16,41 @@ export function ValuePillars() {
       <NoiseTexture variant="crosshatch" opacity={0.6} />
       <SectionBorder position="top" />
       <div className="relative mx-auto grid max-w-content divide-border sm:grid-cols-3 sm:divide-x">
-        {VALUE_PILLARS.pillars.map((pillar, i) => (
-          <FadeIn key={pillar.title} delay={i * 0.06}>
-            <div className="px-6 py-8 lg:px-10 lg:py-10">
-              <div className="mb-3 flex items-center gap-2.5">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: pillarColors[i] }} />
+        {VALUE_PILLARS.pillars.map((pillar, i) => {
+          const { color, icon: Icon, href } = pillarMeta[i];
+          return (
+            <FadeIn key={pillar.title} delay={i * 0.06}>
+              <a
+                href={href}
+                className="group block px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10"
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <span
+                    className="flex h-8 w-8 shrink-0 items-center justify-center border border-dashed transition-colors"
+                    style={{ borderColor: `${color}30`, backgroundColor: `${color}06` }}
+                    aria-hidden="true"
+                  >
+                    <Icon className="h-4 w-4" style={{ color }} strokeWidth={1.5} />
+                  </span>
+                  <span
+                    className="font-mono text-[10px] uppercase tracking-widest"
+                    style={{ color, opacity: 0.6 }}
+                  >
+                    0{i + 1}
+                  </span>
+                </div>
+                <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
+                <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
                 <span
-                  className="font-mono text-[10px] uppercase tracking-widest"
-                  style={{ color: pillarColors[i], opacity: 0.6 }}
+                  className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100"
+                  style={{ color }}
                 >
-                  0{i + 1}
+                  Learn more &rsaquo;
                 </span>
-              </div>
-              <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
-            </div>
-          </FadeIn>
-        ))}
+              </a>
+            </FadeIn>
+          );
+        })}
       </div>
       <SectionBorder position="bottom" />
     </section>

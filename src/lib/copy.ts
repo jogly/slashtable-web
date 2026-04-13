@@ -15,7 +15,7 @@ export const HERO = {
     { label: "A Schema Graph Viewer", desc: "explore relationships visually" },
     { label: "An MCP Server", desc: "safe AI access to your live schema and data" },
   ],
-  leader: "Your job isn\u2019t database administration, so use the right tool for the job.",
+  leader: "You aren\u2019t a database administrator. Use the right tool for the job.",
   ctaDownload: "Download for macOS",
   ctaFeatures: "See features",
   availability: "Available for macOS \u00b7 PostgreSQL only",
@@ -98,9 +98,9 @@ export default class StatusBadge extends Plugin {
 // ─── Features Grid ───────────────────────────────────────────────
 
 export const FEATURES_GRID = {
-  eyebrow: "No premium tier",
+  eyebrow: "Every plan",
   heading: "Batteries included.",
-  description: "No extensions to install. No upgrade to unlock. If it\u2019s on this list, it\u2019s in the app.",
+  description: "No extensions to install. No features behind a paywall. If it\u2019s on this list, it\u2019s in the free tier.",
   features: [
     {
       title: "SQL editor",
@@ -330,7 +330,7 @@ export const FOOTER = {
       title: "Community",
       links: [
         { label: "Discord", href: "https://discord.gg/xR2VdkfnJQ" },
-        { label: "Twitter / X", href: "https://twitter.com/slashtable" },
+        { label: "Twitter / X", href: "https://x.com/mktoast_studio" },
       ],
     },
     {

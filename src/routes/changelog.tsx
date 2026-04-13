@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
+import { NAME } from "../lib/constants";
 import { CHANGELOG } from "../lib/copy";
 
 const CHANGELOG_URL = "https://downloads.slashtable.dev/changelog.json";
@@ -85,7 +86,9 @@ function ChangelogPage() {
         <span className="h-2 w-2 flex-shrink-0 bg-accent" />
         <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{CHANGELOG.eyebrow}</span>
       </div>
-      <h1 className="font-display text-4xl text-text tracking-tight">{CHANGELOG.heading}</h1>
+      <h1 className="font-display text-4xl text-text tracking-tight">
+        What's new in <span className="font-mono">{NAME.short}</span>
+      </h1>
       <p className="mt-3 text-text-secondary leading-relaxed">{CHANGELOG.description}</p>
 
       <div className="mt-12 border-border border-t">

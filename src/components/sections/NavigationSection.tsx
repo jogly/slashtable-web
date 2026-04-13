@@ -5,7 +5,7 @@ import { FeatureFrame } from "../ui/FeatureFrame";
 import { NoiseTexture } from "../ui/NoiseTexture";
 export function NavigationSection() {
   return (
-    <section className="relative py-24 lg:py-32" id="features">
+    <section className="relative py-16 lg:py-24" id="features">
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
@@ -14,7 +14,7 @@ export function NavigationSection() {
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
               <div className="min-w-0">
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-green)" }} />
+                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-green)" }} aria-hidden="true" />
                   <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                     {NAVIGATION.eyebrow}
                   </span>
@@ -30,7 +30,7 @@ export function NavigationSection() {
                 </div>
                 <a
                   href="#download"
-                  className="mt-8 inline-flex items-center gap-1 font-mono text-[11px] text-accent uppercase tracking-widest transition-colors hover:text-white"
+                  className="mt-8 inline-flex items-center gap-1 font-mono text-[11px] text-green uppercase tracking-widest transition-colors hover:text-white"
                 >
                   {NAVIGATION.cta} &rsaquo;
                 </a>

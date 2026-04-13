@@ -158,7 +158,7 @@ export function McpSection() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative py-24 lg:py-32" id="mcp">
+    <section className="relative py-16 lg:py-24" id="mcp">
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
@@ -167,7 +167,7 @@ export function McpSection() {
             {/* Header */}
             <div className="mb-10 text-center">
               <div className="mb-5 flex items-center justify-center gap-2">
-                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-cyan)" }} />
+                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-cyan)" }} aria-hidden="true" />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{MCP.eyebrow}</span>
               </div>
               <h2 className="mx-auto max-w-2xl font-display text-3xl text-text tracking-tight lg:text-4xl">
@@ -210,7 +210,7 @@ export function McpSection() {
                         {/* Title row */}
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex items-center gap-2.5">
-                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-border bg-surface-2">
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-border bg-surface-2" aria-hidden="true">
                               <Icon className="h-3.5 w-3.5" style={{ color }} strokeWidth={1.5} />
                             </span>
                             <h3 className="font-display text-sm text-text tracking-wide">{item.title}</h3>
@@ -220,6 +220,7 @@ export function McpSection() {
                               isActive ? "rotate-90 lg:rotate-0" : ""
                             }`}
                             strokeWidth={1.5}
+                            aria-hidden="true"
                           />
                         </div>
 
@@ -246,7 +247,7 @@ export function McpSection() {
             <div className="mt-6 text-center">
               <a
                 href="#download"
-                className="inline-flex items-center gap-1 font-mono text-[11px] text-accent uppercase tracking-widest transition-colors hover:text-white"
+                className="inline-flex items-center gap-1 font-mono text-[11px] text-cyan uppercase tracking-widest transition-colors hover:text-white"
               >
                 {MCP.cta} &rsaquo;
               </a>

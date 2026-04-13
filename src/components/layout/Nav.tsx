@@ -26,7 +26,7 @@ export function Nav() {
       <header className="fixed top-0 right-0 left-0 z-50 sm:top-4 sm:flex sm:justify-center sm:px-4">
         {/* Mobile: full-width bar / Desktop: centered pill */}
         <nav
-          className={`flex items-center px-4 py-2.5 transition-all duration-300 sm:rounded-full sm:border sm:px-2 sm:py-1.5 ${
+          className={`flex items-center px-4 py-2.5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 sm:rounded-full sm:border sm:px-2 sm:py-1.5 ${
             scrolled || menuOpen
               ? "border-border-strong border-b bg-surface/50 shadow-black/50 shadow-lg backdrop-blur-md sm:border"
               : "border-transparent border-b bg-bg/80 backdrop-blur-sm sm:border sm:border-border sm:bg-surface/80"
@@ -45,20 +45,20 @@ export function Nav() {
                 key={link.label}
                 to="/"
                 hash={link.hash}
-                className="px-2.5 py-1 font-mono text-[10px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
+                className="px-2.5 py-1 font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
               >
                 {link.label}
               </Link>
             ))}
             <Link
               to="/pricing"
-              className="px-2.5 py-1 font-mono text-[10px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
+              className="px-2.5 py-1 font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
             >
               {NAV.pricing}
             </Link>
             <Link
               to="/changelog"
-              className="px-2.5 py-1 font-mono text-[10px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
+              className="px-2.5 py-1 font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
             >
               {NAV.changelog}
             </Link>
@@ -68,7 +68,7 @@ export function Nav() {
           <Link
             to="/"
             hash="download"
-            className="ml-1 hidden items-center rounded-full bg-accent px-4 py-1.5 font-mono text-[10px] text-black uppercase tracking-widest transition-colors hover:bg-white sm:inline-flex"
+            className="ml-1 hidden items-center rounded-full bg-accent px-4 py-1.5 font-mono text-[11px] text-black uppercase tracking-widest transition-colors hover:bg-white sm:inline-flex"
           >
             {NAV.download}
           </Link>
@@ -76,6 +76,7 @@ export function Nav() {
           {/* Mobile hamburger */}
           <button
             type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             className="ml-auto p-1 text-text-muted transition-colors hover:text-text sm:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >

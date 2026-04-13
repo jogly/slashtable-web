@@ -21,13 +21,18 @@ interface ImageCompareProps {
  */
 export function ImageCompare({ darkSrc, lightSrc, alt, className = "", initialPosition = 70 }: ImageCompareProps) {
   const handle = (
-    // w-12 gives a 48px touch target — wide enough to reliably tap on mobile.
-    // The absolute line fills full height; the circle sits centered over it.
-    <div className="relative flex h-full w-12 items-center justify-center">
+    <div className="relative flex h-full w-14 items-center justify-center">
       <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-white/60" />
-      <div className="relative flex h-10 w-10 items-center justify-center rounded-full border bg-white/70 shadow-lg backdrop-blur-lg">
-        <ChevronsLeftRight className="h-4 w-4 text-black/60" />
+      <div className="group relative flex h-12 w-12 animate-[pulse_3s_ease-in-out_2] items-center justify-center rounded-full border border-white/40 bg-white/80 shadow-[0_0_20px_rgba(255,255,255,0.3)] backdrop-blur-lg transition-transform hover:scale-110">
+        <ChevronsLeftRight className="h-5 w-5 text-black/70" />
       </div>
+      {/* Labels */}
+      <span className="pointer-events-none absolute right-full mr-3 font-mono text-[9px] text-white/60 uppercase tracking-widest">
+        Dark
+      </span>
+      <span className="pointer-events-none absolute left-full ml-3 font-mono text-[9px] text-white/60 uppercase tracking-widest">
+        Light
+      </span>
     </div>
   );
 

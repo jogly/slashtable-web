@@ -6,7 +6,7 @@ import { NoiseTexture } from "../ui/NoiseTexture";
 export function PluginSection() {
   const [before, after] = PLUGIN.intro.split(PLUGIN.pluginPath);
   return (
-    <section className="relative py-24 lg:py-32" id="plugins">
+    <section className="relative py-16 lg:py-24" id="plugins">
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
@@ -19,7 +19,7 @@ export function PluginSection() {
 
               <div>
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-yellow)" }} />
+                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-yellow)" }} aria-hidden="true" />
                   <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                     {PLUGIN.eyebrow}
                   </span>
@@ -34,7 +34,7 @@ export function PluginSection() {
                   <ul>
                     {PLUGIN.capabilities.map((item) => (
                       <li key={item} className="relative mt-2">
-                        <span className="absolute -ml-6 text-text">+</span>
+                        <span className="absolute -ml-6 text-text" aria-hidden="true">+</span>
                         <span>{item}</span>
                       </li>
                     ))}

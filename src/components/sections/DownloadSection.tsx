@@ -208,7 +208,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
   }
 
   return (
-    <section id="download" className="relative overflow-hidden py-24 lg:py-32">
+    <section id="download" className="relative overflow-hidden py-16 lg:py-24">
       <NoiseTexture variant="grain" opacity={0.45} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,74,0,0.08)_0%,transparent_60%)]" />
 
@@ -280,7 +280,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                 });
                 t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
-              className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
+              className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-[background-color,box-shadow] duration-150 hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
                 !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
@@ -311,7 +311,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                 });
                 t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
-              className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-all hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
+              className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-3.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_32px_-4px_rgba(201,74,0,0.4)] transition-[background-color,box-shadow] duration-150 hover:bg-white hover:shadow-[0_0_32px_-4px_rgba(255,255,255,0.2)]${
                 !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >

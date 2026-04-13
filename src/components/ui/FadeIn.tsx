@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
 interface FadeInProps {
@@ -9,6 +9,12 @@ interface FadeInProps {
 }
 
 export function FadeIn({ children, className, delay = 0, y = 20 }: FadeInProps) {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y }}
