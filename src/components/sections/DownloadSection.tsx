@@ -1,6 +1,7 @@
 import macosFolderBack from "@assets/macos-folder-back.png?as=img";
 import macosFolderFore from "@assets/macos-folder-fore.png?as=img";
 import { DndContext, type DragEndEvent, type DragOverEvent, useDraggable, useDroppable } from "@dnd-kit/core";
+import { Link } from "@tanstack/react-router";
 import { Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -332,15 +333,24 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
               </span>
               {release && <span className="relative opacity-70">&mdash; v{release.version}</span>}
             </a>
-            <a
-              href={secondary}
-              {...(secondary ? { download: true } : { "aria-disabled": true })}
-              className={`font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text${
-                !secondary ? "pointer-events-none invisible" : ""
-              }`}
-            >
-              {DOWNLOAD.altAvailableLabel} {altLabel}
-            </a>
+            <div className="flex items-center gap-3">
+              <a
+                href={secondary}
+                {...(secondary ? { download: true } : { "aria-disabled": true })}
+                className={`font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text${
+                  !secondary ? "pointer-events-none invisible" : ""
+                }`}
+              >
+                {DOWNLOAD.altAvailableLabel} {altLabel}
+              </a>
+              <span className="font-mono text-[10px] text-text-muted/50">&middot;</span>
+              <Link
+                to="/download"
+                className="font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text"
+              >
+                {DOWNLOAD.moreVersionsLabel}
+              </Link>
+            </div>
           </div>
 
           {/* Secondary links */}

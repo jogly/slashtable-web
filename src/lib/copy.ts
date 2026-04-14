@@ -242,6 +242,56 @@ export const DOWNLOAD = {
   downloadLabel: "Download for Mac",
   altAvailableLabel: "Also available for",
   platformNotice: "macOS only \u00b7 PostgreSQL only",
+  moreVersionsLabel: "All versions & older builds",
+};
+
+// ─── Dedicated /download page ───────────────────────────────
+
+export const DOWNLOAD_PAGE = {
+  eyebrow: "Release",
+  channel: "Stable channel",
+  platformTag: "macOS",
+  loading: "Checking latest\u2026",
+  unavailable: "Release feed unavailable",
+  viewChangelog: "View changelog",
+  archHeading: "Pick your architecture",
+  recommendedBadge: "Detected for your Mac",
+  alsoAvailable: "Also available",
+  downloadCta: "Download .dmg",
+  silicon: {
+    label: "Apple Silicon",
+    arch: "aarch64",
+    body: "M-series Macs",
+  },
+  intel: {
+    label: "Intel",
+    arch: "x86_64",
+    body: "Intel-based Macs running macOS 12 or later.",
+  },
+  requirementsHeading: "System requirements",
+  requirements: [
+    { label: "Operating system", value: "macOS 12.0 Monterey or later" },
+    { label: "Architecture", value: "Apple Silicon or Intel" },
+    { label: "Database", value: "PostgreSQL 12 or later" },
+    { label: "Install size", value: "~40 MB" },
+  ],
+  releaseNotesHeading: "In this release",
+  releaseNotesFallback: "Release notes will appear here once the feed is available.",
+  viewFullChangelog: "View full changelog",
+  olderHeading: "Looking for an older build?",
+  allVersionsHeading: "All versions",
+  allVersionsCount: (n: number) => `${n} release${n === 1 ? "" : "s"}`,
+  allVersionsDescription: "You like the classic stuff, eh?",
+  versionColumn: "Version",
+  releasedColumn: "Released",
+  siliconColumn: "Apple Silicon",
+  intelColumn: "Intel",
+  latestBadge: "Latest",
+  allVersionsError: "Version manifest unavailable. Try again in a moment.",
+  allVersionsLoading: "Loading versions\u2026",
+  agreement: "By downloading, you agree to the",
+  termsLabel: "terms",
+  privacyLabel: "privacy policy",
 };
 
 // ─── Thank You Modal ────────────────────────────────────────
@@ -308,14 +358,13 @@ export const NAV = {
 // ─── Footer ──────────────────────────────────────────────────────
 
 export const FOOTER = {
-  tagline: "The database browser for product engineers.",
+  tagline: "The database app for product engineers.",
   sections: [
     {
       title: "Product",
       links: [
         { label: "MCP Server", to: "/", hash: "mcp" },
         { label: "Schema Graph", to: "/", hash: "schema" },
-        { label: "Download", to: "/", hash: "download" },
         { label: "Pricing", to: "/pricing" },
         { label: "Changelog", to: "/changelog" },
       ],
@@ -325,6 +374,7 @@ export const FOOTER = {
       links: [
         { label: "Documentation", href: "#" },
         { label: "Plugin API", href: "#" },
+        { label: "Download", to: "/download" },
       ],
     },
     {

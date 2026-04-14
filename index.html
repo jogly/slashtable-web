@@ -1,34 +1,61 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark" style="color-scheme:dark;background-color:#111114">
+<!doctype html>
+<html
+  lang="en"
+  data-theme="dark"
+  style="color-scheme: dark; background-color: #111114"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Restore theme before first paint to prevent white flash -->
+    <script>
+      (function () {
+        var t = localStorage.getItem("st-theme");
+        if (!t)
+          t = matchMedia("(prefers-color-scheme:light)").matches
+            ? "light"
+            : "dark";
+        if (t !== "dark" && t !== "light") t = "dark";
+        var d = document.documentElement;
+        d.setAttribute("data-theme", t);
+        d.style.colorScheme = t;
+        d.style.backgroundColor = t === "dark" ? "#111114" : "#f5f3ef";
+      })();
+    </script>
+    <link rel="icon" type="image/png" href="/app-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111114" />
+    <title>/table — The database app for product engineers</title>
+    <meta
+      name="description"
+      content="Schema-aware database browsing with an embedded MCP server, Obsidian-style plugins, and vim-mode navigation. Built with Tauri."
+    />
+    <meta property="og:title" content="/table" />
+    <meta
+      property="og:description"
+      content="The database app for product engineers."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://slashtable.dev" />
+    <meta property="og:image" content="https://slashtable.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta
+      property="og:image:alt"
+      content="/table — The database app for product engineers"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@slashtable" />
+    <meta name="twitter:title" content="/table" />
+    <meta
+      name="twitter:description"
+      content="The database app for product engineers."
+    />
+    <meta name="twitter:image" content="https://slashtable.dev/og-image.png" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <!-- Restore theme before first paint to prevent white flash -->
-  <script>
-    (function () {
-      var t = localStorage.getItem('st-theme');
-      if (!t) t = matchMedia('(prefers-color-scheme:light)').matches ? 'light' : 'dark';
-      if (t !== 'dark' && t !== 'light') t = 'dark';
-      var d = document.documentElement;
-      d.setAttribute('data-theme', t);
-      d.style.colorScheme = t;
-      d.style.backgroundColor = t === 'dark' ? '#111114' : '#f5f3ef';
-    })();
-  </script>
-  <link rel="icon" type="image/png" href="/app-icon.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#111114" />
-  <title>/table — The database browser for product engineers</title>
-  <meta name="description"
-    content="Schema-aware database browsing with an embedded MCP server, Obsidian-style plugins, and vim-mode navigation. Built with Tauri." />
-  <meta property="og:title" content="/table" />
-  <meta property="og:description" content="The database browser for product engineers." />
-  <meta property="og:type" content="website" />
-</head>
-
-<body>
-  <div id="root" style="opacity:0"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root" style="opacity: 0"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
