@@ -397,7 +397,17 @@ function DownloadPage() {
                 {DOWNLOAD_PAGE.requirements.map((req) => (
                   <div key={req.label} className="grid grid-cols-[auto_1fr] gap-6 py-3 first:pt-0 last:pb-0">
                     <dt className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{req.label}</dt>
-                    <dd className="text-right text-sm text-text">{req.value}</dd>
+                    <dd className="text-right text-sm text-text">
+                      {Array.isArray(req.value) ? (
+                        <span className="flex flex-col gap-0.5">
+                          {req.value.map((line) => (
+                            <span key={line}>{line}</span>
+                          ))}
+                        </span>
+                      ) : (
+                        req.value
+                      )}
+                    </dd>
                   </div>
                 ))}
               </dl>

@@ -18,7 +18,7 @@ export const HERO = {
   leader: "You aren\u2019t a database administrator. Use the right tool for the job.",
   ctaDownload: "Download for macOS",
   ctaFeatures: "See features",
-  availability: "Available for macOS \u00b7 PostgreSQL only",
+  availability: "macOS \u00b7 PostgreSQL (beta) \u00b7 MySQL (alpha)",
   screenshotAlt:
     "SlashTable main window showing a data table with foreign key relationships highlighted and breadcrumb navigation \u2014 dark mode left, light mode right",
 };
@@ -127,7 +127,7 @@ export const FEATURES_GRID = {
     {
       title: "Docker auto-detection",
       description:
-        "Finds your running Postgres containers and pulls credentials from their env vars. No YAML required.",
+        "Finds your running Postgres and MySQL containers and pulls credentials from their env vars. No YAML required.",
     },
     {
       title: "Credential vaults",
@@ -241,7 +241,7 @@ export const DOWNLOAD = {
   buttonFallback: "Or if you\u2019re, like, really into buttons",
   downloadLabel: "Download for Mac",
   altAvailableLabel: "Also available for",
-  platformNotice: "macOS only \u00b7 PostgreSQL only",
+  platformNotice: "macOS only \u00b7 PostgreSQL (beta) \u00b7 MySQL (alpha)",
   moreVersionsLabel: "All versions & older builds",
 };
 
@@ -272,7 +272,7 @@ export const DOWNLOAD_PAGE = {
   requirements: [
     { label: "Operating system", value: "macOS 12.0 Monterey or later" },
     { label: "Architecture", value: "Apple Silicon or Intel" },
-    { label: "Database", value: "PostgreSQL 12 or later" },
+    { label: "Databases", value: ["PostgreSQL 12+ (beta)", "MySQL 8.0+ (alpha)"] },
     { label: "Install size", value: "~40 MB" },
   ],
   releaseNotesHeading: "In this release",
