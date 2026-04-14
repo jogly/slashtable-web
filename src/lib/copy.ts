@@ -10,10 +10,10 @@
 export const HERO = {
   tooltipLabel: "Includes",
   tooltipItems: [
-    { label: "A Data Editor", desc: "insert, update, and delete rows inline" },
+    { label: "A Data Editor", desc: "insert, update, and delete rows visually" },
     { label: "An SQL Editor", desc: "write and run queries with full results" },
-    { label: "A Schema Graph Viewer", desc: "explore relationships visually" },
-    { label: "An MCP Server", desc: "safe AI access to your live schema and data" },
+    { label: "A Graph Viewer", desc: "explore relationships visually" },
+    { label: "An MCP Server", desc: "safe AI access to live schema and data" },
   ],
   leader: "You aren\u2019t a database administrator. Use the right tool for the job.",
   ctaDownload: "Download for macOS",
@@ -27,9 +27,9 @@ export const HERO = {
 
 export const SCHEMA_GRAPH = {
   eyebrow: "Schema Graph",
-  heading: "The ER diagram nobody drew.",
+  heading: "Beautiful ER diagrams without noise.",
   description:
-    "Auto-layout your schema. Pin root tables, control depth, search by name. Join tables collapse into direct many-to-many edges. What\u2019s left is your actual data model.",
+    "Auto-layout your schema. Pin root tables to focus on, control graph depth to avoid clutter, search by name. What\u2019s left matches your mental model.",
   cta: "Try it free",
 };
 
@@ -37,22 +37,24 @@ export const SCHEMA_GRAPH = {
 
 export const MCP = {
   eyebrow: "MCP Server",
-  heading: "AI reads your schema. You hold the keys.",
+  heading: "Controlled access for AI agents.",
   description:
-    "MCP tools give Claude, Cursor, or any MCP client live access to your schema and regulated access to data. Credentials never leave the app.",
+    "Built-in MCP gives Claude, Cursor, or any MCP client regulated access to data. Agents never access credentials.",
   callouts: [
     {
       title: "AI guardrails",
       description:
-        "Keyword validation blocks mutations. Parameterized queries prevent injection. Engine-level READ ONLY transactions catch everything else.",
+        "All queries are validated and run in an engine-level READ ONLY transaction that always rolls back. Your data is safe, and agents can\u2019t accidentally (or intentionally) make changes.",
     },
     {
       title: "Schema introspection",
-      description: "Your agent sees every table, column, type, and foreign key. Credentials stay in the vault.",
+      description:
+        "Agents can explore every table, column, type, and all their relationships, without overwhelming the token count.",
     },
     {
       title: "Live data queries",
-      description: "SELECT against your actual database. Real rows, real answers.",
+      description:
+        "SELECT against your actual database, or block all arbitrary SQL. Configure per-connection or globally for peace of mind.",
     },
   ],
   cta: "Try it free",
@@ -65,7 +67,7 @@ export const PLUGIN = {
   heading: "Bring Your Own Code.",
   pluginPath: "~/.slashtable/plugins/",
   intro:
-    "Cell renderers, record enrichers, custom views, query hooks, toolbar actions, and themes. Write TypeScript, drop it in ~/.slashtable/plugins/. No build step.",
+    "Cell renderers, record enrichers, custom views, query hooks, toolbar actions, and themes. Write TypeScript, drop it in ~/.slashtable/plugins/.",
   capabilities: [
     "Cell renderers change how columns look",
     "Record enrichers attach external data to rows",
@@ -100,7 +102,7 @@ export default class StatusBadge extends Plugin {
 export const FEATURES_GRID = {
   eyebrow: "Every plan",
   heading: "Batteries included.",
-  description: "No extensions to install. No features behind a paywall. If it\u2019s on this list, it\u2019s in the free tier.",
+  description: "",
   features: [
     {
       title: "SQL editor",
@@ -188,9 +190,9 @@ export const FEATURES_GRID = {
         "Every destructive action shows a SQL preview and a confirmation dialog. The UI actively discourages you from doing anything you\u2019d have to explain in a postmortem.",
     },
     {
-      title: "Built by one person",
+      title: "And more...",
       description:
-        "The entire app was written by a solo developer. Bug reports go straight to the person who wrote the code. Feature requests get read the same day.",
+        "Just download the app and find out what wouldn\u2019t fit in the list. New features and improving existing ones based on user feedback every week.",
     },
   ],
 };
@@ -201,7 +203,7 @@ export const NAVIGATION = {
   eyebrow: "Navigation",
   heading: "Bidirectional FK navigation.",
   body: [
-    "Click a foreign key value to drill into the related records. A breadcrumb at the top tracks your full path and every level is clickable.",
+    "Click a foreign key value to drill into the related records. A novel breadcrumb tree tracks your full path and every level is clickable.",
     "Reverse FK lookups show every record that points to the current one. Pure join tables collapse into direct relationships so navigation stays clean.",
     "Stack your own filters on top and keep drilling without losing context.",
   ],
@@ -214,15 +216,15 @@ export const VALUE_PILLARS = {
   pillars: [
     {
       title: "Click through your data",
-      body: "A graph navigation model so good it will convert keyboard diehards. FKs, reverse FKs, join tables. All navigable. A breadcrumb trail keeps you oriented.",
+      body: "A graph navigation model so good it will convert keyboard diehards. FKs, reverse FKs, join tables, all navigable.",
     },
     {
       title: "Safe access for AI agents",
-      body: "Built-in MCP server. Agents can query the schema, get live data; you control access.",
+      body: "Built-in MCP server. Agents query the schema, get live data, and never see the credentials, while keeping the token count to a minimum.",
     },
     {
       title: "Screenshot-worthy schema diagrams",
-      body: "An auto-layout ER diagram of your tables and foreign keys. Pin nodes, hide annoying tables, highlight edges. Get the perfect shot for your RFC.",
+      body: "Create bespoke ER diagrams of important tables, hide the rest. Pin nodes, hide annoying tables, highlight edges. Get the perfect shot for your RFC.",
     },
   ],
 };
@@ -311,7 +313,6 @@ export const FOOTER = {
     {
       title: "Product",
       links: [
-        { label: "Features", to: "/", hash: "features" },
         { label: "MCP Server", to: "/", hash: "mcp" },
         { label: "Schema Graph", to: "/", hash: "schema" },
         { label: "Download", to: "/", hash: "download" },

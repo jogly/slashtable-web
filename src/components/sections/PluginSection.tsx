@@ -19,7 +19,11 @@ export function PluginSection() {
 
               <div>
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-yellow)" }} aria-hidden="true" />
+                  <span
+                    className="h-2 w-2 shrink-0"
+                    style={{ backgroundColor: "var(--color-yellow)" }}
+                    aria-hidden="true"
+                  />
                   <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                     {PLUGIN.eyebrow}
                   </span>
@@ -34,7 +38,9 @@ export function PluginSection() {
                   <ul>
                     {PLUGIN.capabilities.map((item) => (
                       <li key={item} className="relative mt-2">
-                        <span className="absolute -ml-6 text-text" aria-hidden="true">+</span>
+                        <span className="absolute -ml-6 text-text" aria-hidden="true">
+                          +
+                        </span>
                         <span>{item}</span>
                       </li>
                     ))}

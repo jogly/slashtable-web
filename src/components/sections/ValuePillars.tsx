@@ -22,7 +22,7 @@ export function ValuePillars() {
             <FadeIn key={pillar.title} delay={i * 0.06}>
               <a
                 href={href}
-                className="group block px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10"
+                className="group block h-full px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10"
               >
                 <div className="mb-4 flex items-center gap-3">
                   <span
@@ -32,10 +32,7 @@ export function ValuePillars() {
                   >
                     <Icon className="h-4 w-4" style={{ color }} strokeWidth={1.5} />
                   </span>
-                  <span
-                    className="font-mono text-[10px] uppercase tracking-widest"
-                    style={{ color, opacity: 0.6 }}
-                  >
+                  <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color, opacity: 0.6 }}>
                     0{i + 1}
                   </span>
                 </div>

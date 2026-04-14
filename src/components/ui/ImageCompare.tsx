@@ -1,11 +1,12 @@
 import { ChevronsLeftRight } from "lucide-react";
 import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
+import type { ImageData } from "./Img";
 
 interface ImageCompareProps {
-  /** Path to the dark-mode screenshot (left side) */
-  darkSrc?: string;
-  /** Path to the light-mode screenshot (right side) */
-  lightSrc?: string;
+  /** Dark-mode screenshot (left side) */
+  dark?: ImageData;
+  /** Light-mode screenshot (right side) */
+  light?: ImageData;
   alt: string;
   className?: string;
   /** Initial divider position as a percentage (0–100). Defaults to 50. */
@@ -19,18 +20,18 @@ interface ImageCompareProps {
  * Drop screenshots in src/assets/screenshots/ and pass them as darkSrc / lightSrc.
  * While either prop is missing, a styled placeholder is shown instead.
  */
-export function ImageCompare({ darkSrc, lightSrc, alt, className = "", initialPosition = 70 }: ImageCompareProps) {
+export function ImageCompare({ dark, light, alt, className = "", initialPosition = 70 }: ImageCompareProps) {
   const handle = (
-    <div className="relative flex h-full w-14 items-center justify-center">
-      <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-white/60" />
-      <div className="group relative flex h-12 w-12 animate-[pulse_3s_ease-in-out_2] items-center justify-center rounded-full border border-white/40 bg-white/80 shadow-[0_0_20px_rgba(255,255,255,0.3)] backdrop-blur-lg transition-transform hover:scale-110">
-        <ChevronsLeftRight className="h-5 w-5 text-black/70" />
+    <div className="relative flex h-full w-8 items-center justify-center">
+      <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-accent/60" />
+      <div className="group relative flex h-7 w-7 items-center justify-center rounded-full border border-accent/40 bg-accent/90 shadow-[0_0_12px_var(--color-glow)] backdrop-blur-lg transition-transform hover:scale-110">
+        <ChevronsLeftRight className="h-3 w-3 text-white" />
       </div>
       {/* Labels */}
-      <span className="pointer-events-none absolute right-full mr-3 font-mono text-[9px] text-white/60 uppercase tracking-widest">
+      <span className="pointer-events-none absolute right-full mr-2 font-mono text-[8px] text-white/60 uppercase tracking-widest">
         Dark
       </span>
-      <span className="pointer-events-none absolute left-full ml-3 font-mono text-[9px] text-white/60 uppercase tracking-widest">
+      <span className="pointer-events-none absolute left-full ml-2 font-mono text-[8px] text-white/60 uppercase tracking-widest">
         Light
       </span>
     </div>
@@ -38,10 +39,26 @@ export function ImageCompare({ darkSrc, lightSrc, alt, className = "", initialPo
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {darkSrc && lightSrc ? (
+      {dark && light ? (
         <ReactCompareSlider
-          itemOne={<ReactCompareSliderImage src={darkSrc} alt={`${alt} — dark mode`} />}
-          itemTwo={<ReactCompareSliderImage src={lightSrc} alt={`${alt} — light mode`} />}
+          itemOne={
+            <ReactCompareSliderImage
+              src={dark.src}
+              srcSet={dark.srcset}
+              width={dark.w}
+              height={dark.h}
+              alt={`${alt} — dark mode`}
+            />
+          }
+          itemTwo={
+            <ReactCompareSliderImage
+              src={light.src}
+              srcSet={light.srcset}
+              width={light.w}
+              height={light.h}
+              alt={`${alt} — light mode`}
+            />
+          }
           defaultPosition={initialPosition}
           handle={handle}
           style={{ width: "100%" }}

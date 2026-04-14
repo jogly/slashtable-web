@@ -22,9 +22,9 @@ function highlightSyntax(code: string): string {
 
 export function CodeBlock({ code, filename, className }: CodeBlockProps) {
   return (
-    <div className={cn("overflow-hidden rounded-sm border border-border shadow-black/20 shadow-lg", className)}>
+    <div className={cn("overflow-hidden rounded-sm border border-border shadow-lg shadow-shadow", className)}>
       {filename && (
-        <div className="flex items-center gap-2 border-border border-b bg-surface px-4 py-2.5">
+        <div className="flex items-center gap-2 border-border border-b bg-bg/60 px-4 py-2.5 backdrop-blur-sm">
           <div className="flex gap-1.5">
             <div className="h-2 w-2 rounded-full bg-[#ff5f57]/60" />
             <div className="h-2 w-2 rounded-full bg-[#febc2e]/60" />
@@ -33,7 +33,7 @@ export function CodeBlock({ code, filename, className }: CodeBlockProps) {
           <span className="ml-2 font-mono text-text-muted text-xs">{filename}</span>
         </div>
       )}
-      <pre className="overflow-x-auto bg-surface-2 p-4" style={{ scrollbarWidth: "none" }}>
+      <pre className="overflow-x-auto bg-bg/60 p-4 backdrop-blur-md" style={{ scrollbarWidth: "none" }}>
         <code
           className="font-mono text-[11px] text-text-secondary leading-relaxed sm:text-sm"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: content is HTML-escaped before highlighting

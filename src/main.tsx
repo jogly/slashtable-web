@@ -3,6 +3,7 @@ import posthog from "posthog-js";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { AnalyticsProvider } from "./components/providers/PostHogProvider";
+import { ThemeProvider } from "./components/providers/ThemeProvider";
 import "./theme/base.css";
 import { routeTree } from "./routeTree.gen";
 
@@ -31,6 +32,16 @@ if (!rootEl) throw new Error("Root element not found");
 
 createRoot(rootEl).render(
   <StrictMode>
-    <RouterProvider router={router} InnerWrap={({ children }) => <AnalyticsProvider>{children}</AnalyticsProvider>} />
+    <ThemeProvider>
+      <RouterProvider router={router} InnerWrap={({ children }) => <AnalyticsProvider>{children}</AnalyticsProvider>} />
+    </ThemeProvider>
   </StrictMode>,
+);
+
+// Reveal root after React has rendered the DOM with motion initial states applied.
+// Double-rAF ensures we're past the frame where React committed.
+requestAnimationFrame(() =>
+  requestAnimationFrame(() => {
+    rootEl.style.opacity = "1";
+  }),
 );

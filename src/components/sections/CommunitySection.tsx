@@ -17,7 +17,12 @@ function XIcon(props: ComponentProps<"svg">) {
 
 const linkMeta = [
   { icon: MessageCircle, href: "https://discord.gg/xR2VdkfnJQ", color: "#5865F2", hoverBg: "rgba(88,101,242,0.08)" },
-  { icon: XIcon, href: "https://x.com/mktoast_studio", color: "#ffffff", hoverBg: "rgba(255,255,255,0.05)" },
+  {
+    icon: XIcon,
+    href: "https://x.com/mktoast_studio",
+    color: "var(--color-text)",
+    hoverBg: "var(--color-surface-hover)",
+  },
 ];
 
 export function CommunitySection() {

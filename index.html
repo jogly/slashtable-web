@@ -1,8 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" style="color-scheme:dark;background-color:#111114">
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Restore theme before first paint to prevent white flash -->
+  <script>
+    (function () {
+      var t = localStorage.getItem('st-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme:light)').matches ? 'light' : 'dark';
+      if (t !== 'dark' && t !== 'light') t = 'dark';
+      var d = document.documentElement;
+      d.setAttribute('data-theme', t);
+      d.style.colorScheme = t;
+      d.style.backgroundColor = t === 'dark' ? '#111114' : '#f5f3ef';
+    })();
+  </script>
   <link rel="icon" type="image/png" href="/app-icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#111114" />
@@ -15,7 +27,7 @@
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root" style="opacity:0"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

@@ -1,8 +1,10 @@
-import heroDark from "@screenshots/hero-dark.png";
-import heroLight from "@screenshots/hero-light.png";
+import heroDark from "@screenshots/hero-dark.png?as=img";
+import heroLight from "@screenshots/hero-light.png?as=img";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { HERO } from "../../lib/copy";
+import { useTheme } from "../providers/ThemeProvider";
+import { ButtonOverlays } from "../ui/ButtonOverlays";
 import { DotGrid } from "../ui/DotGrid";
 import { ImageCompare } from "../ui/ImageCompare";
 import { NoiseTexture } from "../ui/NoiseTexture";
@@ -27,7 +29,34 @@ const fadeUp = {
   },
 };
 
+function CtaDownload() {
+  return (
+    <a
+      href="#download"
+      className="group relative inline-flex h-10 items-center gap-1.5 overflow-hidden rounded-sm bg-accent px-5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)]"
+    >
+      <ButtonOverlays grainOpacity={0.36} />
+      <span className="relative">{HERO.ctaDownload}</span>
+      <span className="relative opacity-70">&rsaquo;</span>
+    </a>
+  );
+}
+
+function CtaFeatures() {
+  return (
+    <a
+      href="#features"
+      className="group relative inline-flex h-10 items-center gap-1.5 overflow-hidden rounded-sm border border-border-strong border-dashed bg-bg/40 px-5 font-mono text-text-secondary text-xs uppercase tracking-widest backdrop-blur-sm transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
+    >
+      <ButtonOverlays grainOpacity={0.1} sheen="subtle" />
+      <span className="relative">{HERO.ctaFeatures}</span>
+      <span className="relative opacity-70">&rsaquo;</span>
+    </a>
+  );
+}
+
 export function Hero() {
+  const { theme } = useTheme();
   const prefersReducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
@@ -116,7 +145,7 @@ export function Hero() {
             }}
             onMouseEnter={startOpen}
             onMouseLeave={startClose}
-            className="inline-block border-0 bg-transparent align-baseline outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="inline-block border-0 bg-transparent align-baseline outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
           >
             <span className="ml-1 cursor-pointer font-display text-accent">*</span>
           </button>{" "}
@@ -129,20 +158,40 @@ export function Hero() {
         >
           {HERO.leader}
         </motion.p>
-        <motion.div className="mt-8 flex flex-col items-center gap-4" variants={prefersReducedMotion ? undefined : fadeUp}>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <a
-              href="#download"
-              className="inline-flex items-center rounded-full bg-accent px-6 py-2.5 font-mono text-black text-xs uppercase tracking-widest shadow-[0_0_24px_-4px_rgba(201,74,0,0.4)] transition-[background-color,box-shadow] duration-150 hover:bg-white hover:shadow-[0_0_24px_-4px_rgba(255,255,255,0.2)]"
-            >
-              {HERO.ctaDownload} &rsaquo;
-            </a>
-            <a
-              href="#features"
-              className="inline-flex items-center gap-2 rounded-full border border-border-strong px-5 py-2.5 font-mono text-[10px] text-text-secondary uppercase tracking-widest transition-colors hover:border-white hover:text-white"
-            >
-              {HERO.ctaFeatures} &rsaquo;
-            </a>
+        <motion.div
+          className="mt-8 flex flex-col items-center gap-4"
+          variants={prefersReducedMotion ? undefined : fadeUp}
+        >
+          <div className="relative hidden sm:inline-block">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-10"
+              style={{
+                backgroundImage: "radial-gradient(circle, var(--color-text-muted) 0.75px, transparent 0.75px)",
+                backgroundSize: "14px 14px",
+                maskImage: "radial-gradient(ellipse 65% 75% at 50% 50%, black 10%, transparent 70%)",
+                WebkitMaskImage: "radial-gradient(ellipse 65% 75% at 50% 50%, black 10%, transparent 70%)",
+                opacity: 0.35,
+              }}
+            />
+            <div className="relative flex items-stretch">
+              {/*<BlueprintRule orientation="vertical" />*/}
+              <div className="flex items-center p-4">
+                <CtaDownload />
+              </div>
+              {/*<BlueprintRule orientation="vertical" />*/}
+              <div className="flex items-center p-4">
+                <CtaFeatures />
+              </div>
+              {/*<BlueprintRule orientation="vertical" />*/}
+              {/*<BlueprintRule orientation="horizontal" className="top-0 right-0 left-0" />*/}
+              {/*<BlueprintRule orientation="horizontal" className="right-0 bottom-0 left-0" />*/}
+            </div>
+          </div>
+          {/* Mobile: plain button row, no frame */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:hidden">
+            <CtaDownload />
+            <CtaFeatures />
           </div>
           <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{HERO.availability}</p>
         </motion.div>
@@ -160,7 +209,11 @@ export function Hero() {
         <ul className="space-y-3">
           {HERO.tooltipItems.map((item, i) => (
             <li key={item.label} className="flex items-start gap-3">
-              <span className="mt-2 h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: tooltipColors[i] }} aria-hidden="true" />
+              <span
+                className="mt-2 h-2 w-2 shrink-0 rounded-full"
+                style={{ backgroundColor: tooltipColors[i] }}
+                aria-hidden="true"
+              />
               <div className="flex flex-col font-mono text-xs">
                 <span className="text-text">{item.label}</span>
                 <span className="text-text-muted">{item.desc}</span>
@@ -175,14 +228,20 @@ export function Hero() {
         className="mx-auto mt-16 max-w-5xl px-6 lg:mt-20"
         initial={prefersReducedMotion ? undefined : { opacity: 0, y: 24 }}
         animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-        transition={prefersReducedMotion ? undefined : { duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] as const }}
+        transition={
+          prefersReducedMotion ? undefined : { duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] as const }
+        }
       >
-        <div className="relative overflow-hidden rounded-2xl shadow-[0_0_80px_-12px_rgba(201,74,0,0.15),0_0_32px_-8px_rgba(201,74,0,0.1)]">
+        <div className="relative overflow-hidden rounded-2xl shadow-[0_0_80px_-12px_var(--color-glow-soft),0_0_32px_-8px_var(--color-glow-soft)]">
           <div className="-mt-px">
-            <ImageCompare darkSrc={heroDark} lightSrc={heroLight} alt={HERO.screenshotAlt} />
+            <ImageCompare
+              dark={theme === "dark" ? heroDark : heroLight}
+              light={theme === "dark" ? heroLight : heroDark}
+              alt={HERO.screenshotAlt}
+            />
           </div>
           {/* Inset ring masks 1px of image edges */}
-          <div className="pointer-events-none absolute inset-0 z-50 rounded-2xl ring-1 ring-white/10 ring-inset" />
+          <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-border-strong ring-inset" />
         </div>
       </motion.div>
     </section>

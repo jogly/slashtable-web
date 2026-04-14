@@ -44,7 +44,7 @@ function VaultTooltip() {
         <div
           onMouseEnter={show}
           onMouseLeave={hide}
-          className="absolute top-full left-0 z-10 mt-2 w-56 border border-border bg-surface-2 p-3 shadow-black/40 shadow-lg"
+          className="absolute top-full left-0 z-10 mt-2 w-56 border border-border bg-surface-2 p-3 shadow-lg shadow-shadow"
         >
           <ul className="space-y-2">
             {PRICING.vaults.providers.map((v) => (
@@ -104,7 +104,7 @@ function PricingPage() {
                   )}
 
                   {hasDiscount && (
-                    <div className="absolute top-0 right-4 -translate-y-1/2 bg-accent px-3 py-1 font-mono text-[10px] text-black uppercase tracking-widest">
+                    <div className="absolute top-0 right-4 -translate-y-1/2 bg-accent px-3 py-1 font-mono text-[10px] text-bg uppercase tracking-widest">
                       {formatDiscount(discount)}
                     </div>
                   )}
@@ -158,7 +158,7 @@ function PricingPage() {
                     <button
                       type="button"
                       onClick={() => triggerDownload("pricing_free_tier")}
-                      className="flex items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-white hover:text-white"
+                      className="flex items-center justify-center rounded-[6px] border border-border-strong border-dashed bg-bg/40 px-5 py-[calc(0.625rem-1px)] font-mono text-text-secondary text-xs uppercase tracking-widest transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
                     >
                       {tier.cta}
                     </button>
@@ -175,10 +175,10 @@ function PricingPage() {
                         })
                       }
                       className={cn(
-                        "flex items-center justify-center rounded-full px-5 py-2.5 font-mono text-xs uppercase tracking-widest transition-colors",
+                        "group relative flex items-center justify-center overflow-hidden rounded-[6px] font-mono text-xs uppercase tracking-widest transition-[background-color,border-color,box-shadow,color] duration-150",
                         highlighted
-                          ? "bg-accent text-black hover:bg-white"
-                          : "border border-border-strong text-text-secondary hover:border-white hover:text-white",
+                          ? "bg-accent px-5 py-2.5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)]"
+                          : "border border-border-strong border-dashed bg-bg/40 px-5 py-[calc(0.625rem-1px)] text-text-secondary hover:border-text/50 hover:bg-bg/70 hover:text-text",
                       )}
                     >
                       {tier.cta}
@@ -223,7 +223,7 @@ function PricingPage() {
                       trackContactSalesOpened({ source: "pricing_team_tier" });
                       setShowContactSales(true);
                     }}
-                    className="flex shrink-0 items-center justify-center rounded-full border border-border-strong px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-white hover:text-white"
+                    className="flex shrink-0 items-center justify-center rounded-[6px] border border-border-strong border-dashed bg-bg/40 px-5 py-[calc(0.625rem-1px)] font-mono text-text-secondary text-xs uppercase tracking-widest transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
                   >
                     {team.cta}
                   </button>

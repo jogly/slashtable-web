@@ -13,7 +13,11 @@ export function SchemaGraphSection() {
           <FeatureFrame accentColor="#cc44ff">
             <div className="mb-8">
               <div className="mb-5 flex items-center gap-2">
-                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-magenta)" }} aria-hidden="true" />
+                <span
+                  className="h-2 w-2 shrink-0"
+                  style={{ backgroundColor: "var(--color-magenta)" }}
+                  aria-hidden="true"
+                />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                   {SCHEMA_GRAPH.eyebrow}
                 </span>
@@ -26,7 +30,7 @@ export function SchemaGraphSection() {
 
             <a
               href="#download"
-              className="mt-6 inline-flex items-center gap-1 font-mono text-[11px] text-magenta uppercase tracking-widest transition-colors hover:text-white"
+              className="mt-6 inline-flex items-center gap-1 font-mono text-[11px] text-magenta uppercase tracking-widest transition-colors hover:text-text"
             >
               {SCHEMA_GRAPH.cta} &rsaquo;
             </a>

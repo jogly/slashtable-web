@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { ChevronRight, Network, ShieldCheck, Terminal } from "lucide-react";
+import { Network, ShieldCheck, Terminal } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { MCP } from "../../lib/copy";
@@ -56,38 +56,38 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
             </tr>
           </thead>
           <tbody className="text-text-secondary">
-            <tr className="border-white/[0.03] border-b">
+            <tr className="border-border/50 border-b">
               <td className="py-1 pr-4 text-cyan">id</td>
               <td className="py-1 pr-4">
                 integer <span className="text-text-muted">(PK)</span>
               </td>
               <td className="py-1 text-text-muted">auto</td>
             </tr>
-            <tr className="border-white/[0.03] border-b">
+            <tr className="border-border/50 border-b">
               <td className="py-1 pr-4 text-cyan">order_number</td>
               <td className="py-1 pr-4">
                 text <span className="text-text-muted">(unique)</span>
               </td>
               <td className="py-1 text-text-muted">&mdash;</td>
             </tr>
-            <tr className="border-white/[0.03] border-b">
+            <tr className="border-border/50 border-b">
               <td className="py-1 pr-4 text-cyan">customer_id</td>
               <td className="py-1 pr-4">
                 uuid <span className="text-text-muted">(FK)</span>
               </td>
               <td className="py-1 text-text-muted">&mdash;</td>
             </tr>
-            <tr className="border-white/[0.03] border-b">
+            <tr className="border-border/50 border-b">
               <td className="py-1 pr-4 text-cyan">status</td>
               <td className="py-1 pr-4">text</td>
               <td className="py-1 text-yellow">'pending'</td>
             </tr>
-            <tr className="border-white/[0.03] border-b">
+            <tr className="border-border/50 border-b">
               <td className="py-1 pr-4 text-cyan">total</td>
               <td className="py-1 pr-4">numeric</td>
               <td className="py-1 text-yellow">0</td>
             </tr>
-            <tr className="border-white/[0.03] border-b">
+            <tr className="border-border/50 border-b">
               <td className="py-1 pr-4 text-cyan">shipping_address</td>
               <td className="py-1 pr-4">jsonb</td>
               <td className="py-1 text-text-muted">&mdash;</td>
@@ -117,11 +117,11 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
               </tr>
             </thead>
             <tbody className="text-text-secondary">
-              <tr className="border-white/[0.03] border-b">
+              <tr className="border-border/50 border-b">
                 <td className="py-1 pr-6 text-green">shipped</td>
                 <td className="py-1 text-right text-yellow">1,247</td>
               </tr>
-              <tr className="border-white/[0.03] border-b">
+              <tr className="border-border/50 border-b">
                 <td className="py-1 pr-6 text-green">pending</td>
                 <td className="py-1 text-right text-yellow">84</td>
               </tr>
@@ -155,7 +155,7 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
 ];
 
 export function McpSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [active, setActive] = useState(0);
 
   return (
     <section className="relative py-16 lg:py-24" id="mcp">
@@ -167,7 +167,11 @@ export function McpSection() {
             {/* Header */}
             <div className="mb-10 text-center">
               <div className="mb-5 flex items-center justify-center gap-2">
-                <span className="h-2 w-2 shrink-0" style={{ backgroundColor: "var(--color-cyan)" }} aria-hidden="true" />
+                <span
+                  className="h-2 w-2 shrink-0"
+                  style={{ backgroundColor: "var(--color-cyan)" }}
+                  aria-hidden="true"
+                />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{MCP.eyebrow}</span>
               </div>
               <h2 className="mx-auto max-w-2xl font-display text-3xl text-text tracking-tight lg:text-4xl">
@@ -176,57 +180,49 @@ export function McpSection() {
               <p className="mx-auto mt-4 max-w-xl text-text-secondary leading-relaxed">{MCP.description}</p>
             </div>
 
-            {/* Accordion + Code panel */}
-            <div className="flex flex-col overflow-hidden rounded-sm border border-border lg:flex-row">
-              {/* Accordion items */}
-              <div className="flex shrink-0 flex-col border-border border-b bg-bg lg:w-[340px] lg:border-r lg:border-b-0">
+            <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+              {/* Minimal sidebar — no backgrounds, just typography and dots */}
+              <div className="flex shrink-0 flex-col gap-1 lg:w-[280px]">
                 {MCP.callouts.map((item, i) => {
-                  const isActive = activeIndex === i;
                   const { icon: Icon, color } = calloutMeta[i];
+                  const isActive = active === i;
                   return (
                     <button
                       key={item.title}
                       type="button"
-                      onClick={() => setActiveIndex(i)}
-                      className={`group relative w-full text-left transition-colors ${
-                        i > 0 ? "border-border border-t" : ""
-                      } ${isActive ? "bg-surface-2" : "bg-bg hover:bg-surface"}`}
+                      onClick={() => setActive(i)}
+                      className={`group flex items-start gap-3 rounded px-3 py-3 text-left transition-all duration-200 ${
+                        isActive ? "" : "hover:bg-border/30"
+                      }`}
                     >
-                      {/* Active accent bar — vertical on desktop, horizontal on mobile */}
-                      {isActive && (
-                        <div
-                          className="absolute top-0 bottom-0 left-0 hidden w-0.5 lg:block"
-                          style={{ backgroundColor: color }}
-                        />
-                      )}
-                      {isActive && (
-                        <div
-                          className="absolute top-0 right-0 left-0 h-0.5 lg:hidden"
-                          style={{ backgroundColor: color }}
-                        />
-                      )}
-
-                      <div className="px-5 py-4">
-                        {/* Title row */}
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-2.5">
-                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-border bg-surface-2" aria-hidden="true">
-                              <Icon className="h-3.5 w-3.5" style={{ color }} strokeWidth={1.5} />
-                            </span>
-                            <h3 className="font-display text-sm text-text tracking-wide">{item.title}</h3>
-                          </div>
-                          <ChevronRight
-                            className={`h-3.5 w-3.5 shrink-0 text-text-muted ${
-                              isActive ? "rotate-90 lg:rotate-0" : ""
-                            }`}
+                      {/* Dot indicator */}
+                      <span
+                        className="mt-1.5 h-2 w-2 shrink-0 rounded-full transition-all duration-200"
+                        style={{
+                          backgroundColor: isActive ? color : "transparent",
+                          boxShadow: isActive ? `0 0 8px ${color}40` : "none",
+                          border: isActive ? "none" : "1px solid var(--color-border-strong)",
+                        }}
+                      />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            className="h-3.5 w-3.5 transition-colors"
+                            style={{ color: isActive ? color : "var(--color-text-muted)" }}
                             strokeWidth={1.5}
-                            aria-hidden="true"
                           />
+                          <h3
+                            className="font-display text-sm tracking-wide transition-colors"
+                            style={{
+                              color: isActive ? "var(--color-text)" : "var(--color-text-muted)",
+                              fontWeight: isActive ? 600 : 400,
+                            }}
+                          >
+                            {item.title}
+                          </h3>
                         </div>
-
-                        {/* Expanded description */}
                         {isActive && (
-                          <p className="mt-3 text-[13px] text-text-secondary leading-relaxed">{item.description}</p>
+                          <p className="mt-2 text-[12px] text-text-secondary leading-relaxed">{item.description}</p>
                         )}
                       </div>
                     </button>
@@ -234,20 +230,23 @@ export function McpSection() {
                 })}
               </div>
 
-              {/* Content panel */}
-              <div className="min-w-0 flex-1 overflow-x-auto bg-surface-2" style={{ scrollbarWidth: "none" }}>
-                {MCP.callouts.map((item, i) => (
-                  <div key={item.title} className={activeIndex === i ? "block h-full p-5" : "hidden"}>
-                    {calloutMeta[i].content}
-                  </div>
-                ))}
+              {/* Content panel — accent left strip, backdrop blur for depth */}
+              <div
+                className="relative min-w-0 flex-1 overflow-x-auto rounded-sm border border-border bg-bg/60 backdrop-blur-md"
+                style={{ scrollbarWidth: "none" }}
+              >
+                <div
+                  className="absolute top-0 bottom-0 left-0 w-0.5"
+                  style={{ backgroundColor: calloutMeta[active].color }}
+                />
+                <div className="p-5 pl-6">{calloutMeta[active].content}</div>
               </div>
             </div>
 
             <div className="mt-6 text-center">
               <a
                 href="#download"
-                className="inline-flex items-center gap-1 font-mono text-[11px] text-cyan uppercase tracking-widest transition-colors hover:text-white"
+                className="inline-flex items-center gap-1 font-mono text-[11px] text-cyan uppercase tracking-widest transition-colors hover:text-text"
               >
                 {MCP.cta} &rsaquo;
               </a>

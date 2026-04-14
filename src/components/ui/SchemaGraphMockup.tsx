@@ -180,15 +180,15 @@ function TableCard({
 }) {
   const h = tableH(t);
   const level = selected ? 2 : onPath ? 1 : 0;
-  const borderAlpha = [0.08, 0.14, 0.2][level];
-  const nameAlpha = [0.45, 0.55, 0.65][level];
-  const cardFill = [0.02, 0.03, 0.045][level];
+  const borderOpacity = [0.08, 0.14, 0.2][level];
+  const nameOpacity = [0.45, 0.55, 0.65][level];
+  const cardOpacity = [0.02, 0.03, 0.045][level];
 
   return (
     <g onClick={onClick} className="cursor-pointer">
       {/* Opaque base + tinted overlay */}
       <rect x={t.x} y={t.y} width={TW} height={h} rx={1} fill="var(--color-bg)" />
-      <rect x={t.x} y={t.y} width={TW} height={h} rx={1} fill={`rgba(255,255,255,${cardFill})`} />
+      <rect x={t.x} y={t.y} width={TW} height={h} rx={1} fill="var(--color-text)" opacity={cardOpacity} />
 
       {/* Border */}
       <rect
@@ -198,8 +198,9 @@ function TableCard({
         height={h}
         rx={1}
         fill="none"
-        stroke={`rgba(255,255,255,${borderAlpha})`}
+        stroke="var(--color-text)"
         strokeWidth={0.5}
+        opacity={borderOpacity}
       />
 
       {/* Header divider */}
@@ -208,8 +209,9 @@ function TableCard({
         y1={t.y + HEADER_H}
         x2={t.x + TW}
         y2={t.y + HEADER_H}
-        stroke="rgba(255,255,255,0.06)"
+        stroke="var(--color-text)"
         strokeWidth={0.5}
+        opacity={0.06}
       />
 
       {/* Table name */}
@@ -219,7 +221,8 @@ function TableCard({
         fontSize={11}
         fontWeight={500}
         fontFamily="var(--font-mono)"
-        fill={`rgba(255,255,255,${nameAlpha})`}
+        fill="var(--color-text)"
+        opacity={nameOpacity}
       >
         {t.name}
       </text>
@@ -229,12 +232,18 @@ function TableCard({
         const rowY = t.y + HEADER_H + i * ROW_H;
         const textY = rowY + ROW_H / 2 + 4;
         const isFk = !!col.fk && !col.pk;
-        const iconColor = "rgba(255,255,255,0.25)";
         return (
           <g key={col.name}>
-            {col.pk && <PkIcon x={t.x + 7} y={rowY + (ROW_H - ICON_S) / 2} color={iconColor} />}
-            {isFk && <FkIcon x={t.x + 7} y={rowY + (ROW_H - ICON_S) / 2} color={iconColor} />}
-            <text x={t.x + 25} y={textY} fontSize={10.5} fontFamily="var(--font-mono)" fill="rgba(255,255,255,0.35)">
+            {col.pk && <PkIcon x={t.x + 7} y={rowY + (ROW_H - ICON_S) / 2} color="var(--color-text-muted)" />}
+            {isFk && <FkIcon x={t.x + 7} y={rowY + (ROW_H - ICON_S) / 2} color="var(--color-text-muted)" />}
+            <text
+              x={t.x + 25}
+              y={textY}
+              fontSize={10.5}
+              fontFamily="var(--font-mono)"
+              fill="var(--color-text)"
+              opacity={0.35}
+            >
               {col.name}
             </text>
             <text
@@ -243,7 +252,8 @@ function TableCard({
               fontSize={9}
               textAnchor="end"
               fontFamily="var(--font-mono)"
-              fill="rgba(255,255,255,0.15)"
+              fill="var(--color-text)"
+              opacity={0.15}
             >
               {col.type}
             </text>
@@ -259,8 +269,9 @@ function TableCard({
             y1={t.y + h - FOOTER_H}
             x2={t.x + TW}
             y2={t.y + h - FOOTER_H}
-            stroke="rgba(255,255,255,0.03)"
+            stroke="var(--color-text)"
             strokeWidth={0.5}
+            opacity={0.03}
           />
           <text
             x={t.x + TW / 2}
@@ -312,7 +323,7 @@ export function SchemaGraphMockup({ className }: { className?: string }) {
         {/* Dark background + dot grid */}
         <defs>
           <pattern id={patternId} width="16" height="16" patternUnits="userSpaceOnUse">
-            <circle cx="8" cy="8" r="1" fill="rgba(255,255,255,0.1)" />
+            <circle cx="8" cy="8" r="1" fill="var(--color-text)" opacity={0.1} />
           </pattern>
         </defs>
         <rect width={VW} height={VH} fill="var(--color-bg)" />
@@ -324,7 +335,7 @@ export function SchemaGraphMockup({ className }: { className?: string }) {
             <path
               d={e.d}
               fill="none"
-              stroke={e.on ? "var(--color-accent)" : "rgba(255,255,255,0.04)"}
+              stroke={e.on ? "var(--color-accent)" : "var(--color-border)"}
               strokeWidth={e.on ? 1.5 : 0.75}
               className="transition-all duration-300"
             />
@@ -333,14 +344,14 @@ export function SchemaGraphMockup({ className }: { className?: string }) {
               cx={e.sx}
               cy={e.sy}
               r={2.5}
-              fill={e.on ? "var(--color-accent)" : "rgba(255,255,255,0.06)"}
+              fill={e.on ? "var(--color-accent)" : "var(--color-border)"}
               className="transition-all duration-300"
             />
             <circle
               cx={e.ex}
               cy={e.ey}
               r={2.5}
-              fill={e.on ? "var(--color-accent)" : "rgba(255,255,255,0.06)"}
+              fill={e.on ? "var(--color-accent)" : "var(--color-border)"}
               className="transition-all duration-300"
             />
           </g>

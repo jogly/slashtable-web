@@ -16,7 +16,7 @@ interface FeatureFrameProps {
  */
 export function FeatureFrame({ accentColor, children, className }: FeatureFrameProps) {
   return (
-    <div className={cn("relative border-white/[0.06] border-x border-dashed", className)}>
+    <div className={cn("relative border-border border-x border-dashed", className)}>
       {/* Full-width top line */}
       <div className="pointer-events-none absolute top-0 left-1/2 h-px w-screen -translate-x-1/2 bg-border" />
       {/* Full-width bottom line */}
@@ -25,14 +25,14 @@ export function FeatureFrame({ accentColor, children, className }: FeatureFrameP
       <div
         className="pointer-events-none absolute top-0 left-1/2 h-px w-screen -translate-x-1/2"
         style={{
-          background: `linear-gradient(to right, transparent, ${accentColor}50, transparent)`,
+          background: `linear-gradient(to right, transparent, ${accentColor}30, transparent)`,
         }}
       />
       {/* Subtle radial accent warmth bleeding down from top */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse at 50% 0%, ${accentColor}14, transparent 60%)`,
+          background: `radial-gradient(ellipse at 50% 0%, ${accentColor}0a, transparent 60%)`,
         }}
       />
       {/* Inner crosshatch texture — the blueprint grid */}

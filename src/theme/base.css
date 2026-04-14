@@ -4,6 +4,24 @@
 @import "@fontsource-variable/playfair-display";
 @import "@fontsource-variable/playfair-display/wght-italic.css";
 
+/*
+ * Override font-display from swap → optional to eliminate layout shift.
+ * On first visit the system font is used (no swap). On repeat visits
+ * the font is already cached and loads instantly.
+ */
+@font-face {
+  font-family: "Manrope Variable";
+  font-display: optional;
+}
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-display: optional;
+}
+@font-face {
+  font-family: "Playfair Display Variable";
+  font-display: optional;
+}
+
 @layer base {
   *,
   *::before,
@@ -20,6 +38,13 @@
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     scroll-behavior: smooth;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  html[data-theme="light"] {
+    color-scheme: light;
   }
 
   :focus-visible {
@@ -36,6 +61,10 @@
   ::selection {
     background-color: rgba(201, 74, 0, 0.3);
     color: var(--color-text);
+  }
+
+  [data-theme="light"] ::selection {
+    background-color: rgba(179, 66, 0, 0.2);
   }
 
   code,

@@ -30,7 +30,7 @@ const markdownComponents: Components = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-accent underline underline-offset-2 transition-colors hover:text-white"
+      className="text-accent underline underline-offset-2 transition-colors hover:text-text"
     >
       {children}
     </a>

@@ -11,7 +11,7 @@ const markdownComponents: Components = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-accent underline underline-offset-2 transition-colors hover:text-white"
+      className="text-accent underline underline-offset-2 transition-colors hover:text-text"
     >
       {children}
     </a>
@@ -20,7 +20,7 @@ const markdownComponents: Components = {
     <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-text text-xs">{children}</code>
   ),
   h1: ({ children }) => <h1 className="mt-10 mb-4 font-display text-3xl text-text tracking-tight">{children}</h1>,
-  h2: ({ children }) => <h2 className="mt-8 mb-3 font-display text-xl text-text tracking-tight">{children}</h2>,
+  h2: ({ children }) => <h2 className="mt-8 mb-3 font-display text-text text-xl tracking-tight">{children}</h2>,
   h3: ({ children }) => <h3 className="mt-6 mb-2 font-medium font-mono text-sm text-text">{children}</h3>,
   li: ({ children }) => (
     <li className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">

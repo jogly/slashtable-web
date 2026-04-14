@@ -28,6 +28,11 @@
   /* ── Primary accent (brand orange) ── */
   --color-accent: #c94a00;
 
+  /* ── Shadows & glows ── */
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-glow: rgba(201, 74, 0, 0.25);
+  --color-glow-soft: rgba(201, 74, 0, 0.06);
+
   /* ── Font families ── */
   --font-sans: "Manrope Variable", "Manrope", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "Fira Code", "SF Mono", Menlo, monospace;
@@ -37,4 +42,39 @@
   --max-width-content: 68rem;
   --max-width-narrow: 44rem;
   --max-width-xs: 28rem;
+}
+
+/* ── Light theme overrides ── */
+:root[data-theme="light"] {
+  /* Backgrounds — warm parchment tones */
+  --color-bg: #f5f3ef;
+  --color-surface: #edeae4;
+  --color-surface-2: #e4e1da;
+  --color-surface-3: #dbd8d0;
+  --color-surface-hover: #d2cfc7;
+
+  /* Text — warm charcoal */
+  --color-text: #1a1917;
+  --color-text-secondary: rgba(26, 25, 23, 0.7);
+  --color-text-muted: rgba(26, 25, 23, 0.45);
+
+  /* Borders */
+  --color-border: rgba(26, 25, 23, 0.1);
+  --color-border-strong: rgba(26, 25, 23, 0.2);
+
+  /* Brand colors — slightly deepened for contrast on light */
+  --color-orange: #b34200;
+  --color-orange-bright: #e64d00;
+  --color-cyan: #0098b8;
+  --color-magenta: #9b30d9;
+  --color-green: #1a8a46;
+  --color-yellow: #a88600;
+
+  /* Accent */
+  --color-accent: #b34200;
+
+  /* Shadows & glows */
+  --color-shadow: rgba(26, 25, 23, 0.12);
+  --color-glow: rgba(179, 66, 0, 0.1);
+  --color-glow-soft: rgba(179, 66, 0, 0.03);
 }
