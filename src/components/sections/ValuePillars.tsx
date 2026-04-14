@@ -15,7 +15,7 @@ export function ValuePillars() {
     <section className="relative bg-surface">
       <NoiseTexture variant="crosshatch" opacity={0.6} />
       <SectionBorder position="top" />
-      <div className="relative mx-auto grid max-w-content divide-border sm:grid-cols-3 sm:divide-x">
+      <div className="relative mx-auto grid max-w-content border-x border-border divide-border sm:grid-cols-3 sm:divide-x">
         {VALUE_PILLARS.pillars.map((pillar, i) => {
           const { color, icon: Icon, href } = pillarMeta[i];
           return (

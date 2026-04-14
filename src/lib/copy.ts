@@ -331,7 +331,7 @@ export const FOOTER = {
       title: "Community",
       links: [
         { label: "Discord", href: "https://discord.gg/xR2VdkfnJQ" },
-        { label: "Twitter / X", href: "https://x.com/mktoast_studio" },
+        { label: "Twitter / X", href: "https://x.com/slashtable" },
       ],
     },
     {

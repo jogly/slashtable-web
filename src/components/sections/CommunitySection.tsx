@@ -19,7 +19,7 @@ const linkMeta = [
   { icon: MessageCircle, href: "https://discord.gg/xR2VdkfnJQ", color: "#5865F2", hoverBg: "rgba(88,101,242,0.08)" },
   {
     icon: XIcon,
-    href: "https://x.com/mktoast_studio",
+    href: "https://x.com/slashtable",
     color: "var(--color-text)",
     hoverBg: "var(--color-surface-hover)",
   },
