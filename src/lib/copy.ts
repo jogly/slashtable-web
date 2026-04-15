@@ -426,7 +426,7 @@ export const PRICING = {
       price: "$49",
       salePrice: "$19",
       description: "For engineers who talk to more than one database.",
-      features: ["3 connections", "Unlimited tabs", "Remote credential vaults"],
+      features: ["3 connections", "Unlimited tabs", "macOS Keychain"],
       role: { tag: "@supporter", color: "#00d4ff" },
       cta: "Buy Personal",
       polarId: "polar_cl_kJYdwT8vY6W1YVXo4URTlgc30xiJYByWAcJvO0zrnze",
@@ -443,10 +443,10 @@ export const PRICING = {
     },
     {
       name: "Team",
-      price: "$10",
+      price: "$29",
       pricePer: "seat / mo",
       priceBilling: "billed annually",
-      priceAlt: "$12/seat/mo billed monthly",
+      priceAlt: "$35/seat/mo billed monthly",
       description: "",
       features: [
         "Unlimited connections",
@@ -492,7 +492,7 @@ export const PRICING = {
       },
       {
         q: "What are remote credential vaults?",
-        a: "Pull database credentials from a secret manager instead of copy-pasting. 1Password is supported today, with Bitwarden, AWS Secrets Manager, and HashiCorp Vault on the roadmap. Free tier uses macOS Keychain only.",
+        a: "Pull database credentials from a secret manager instead of copy-pasting. 1Password is supported today, with Bitwarden, AWS Secrets Manager, and HashiCorp Vault on the roadmap. Free and Personal tiers use macOS Keychain only.",
       },
     ],
   },
