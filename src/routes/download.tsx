@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Download } from "lucide-react";
+import { CloudFog, Download } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
@@ -223,7 +223,8 @@ function DownloadPage() {
                   <span className="font-mono text-[10px] text-text uppercase tracking-widest">Latest stable</span>
                 </div>
                 <p className="max-w-xs font-mono text-[10px] text-text-muted uppercase leading-relaxed tracking-widest lg:text-right">
-                  Notarized by Apple &middot; Signed &middot; Auto-updates
+                  Built in the Bay
+                  <CloudFog className="ml-2 inline-block size-4" />
                 </p>
               </div>
             </div>
