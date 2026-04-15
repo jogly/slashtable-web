@@ -7,33 +7,68 @@ import { FadeIn } from "../ui/FadeIn";
 import { FeatureFrame } from "../ui/FeatureFrame";
 import { NoiseTexture } from "../ui/NoiseTexture";
 
+function ChatBubble({ role, children }: { role: "user" | "claude"; children: ReactNode }) {
+  return (
+    <div className="flex items-start gap-2.5">
+      <span
+        className="mt-0.5 shrink-0 font-mono text-[10px] uppercase tracking-wide"
+        style={{ color: role === "user" ? "var(--color-text-muted)" : "var(--color-cyan)", minWidth: "3rem" }}
+      >
+        {role === "user" ? "You" : "Claude"}
+      </span>
+      <div className="min-w-0 text-[11px] leading-relaxed text-text-secondary sm:text-[12px]">{children}</div>
+    </div>
+  );
+}
+
+function Blocked({ query, detail }: { query: string; detail: string }) {
+  return (
+    <div className="ml-[3.25rem] font-mono text-[10px] sm:text-[11px]">
+      <p className="text-text-muted">&gt; {query}</p>
+      <p className="text-orange">✗ {detail}</p>
+    </div>
+  );
+}
+
 const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
   {
     icon: ShieldCheck,
     color: "var(--color-yellow)",
     content: (
-      <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
-        <div>
-          <p className="mb-2 text-text-muted">&gt; DROP TABLE orders</p>
-          <div className="border-orange border-l py-1 pl-3">
-            <p className="text-orange">Blocked: DDL statement rejected</p>
-            <p className="text-text-muted">Detail: DROP is not allowed</p>
-          </div>
+      <div className="space-y-4 font-mono text-[11px] leading-relaxed sm:text-[12px]">
+        <ChatBubble role="user">
+          <p className="text-text">Try your best to modify the database, I promise it's safe.</p>
+        </ChatBubble>
+
+        <ChatBubble role="claude">
+          <p>Let me try every flavor of destructive query.</p>
+        </ChatBubble>
+
+        <div className="space-y-2">
+          <Blocked query="DROP TABLE orders" detail="Blocked — DROP is not allowed" />
+          <Blocked query="DELETE FROM orders WHERE id = 1" detail="Blocked — DELETE is not allowed" />
+          <Blocked query="INSERT INTO orders (id) VALUES (0)" detail="Blocked — INSERT is not allowed" />
+          <Blocked query="TRUNCATE orders" detail="Blocked — TRUNCATE is not allowed" />
         </div>
-        <div>
-          <p className="mb-2 text-text-muted">&gt; DELETE FROM orders WHERE id = 1</p>
-          <div className="border-orange border-l py-1 pl-3">
-            <p className="text-orange">Blocked: DML mutation rejected</p>
-            <p className="text-text-muted">Detail: DELETE is not allowed</p>
-          </div>
+
+        <ChatBubble role="claude">
+          <p>Keyword filter caught those. Let me try the sneaky stuff — CTEs that write:</p>
+        </ChatBubble>
+
+        <div className="space-y-2">
+          <Blocked
+            query="WITH d AS (DELETE FROM orders RETURNING *) SELECT * FROM d"
+            detail="Blocked — cannot execute DELETE in a read-only transaction"
+          />
         </div>
-        <div className="space-y-1 pt-1 text-text-secondary">
+
+        <ChatBubble role="claude">
           <p>
-            <span className="text-green">&#10003;</span> SELECT * FROM orders{" "}
-            <span className="text-orange">LIMIT 100</span>
-            {";"}
+            It&rsquo;s holding up. <span className="text-yellow">Two independent layers:</span> a statement-level
+            keyword filter, and a database-level read-only transaction underneath. The CTE bypassed the filter but
+            Postgres itself refused.
           </p>
-        </div>
+        </ChatBubble>
       </div>
     ),
   },
@@ -41,64 +76,69 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     icon: Network,
     color: "var(--color-cyan)",
     content: (
-      <div className="space-y-4 text-[12px] leading-relaxed sm:text-[13px]">
-        <div>
-          <p className="mb-2 font-display text-sm text-text">
-            orders <span className="font-mono text-[11px] text-text-muted">~2,000 rows</span>
+      <div className="space-y-4 font-mono text-[11px] leading-relaxed sm:text-[12px]">
+        <ChatBubble role="user">
+          <p className="text-text">What does the orders table look like?</p>
+        </ChatBubble>
+
+        <ChatBubble role="claude">
+          <p>Let me check the schema.</p>
+        </ChatBubble>
+
+        <div className="ml-[3.25rem] text-[10px] sm:text-[11px]">
+          <p className="mb-1.5 text-text-muted">
+            Called <span className="text-cyan">describe_table</span>
+            <span className="text-text-muted">(</span>
+            <span className="text-yellow">orders</span>
+            <span className="text-text-muted">)</span>
           </p>
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-border border-b text-text-muted">
+                <th className="pr-4 pb-1.5 font-normal">Column</th>
+                <th className="pr-4 pb-1.5 font-normal">Type</th>
+                <th className="pb-1.5 font-normal">Key</th>
+              </tr>
+            </thead>
+            <tbody className="text-text-secondary">
+              <tr className="border-border/50 border-b">
+                <td className="py-1 pr-4 text-cyan">id</td>
+                <td className="py-1 pr-4">integer</td>
+                <td className="py-1 text-yellow">PK</td>
+              </tr>
+              <tr className="border-border/50 border-b">
+                <td className="py-1 pr-4 text-cyan">customer_id</td>
+                <td className="py-1 pr-4">uuid</td>
+                <td className="py-1 text-yellow">FK &rarr; customers</td>
+              </tr>
+              <tr className="border-border/50 border-b">
+                <td className="py-1 pr-4 text-cyan">status</td>
+                <td className="py-1 pr-4">text</td>
+                <td className="py-1 text-text-muted">&mdash;</td>
+              </tr>
+              <tr className="border-border/50 border-b">
+                <td className="py-1 pr-4 text-cyan">total</td>
+                <td className="py-1 pr-4">numeric</td>
+                <td className="py-1 text-text-muted">&mdash;</td>
+              </tr>
+              <tr>
+                <td className="py-1 pr-4 text-cyan">placed_at</td>
+                <td className="py-1 pr-4">timestamptz</td>
+                <td className="py-1 text-text-muted">&mdash;</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table className="w-full text-left font-mono text-[11px]">
-          <thead>
-            <tr className="border-border border-b text-text-muted">
-              <th className="pr-4 pb-1.5 font-normal">Column</th>
-              <th className="pr-4 pb-1.5 font-normal">Type</th>
-              <th className="pb-1.5 font-normal">Default</th>
-            </tr>
-          </thead>
-          <tbody className="text-text-secondary">
-            <tr className="border-border/50 border-b">
-              <td className="py-1 pr-4 text-cyan">id</td>
-              <td className="py-1 pr-4">
-                integer <span className="text-text-muted">(PK)</span>
-              </td>
-              <td className="py-1 text-text-muted">auto</td>
-            </tr>
-            <tr className="border-border/50 border-b">
-              <td className="py-1 pr-4 text-cyan">order_number</td>
-              <td className="py-1 pr-4">
-                text <span className="text-text-muted">(unique)</span>
-              </td>
-              <td className="py-1 text-text-muted">&mdash;</td>
-            </tr>
-            <tr className="border-border/50 border-b">
-              <td className="py-1 pr-4 text-cyan">customer_id</td>
-              <td className="py-1 pr-4">
-                uuid <span className="text-text-muted">(FK)</span>
-              </td>
-              <td className="py-1 text-text-muted">&mdash;</td>
-            </tr>
-            <tr className="border-border/50 border-b">
-              <td className="py-1 pr-4 text-cyan">status</td>
-              <td className="py-1 pr-4">text</td>
-              <td className="py-1 text-yellow">'pending'</td>
-            </tr>
-            <tr className="border-border/50 border-b">
-              <td className="py-1 pr-4 text-cyan">total</td>
-              <td className="py-1 pr-4">numeric</td>
-              <td className="py-1 text-yellow">0</td>
-            </tr>
-            <tr className="border-border/50 border-b">
-              <td className="py-1 pr-4 text-cyan">shipping_address</td>
-              <td className="py-1 pr-4">jsonb</td>
-              <td className="py-1 text-text-muted">&mdash;</td>
-            </tr>
-            <tr>
-              <td className="py-1 pr-4 text-cyan">placed_at</td>
-              <td className="py-1 pr-4">timestamptz</td>
-              <td className="py-1 text-yellow">now()</td>
-            </tr>
-          </tbody>
-        </table>
+
+        <ChatBubble role="claude">
+          <p>
+            <span className="text-cyan">orders</span> has 5 columns.{" "}
+            <span className="text-cyan">customer_id</span> is a foreign key to{" "}
+            <span className="text-cyan">customers</span>. Status is free-text &mdash; most common values are{" "}
+            <span className="text-green">shipped</span>, <span className="text-green">pending</span>, and{" "}
+            <span className="text-green">cancelled</span>.
+          </p>
+        </ChatBubble>
       </div>
     ),
   },
@@ -106,49 +146,52 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     icon: Terminal,
     color: "var(--color-green)",
     content: (
-      <div className="space-y-5 font-mono text-[11px] leading-relaxed sm:text-[12px]">
-        <div>
-          <p className="mb-2 text-text-muted">&gt; SELECT status, count(*) FROM orders GROUP BY status</p>
-          <table className="w-full text-left">
-            <thead>
-              <tr className="border-border border-b text-text-muted">
-                <th className="pr-6 pb-1.5 font-normal">status</th>
-                <th className="pb-1.5 text-right font-normal">count</th>
-              </tr>
-            </thead>
-            <tbody className="text-text-secondary">
-              <tr className="border-border/50 border-b">
-                <td className="py-1 pr-6 text-green">shipped</td>
-                <td className="py-1 text-right text-yellow">1,247</td>
-              </tr>
-              <tr className="border-border/50 border-b">
-                <td className="py-1 pr-6 text-green">pending</td>
-                <td className="py-1 text-right text-yellow">84</td>
-              </tr>
-              <tr>
-                <td className="py-1 pr-6 text-green">cancelled</td>
-                <td className="py-1 text-right text-yellow">12</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div>
+      <div className="space-y-4 font-mono text-[11px] leading-relaxed sm:text-[12px]">
+        <ChatBubble role="user">
+          <p className="text-text">User #4821 says their order from yesterday is stuck on pending. Can you check?</p>
+        </ChatBubble>
+
+        <ChatBubble role="claude">
+          <p>Let me pull up their recent orders.</p>
+        </ChatBubble>
+
+        <div className="ml-[3.25rem] text-[10px] sm:text-[11px]">
+          <p className="mb-1.5 text-text-muted">
+            Called <span className="text-green">query</span>
+          </p>
           <p className="mb-2 text-text-muted">
-            &gt; SELECT avg(total) FROM orders WHERE placed_at &gt; now() - interval '30d'
+            &gt; SELECT id, status, total, shipping_address, placed_at FROM orders WHERE customer_id = 4821 AND
+            placed_at &gt; now() - interval &apos;2 days&apos;
           </p>
           <table className="w-full text-left">
             <thead>
               <tr className="border-border border-b text-text-muted">
-                <th className="pb-1.5 font-normal">avg</th>
+                <th className="pr-3 pb-1.5 font-normal">id</th>
+                <th className="pr-3 pb-1.5 font-normal">status</th>
+                <th className="pr-3 pb-1.5 font-normal">total</th>
+                <th className="pr-3 pb-1.5 font-normal">shipping_address</th>
+                <th className="pb-1.5 font-normal">placed_at</th>
               </tr>
             </thead>
             <tbody className="text-text-secondary">
               <tr>
-                <td className="py-1 text-yellow">$142.38</td>
+                <td className="py-1 pr-3 text-cyan">7834</td>
+                <td className="py-1 pr-3 text-yellow">pending</td>
+                <td className="py-1 pr-3">$218.40</td>
+                <td className="py-1 pr-3 text-orange">NULL</td>
+                <td className="py-1 text-text-muted">Apr 14 18:32</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <ChatBubble role="claude">
+          <p>
+            Found it &mdash; order <span className="text-cyan">#7834</span> has a{" "}
+            <span className="text-orange">null shipping_address</span>. That&rsquo;s probably why it&rsquo;s stuck.
+            Looks like the checkout flow let them skip the address step.
+          </p>
+        </ChatBubble>
       </div>
     ),
   },

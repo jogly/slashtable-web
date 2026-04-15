@@ -42,9 +42,9 @@ export const MCP = {
     "Built-in MCP gives Claude, Cursor, or any MCP client regulated access to data. Agents never access credentials.",
   callouts: [
     {
-      title: "AI guardrails",
+      title: "Battle-tested guardrails",
       description:
-        "All queries are validated and run in an engine-level READ ONLY transaction that always rolls back. Your data is safe, and agents can\u2019t accidentally (or intentionally) make changes.",
+        "All queries are validated and run in an engine-level READ ONLY transaction that always rolls back. Your data is safe, and agents can\u2019t accidentally, or intentionally, make changes.",
     },
     {
       title: "Schema introspection",
