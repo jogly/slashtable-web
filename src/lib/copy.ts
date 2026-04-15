@@ -462,9 +462,9 @@ export const PRICING = {
     label: "Remote credential vaults",
     providers: [
       { name: "1Password", status: "available" as const },
-      { name: "Bitwarden", status: "planned" as const },
-      { name: "AWS Secrets Manager", status: "planned" as const },
-      { name: "HashiCorp Vault", status: "planned" as const },
+      { name: "Bitwarden", status: "alpha" as const },
+      { name: "AWS Secrets Manager", status: "alpha" as const },
+      { name: "HashiCorp Vault", status: "alpha" as const },
     ],
   },
   faq: {
@@ -492,7 +492,7 @@ export const PRICING = {
       },
       {
         q: "What are remote credential vaults?",
-        a: "Pull database credentials from a secret manager instead of copy-pasting. 1Password is supported today, with Bitwarden, AWS Secrets Manager, and HashiCorp Vault on the roadmap. Free and Personal tiers use macOS Keychain only.",
+        a: "Pull database credentials from a secret manager instead of copy-pasting. 1Password is fully supported. Bitwarden, AWS Secrets Manager, and HashiCorp Vault are in alpha. Free and Personal tiers use macOS Keychain only.",
       },
     ],
   },

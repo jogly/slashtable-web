@@ -58,10 +58,10 @@ function VaultTooltip() {
                 <span
                   className={cn(
                     "font-mono text-[10px] uppercase tracking-widest",
-                    v.status === "available" ? "text-green" : "text-text-muted",
+                    v.status === "available" ? "text-green" : v.status === "alpha" ? "text-yellow" : "text-text-muted",
                   )}
                 >
-                  {v.status === "available" ? "Ready" : "Planned"}
+                  {v.status === "available" ? "Ready" : v.status === "alpha" ? "Alpha" : "Planned"}
                 </span>
               </li>
             ))}
