@@ -363,17 +363,8 @@ export const FOOTER = {
     {
       title: "Product",
       links: [
-        { label: "MCP Server", to: "/", hash: "mcp" },
-        { label: "Schema Graph", to: "/", hash: "schema" },
         { label: "Pricing", to: "/pricing" },
         { label: "Changelog", to: "/changelog" },
-      ],
-    },
-    {
-      title: "Resources",
-      links: [
-        { label: "Documentation", href: "#" },
-        { label: "Plugin API", href: "#" },
         { label: "Download", to: "/download" },
       ],
     },

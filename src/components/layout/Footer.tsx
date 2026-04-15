@@ -18,9 +18,9 @@ export function Footer() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,var(--color-glow-soft)_0%,transparent_60%)]" />
 
       <ContentContainer className="relative py-16">
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 md:grid-cols-6">
+        <div className="grid grid-cols-3 gap-10 md:grid-cols-6">
           {/* Brand */}
-          <div className="col-span-2 sm:col-span-4 md:col-span-2">
+          <div className="col-span-3 md:col-span-2">
             <div className="flex items-center gap-2.5">
               <Img image={logoImg} className="h-7 w-7" />
               <span className="font-mono font-semibold text-sm text-text">{NAME.short}</span>
