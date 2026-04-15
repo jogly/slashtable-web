@@ -38,6 +38,8 @@ interface ManifestVersion {
   };
 }
 
+const VERSIONS_PER_PAGE = 15;
+
 function formatDate(dateStr: string): string {
   const date = new Date(`${dateStr}T00:00:00`);
   return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
@@ -94,6 +96,7 @@ function DownloadPage() {
   const [changelogState, setChangelogState] = useState<"loading" | "ready" | "error">("loading");
   const [versions, setVersions] = useState<ManifestVersion[]>([]);
   const [manifestState, setManifestState] = useState<"loading" | "ready" | "error">("loading");
+  const [versionPage, setVersionPage] = useState(0);
   const heroCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -132,6 +135,8 @@ function DownloadPage() {
     };
   }, []);
 
+  const totalPages = Math.max(1, Math.ceil(versions.length / VERSIONS_PER_PAGE));
+  const visibleVersions = versions.slice(versionPage * VERSIONS_PER_PAGE, (versionPage + 1) * VERSIONS_PER_PAGE);
   const detected: ArchKey = isIntel ? "intel" : "silicon";
   const siliconUrl = release?.downloads.macos_arm64;
   const intelUrl = release?.downloads.macos_x64;
@@ -418,14 +423,14 @@ function DownloadPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {versions.map((v, i) => {
+                      {visibleVersions.map((v, i) => {
                         const isLatest = release?.version === v.version;
                         return (
                           <tr
                             key={v.tag}
                             className={cn(
                               "border-border transition-colors hover:bg-surface-1/50",
-                              i < versions.length - 1 && "border-b",
+                              i < visibleVersions.length - 1 && "border-b",
                               isLatest && "bg-surface-1/30",
                             )}
                           >
@@ -467,6 +472,31 @@ function DownloadPage() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-between border-border border-t px-6 py-3">
+                    <button
+                      type="button"
+                      disabled={versionPage === 0}
+                      onClick={() => setVersionPage((p) => p - 1)}
+                      className="font-mono text-[11px] text-text-secondary uppercase tracking-widest transition-colors hover:text-text disabled:pointer-events-none disabled:opacity-30"
+                    >
+                      &larr; Prev
+                    </button>
+                    <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                      {versionPage + 1} / {totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={versionPage >= totalPages - 1}
+                      onClick={() => setVersionPage((p) => p + 1)}
+                      className="font-mono text-[11px] text-text-secondary uppercase tracking-widest transition-colors hover:text-text disabled:pointer-events-none disabled:opacity-30"
+                    >
+                      Next &rarr;
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </section>
