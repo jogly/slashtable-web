@@ -194,48 +194,78 @@ export function Nav() {
 
       {/* Mobile fullscreen menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col bg-bg pt-[60px] sm:hidden">
-          <div className="grid grid-cols-1 gap-px border-border border-t bg-border">
-            {featurePopoverItems.map((item) => (
+        <div className="fixed inset-0 z-40 flex flex-col bg-bg/95 pt-[60px] backdrop-blur-xl sm:hidden animate-[menuSlideIn_0.25s_ease-out]">
+          <div className="relative flex flex-1 flex-col overflow-y-auto px-5 pt-6 pb-8">
+            {/* All nav items in one unified list */}
+            <div className="space-y-px">
+              {featurePopoverItems.map((item) => (
+                <Link
+                  key={item.label}
+                  to="/"
+                  hash={item.hash}
+                  onClick={() => setMenuOpen(false)}
+                  className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
+                >
+                  <span
+                    className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <div className="font-display text-[14px] text-text">{item.label}</div>
+                    <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">{item.description}</div>
+                  </div>
+                </Link>
+              ))}
+
+              {/* Dashed separator */}
+              <div className="mx-3 border-border border-t border-dashed" />
+
+              {/* Pricing */}
               <Link
-                key={item.label}
-                to="/"
-                hash={item.hash}
+                to="/pricing"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-start gap-3 bg-bg px-5 py-4 transition-colors"
+                className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
               >
-                <item.icon className="mt-0.5 h-4 w-4 shrink-0" style={{ color: item.color }} strokeWidth={1.5} />
+                <span
+                  className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted"
+                  aria-hidden="true"
+                />
                 <div>
-                  <div className="font-display text-sm text-text">{item.label}</div>
-                  <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">{item.description}</div>
+                  <div className="font-display text-[14px] text-text">{NAV.pricing}</div>
+                  <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">Free tier and Pro plans.</div>
                 </div>
               </Link>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-px border-border border-t bg-border">
-            <Link
-              to="/pricing"
-              onClick={() => setMenuOpen(false)}
-              className="bg-bg px-5 py-4 font-mono text-[11px] text-text-secondary uppercase tracking-widest"
-            >
-              {NAV.pricing}
-            </Link>
-            <Link
-              to="/changelog"
-              onClick={() => setMenuOpen(false)}
-              className="bg-bg px-5 py-4 font-mono text-[11px] text-text-secondary uppercase tracking-widest"
-            >
-              {NAV.changelog}
-            </Link>
-          </div>
-          <div className="border-border border-t p-4">
+
+              {/* Changelog */}
+              <Link
+                to="/changelog"
+                onClick={() => setMenuOpen(false)}
+                className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
+              >
+                <span
+                  className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted"
+                  aria-hidden="true"
+                />
+                <div>
+                  <div className="font-display text-[14px] text-text">{NAV.changelog}</div>
+                  <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">What's new and what's next.</div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Spacer pushes CTA to bottom */}
+            <div className="flex-1" />
+
+            {/* Download CTA */}
             <Link
               to="/"
               hash="download"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-center bg-accent px-5 py-3.5 font-mono text-[12px] text-bg uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15)]"
+              className="group relative mt-8 flex items-center justify-center overflow-hidden rounded-[4px] bg-accent px-5 py-3.5 font-mono text-[12px] text-white uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.2)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)]"
             >
-              {NAV.download}
+              <ButtonOverlays grainOpacity={0.14} />
+              <span className="relative">{NAV.download}</span>
             </Link>
           </div>
         </div>

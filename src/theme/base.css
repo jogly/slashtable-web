@@ -76,4 +76,15 @@
   .font-mono {
     letter-spacing: 0.02em;
   }
+
+  @keyframes menuSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
