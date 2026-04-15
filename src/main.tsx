@@ -13,11 +13,13 @@ if (window.location.search.startsWith("?p=")) {
   window.history.replaceState(null, "", path);
 }
 
-posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN, {
-  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-  person_profiles: "identified_only",
-  capture_pageview: false,
-});
+if (import.meta.env.PROD) {
+  posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN, {
+    api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+    person_profiles: "identified_only",
+    capture_pageview: false,
+  });
+}
 
 const router = createRouter({ routeTree });
 
