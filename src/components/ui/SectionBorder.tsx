@@ -21,8 +21,8 @@ export function SectionBorder({ position, className }: SectionBorderProps) {
       <div className="h-px w-full bg-border" />
       {/* Diamond markers at content edges */}
       <div className="relative mx-auto max-w-content">
-        <Diamond className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2" />
-        <Diamond className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2" />
+        <Diamond className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 max-[68rem]:hidden" />
+        <Diamond className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 max-[68rem]:hidden" />
       </div>
     </div>
   );
