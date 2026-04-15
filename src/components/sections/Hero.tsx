@@ -134,7 +134,7 @@ export function Hero() {
           className="text-balance font-semibold text-5xl text-text leading-snug tracking-tight sm:text-6xl"
           variants={prefersReducedMotion ? undefined : fadeUp}
         >
-          The database app
+          The database client
           <button
             ref={btnRef}
             type="button"

@@ -358,7 +358,7 @@ export const NAV = {
 // ─── Footer ──────────────────────────────────────────────────────
 
 export const FOOTER = {
-  tagline: "The database app for product engineers.",
+  tagline: "The database client for product engineers.",
   sections: [
     {
       title: "Product",
