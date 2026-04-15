@@ -124,7 +124,7 @@ function PricingPage() {
             const discountAmount = hasDiscount ? parseDollars(tier.price) - parseDollars(salePrice) : 0;
             const isBestDeal = hasDiscount && discountAmount === biggestDiscount;
             return (
-              <FadeIn key={tier.name} delay={i * 0.1}>
+              <FadeIn key={tier.name} delay={i * 0.15}>
                 <div
                   className={cn(
                     "relative flex h-full flex-col border p-8",
@@ -132,17 +132,17 @@ function PricingPage() {
                   )}
                 >
                   {highlighted && (
-                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
+                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent to-transparent" />
                   )}
 
                   {hasDiscount &&
                     (isBestDeal ? (
-                      <div className="-translate-y-1/2 absolute top-0 right-4 flex items-center gap-1.5 bg-accent px-3.5 py-1.5 font-mono font-semibold text-white text-xs uppercase tracking-widest shadow-[0_0_24px_-2px_var(--color-accent),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.18)]">
+                      <div className="absolute top-0 right-4 flex -translate-y-1/2 items-center gap-1.5 bg-accent px-3.5 py-1.5 font-mono font-semibold text-white text-xs uppercase tracking-widest shadow-[0_0_24px_-2px_var(--color-accent),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.18)]">
                         <span className="h-1 w-1 rounded-full bg-white/80 shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
                         <span>${discountAmount} off</span>
                       </div>
                     ) : (
-                      <div className="-translate-y-1/2 absolute top-0 right-4 border border-accent/40 bg-surface px-3 py-1 font-mono text-[10px] text-accent uppercase tracking-widest">
+                      <div className="absolute top-0 right-4 -translate-y-1/2 border border-accent/40 bg-surface px-3 py-1 font-mono text-[10px] text-accent uppercase tracking-widest">
                         ${discountAmount} off
                       </div>
                     ))}
@@ -169,7 +169,7 @@ function PricingPage() {
                     )}
                   </div>
 
-                  <ul className="mb-8 space-y-3">
+                  <ul className="mb-8 h-40 space-y-3">
                     {tier.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2.5 text-sm text-text-secondary">
                         <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
