@@ -18,7 +18,12 @@ if (import.meta.env.PROD) {
     api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
     person_profiles: "identified_only",
     capture_pageview: false,
+    opt_out_capturing_by_default: true,
   });
+
+  // Restore prior consent choice
+  const consent = localStorage.getItem("cookie-consent");
+  if (consent === "accepted") posthog.opt_in_capturing();
 }
 
 const router = createRouter({ routeTree });

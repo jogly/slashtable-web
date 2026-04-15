@@ -18,12 +18,12 @@ export function FeatureFrame({ accentColor, children, className }: FeatureFrameP
   return (
     <section className={cn("relative", className)}>
       {/* Full-width top line */}
-      <div className="pointer-events-none absolute top-0 left-1/2 h-px w-screen -translate-x-1/2 bg-border" />
+      <div className="pointer-events-none absolute top-0 left-1/2 h-px w-screen -translate-x-1/2 bg-border max-[68rem]:hidden" />
       {/* Full-width bottom line */}
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-px w-screen -translate-x-1/2 bg-border" />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 h-px w-screen -translate-x-1/2 bg-border max-[68rem]:hidden" />
       {/* Accent glow along top edge (full-width) */}
       <div
-        className="pointer-events-none absolute top-0 left-1/2 h-px w-screen -translate-x-1/2"
+        className="pointer-events-none absolute top-0 left-1/2 h-px w-screen -translate-x-1/2 max-[68rem]:hidden"
         style={{
           background: `linear-gradient(to right, transparent, ${accentColor}30, transparent)`,
         }}
@@ -37,11 +37,11 @@ export function FeatureFrame({ accentColor, children, className }: FeatureFrameP
       />
       {/* Inner crosshatch texture — the blueprint grid */}
       <NoiseTexture variant="crosshatch" opacity={0.4} />
-      {/* Corner diamonds */}
-      <Diamond className="absolute top-0 left-0 -translate-x-0.75 -translate-y-1/2" />
-      <Diamond className="absolute top-0 right-0 translate-x-0.75 -translate-y-1/2" />
-      <Diamond className="absolute bottom-0 left-0 -translate-x-0.75 translate-y-1/2" />
-      <Diamond className="absolute right-0 bottom-0 translate-x-0.75 translate-y-1/2" />
+      {/* Corner diamonds — hidden below content width to prevent horizontal overflow */}
+      <Diamond className="absolute top-0 left-0 -translate-x-0.75 -translate-y-1/2 max-[68rem]:hidden" />
+      <Diamond className="absolute top-0 right-0 translate-x-0.75 -translate-y-1/2 max-[68rem]:hidden" />
+      <Diamond className="absolute bottom-0 left-0 -translate-x-0.75 translate-y-1/2 max-[68rem]:hidden" />
+      <Diamond className="absolute right-0 bottom-0 translate-x-0.75 translate-y-1/2 max-[68rem]:hidden" />
       {/* Content */}
       <div className="relative p-8 lg:p-12">{children}</div>
     </section>

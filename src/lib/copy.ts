@@ -386,6 +386,15 @@ export const FOOTER = {
   copyright: "Make Toast LLC",
 };
 
+// ─── Cookie Consent ─────────────────────────────────────────────
+
+export const COOKIE_CONSENT = {
+  heading: "The legally-required cookie banner",
+  body: "We use one analytics cookie (PostHog) to see what\u2019s working. No third-party tracking or ads.",
+  accept: "That's fine",
+  decline: "No thanks",
+};
+
 // ─── Pricing ────────────────────────────────────────────────────
 
 const SITE_URL = "https://slashtable.dev";
