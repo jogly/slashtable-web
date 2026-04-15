@@ -1,15 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ContactSalesModal } from "../components/ui/ContactSalesModal";
 import { ContentContainer } from "../components/ui/ContentContainer";
 import { FadeIn } from "../components/ui/FadeIn";
+import { SkyParallax } from "../components/ui/SkyParallax";
 import { ThankYouModal } from "../components/ui/ThankYouModal";
 import { useDownload } from "../hooks/useDownload";
-import { discountedPrice, formatDiscount, isDiscountActive, usePolarDiscounts } from "../hooks/usePolarDiscounts";
 import { trackCheckoutClicked, trackContactSalesOpened } from "../lib/analytics";
 import { PRICING, polarCheckoutUrl } from "../lib/copy";
 import { cn } from "../lib/utils";
+
+function parseDollars(price: string): number {
+  const m = price.match(/\d+/);
+  return m ? Number(m[0]) : 0;
+}
 
 export const Route = createFileRoute("/pricing")({
   component: PricingPage,
@@ -70,27 +75,54 @@ function VaultTooltip() {
 function PricingPage() {
   const { showThankYou, closeThankYou, triggerDownload } = useDownload();
   const [showContactSales, setShowContactSales] = useState(false);
+  const bannerRef = useRef<HTMLDivElement>(null);
 
-  const polarIds = useMemo(() => PRICING.tiers.filter((t) => t.polarId).map((t) => t.polarId as string), []);
-  const { discounts } = usePolarDiscounts(polarIds);
+  // Biggest discount across individual tiers — we give that badge extra visual weight.
+  const individualTiers = PRICING.tiers.slice(0, 3);
+  const biggestDiscount = Math.max(
+    ...individualTiers.map((t) => {
+      if (!("salePrice" in t) || !t.salePrice) return 0;
+      return parseDollars(t.price) - parseDollars(t.salePrice);
+    }),
+  );
 
   return (
     <div className="pt-32 pb-20">
       <ContentContainer>
         {/* Header */}
-        <div className="mb-16 text-center">
+        <div className="mb-10 text-center">
           <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">{PRICING.eyebrow}</p>
           <h1 className="font-display text-4xl text-text tracking-tight lg:text-5xl">{PRICING.heading}</h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-text-secondary leading-relaxed">{PRICING.description}</p>
         </div>
 
+        {/* Early-access banner — friendly sky-parallax card, no warning styling */}
+        <FadeIn>
+          <div
+            ref={bannerRef}
+            className="relative mx-auto mb-10 max-w-4xl overflow-hidden border border-border bg-surface-1/30 px-5 py-5 backdrop-blur-sm lg:px-7 lg:py-6"
+          >
+            <SkyParallax targetRef={bannerRef} />
+            <div className="relative z-10 flex items-start gap-4 lg:items-center">
+              <span className="mt-0.5 font-mono text-lg text-accent leading-none lg:text-xl">✦</span>
+              <div className="flex-1">
+                <p className="font-mono text-[10px] text-accent uppercase tracking-widest">
+                  {PRICING.earlyAccess.eyebrow}
+                </p>
+                <p className="mt-1 text-sm text-text-secondary leading-relaxed">{PRICING.earlyAccess.body}</p>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+
         {/* Individual tiers */}
         <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-3">
-          {PRICING.tiers.slice(0, 3).map((tier, i) => {
+          {individualTiers.map((tier, i) => {
             const highlighted = i === 1;
-            const discount = tier.polarId ? discounts[tier.polarId] : null;
-            const hasDiscount = discount != null && isDiscountActive(discount);
-            const salePrice = hasDiscount ? discountedPrice(tier.price, discount) : null;
+            const salePrice = "salePrice" in tier ? tier.salePrice : undefined;
+            const hasDiscount = !!salePrice;
+            const discountAmount = hasDiscount ? parseDollars(tier.price) - parseDollars(salePrice) : 0;
+            const isBestDeal = hasDiscount && discountAmount === biggestDiscount;
             return (
               <FadeIn key={tier.name} delay={i * 0.1}>
                 <div
@@ -103,19 +135,25 @@ function PricingPage() {
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
                   )}
 
-                  {hasDiscount && (
-                    <div className="absolute top-0 right-4 -translate-y-1/2 bg-accent px-3 py-1 font-mono text-[10px] text-bg uppercase tracking-widest">
-                      {formatDiscount(discount)}
-                    </div>
-                  )}
+                  {hasDiscount &&
+                    (isBestDeal ? (
+                      <div className="-translate-y-1/2 absolute top-0 right-4 flex items-center gap-1.5 bg-accent px-3.5 py-1.5 font-mono font-semibold text-white text-xs uppercase tracking-widest shadow-[0_0_24px_-2px_var(--color-accent),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.18)]">
+                        <span className="h-1 w-1 rounded-full bg-white/80 shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
+                        <span>${discountAmount} off</span>
+                      </div>
+                    ) : (
+                      <div className="-translate-y-1/2 absolute top-0 right-4 border border-accent/40 bg-surface px-3 py-1 font-mono text-[10px] text-accent uppercase tracking-widest">
+                        ${discountAmount} off
+                      </div>
+                    ))}
 
                   <div className="flex-1">
                     <div className="mb-6">
                       <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{tier.name}</h2>
                       <div className="mt-3 flex items-baseline gap-2">
-                        {hasDiscount && salePrice != null ? (
+                        {hasDiscount && salePrice ? (
                           <>
-                            <span className="font-display text-4xl text-text">${Math.round(salePrice / 100)}</span>
+                            <span className="font-display text-4xl text-text">{salePrice}</span>
                             <span className="font-display text-lg text-text-muted line-through">{tier.price}</span>
                           </>
                         ) : (
@@ -168,9 +206,9 @@ function PricingPage() {
                       onClick={() =>
                         trackCheckoutClicked({
                           tier: tier.name,
-                          price: tier.price,
+                          price: salePrice ?? tier.price,
                           discount_active: hasDiscount,
-                          discount_amount: hasDiscount ? formatDiscount(discount) : null,
+                          discount_amount: hasDiscount ? `$${discountAmount} off` : null,
                           polar_id: tier.polarId as string,
                         })
                       }

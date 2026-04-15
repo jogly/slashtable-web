@@ -8,6 +8,7 @@ import { ButtonOverlays } from "../ui/ButtonOverlays";
 import { DotGrid } from "../ui/DotGrid";
 import { ImageCompare } from "../ui/ImageCompare";
 import { NoiseTexture } from "../ui/NoiseTexture";
+import { SkyParallax } from "../ui/SkyParallax";
 
 const tooltipColors = ["#44ff88", "#ffcc00", "#cc44ff", "#00d4ff"];
 const TOOLTIP_W = 320;
@@ -62,6 +63,7 @@ export function Hero() {
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const openTimerRef = useRef<number>(undefined);
   const closeTimerRef = useRef<number>(undefined);
 
@@ -117,7 +119,8 @@ export function Hero() {
   }
 
   return (
-    <section className="relative pt-32 pb-20">
+    <section ref={sectionRef} className="relative overflow-hidden pt-36 pb-24 lg:pt-40 lg:pb-28">
+      <SkyParallax targetRef={sectionRef} />
       <NoiseTexture
         variant="grain"
         opacity={0.4}
@@ -125,7 +128,7 @@ export function Hero() {
       />
       <DotGrid className="opacity-[0.25] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,black,transparent)]" />
       <motion.div
-        className="mx-auto max-w-narrow px-6 text-center"
+        className="relative z-10 mx-auto max-w-narrow px-6 text-center"
         variants={prefersReducedMotion ? undefined : stagger}
         initial={prefersReducedMotion ? undefined : "hidden"}
         animate={prefersReducedMotion ? undefined : "visible"}
@@ -225,7 +228,7 @@ export function Hero() {
 
       {/* Hero screenshot */}
       <motion.div
-        className="mx-auto mt-16 max-w-5xl px-6 lg:mt-20"
+        className="relative z-10 mx-auto mt-16 max-w-5xl px-6 lg:mt-20"
         initial={prefersReducedMotion ? undefined : { opacity: 0, y: 24 }}
         animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
         transition={

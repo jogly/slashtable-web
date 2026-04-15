@@ -251,7 +251,7 @@ export const DOWNLOAD_PAGE = {
   eyebrow: "Release",
   channel: "Stable channel",
   platformTag: "macOS",
-  loading: "Checking latest\u2026",
+  loading: "Checking\u2026",
   unavailable: "Release feed unavailable",
   viewChangelog: "View changelog",
   archHeading: "Pick your architecture",
@@ -409,6 +409,10 @@ export const PRICING = {
   heading: "Pay once. Or bring the team.",
   description: "Individual plans are one-time purchases. Team plans are per seat. Updates are free on every plan.",
   perpetual: "Buy once, yours forever. Updates included.",
+  earlyAccess: {
+    eyebrow: "Early access pricing",
+    body: "Personal and Pro are discounted for early access purchasers as a personal thank you for supporting the development.",
+  },
   tiers: [
     {
       name: "Free",
@@ -420,6 +424,7 @@ export const PRICING = {
     {
       name: "Personal",
       price: "$49",
+      salePrice: "$19",
       description: "For engineers who talk to more than one database.",
       features: ["3 connections", "Unlimited tabs", "Remote credential vaults"],
       role: { tag: "@supporter", color: "#00d4ff" },
@@ -429,6 +434,7 @@ export const PRICING = {
     {
       name: "Pro",
       price: "$99",
+      salePrice: "$49",
       description: "Fully unlocked.",
       features: ["Unlimited connections", "Unlimited tabs", "Remote credential vaults"],
       role: { tag: "@pro", color: "#ffcc00" },

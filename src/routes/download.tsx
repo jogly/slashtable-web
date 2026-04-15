@@ -1,19 +1,15 @@
-import skyDay from "@assets/sky-day.png?as=img";
-import skyNight from "@assets/sky-night.png?as=img";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Download } from "lucide-react";
-import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
-import { useTheme } from "../components/providers/ThemeProvider";
 import { BlueprintRule } from "../components/ui/BlueprintRule";
 import { ButtonOverlays } from "../components/ui/ButtonOverlays";
 import { ContentContainer } from "../components/ui/ContentContainer";
 import { FadeIn } from "../components/ui/FadeIn";
-import { Img } from "../components/ui/Img";
 import { NoiseTexture } from "../components/ui/NoiseTexture";
 import { Diamond } from "../components/ui/SectionBorder";
+import { SkyParallax } from "../components/ui/SkyParallax";
 import { ThankYouModal } from "../components/ui/ThankYouModal";
 import { useDownload } from "../hooks/useDownload";
 import { trackDownloadStarted } from "../lib/analytics";
@@ -89,48 +85,6 @@ const markdownComponents: Components = {
 export const Route = createFileRoute("/download")({
   component: DownloadPage,
 });
-
-/**
- * Subtle sky background for the version card.
- * - Day image in light mode, night image in dark mode.
- * - Parallax: image translates up ~120px as the user scrolls past the card.
- * - Layered fades keep the image from fighting the card's foreground content.
- */
-function SkyParallax({ targetRef }: { targetRef: React.RefObject<HTMLDivElement | null> }) {
-  const { theme } = useTheme();
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
-
-  return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <motion.div style={{ y }} className="absolute inset-x-0 top-[-20%] h-[140%]">
-        <Img
-          image={theme === "light" ? skyDay : skyNight}
-          alt=""
-          draggable={false}
-          loading="eager"
-          className={cn(
-            "h-full w-full select-none object-cover",
-            theme === "light" ? "opacity-[0.20]" : "opacity-[0.11]",
-          )}
-          style={{ filter: "saturate(0.55)" }}
-        />
-      </motion.div>
-      {/* Top & bottom vignette — aggressive fades that swallow the image near the card edges */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to bottom, var(--color-surface-1) 0%, transparent 40%, transparent 60%, var(--color-surface-1) 100%)",
-          opacity: 0.85,
-        }}
-      />
-    </div>
-  );
-}
 
 type ArchKey = "silicon" | "intel";
 
