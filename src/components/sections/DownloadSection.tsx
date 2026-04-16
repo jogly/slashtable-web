@@ -1,3 +1,4 @@
+import appIconImg from "@assets/app-icon.png?as=img";
 import macosFolderBack from "@assets/macos-folder-back.png?as=img";
 import macosFolderFore from "@assets/macos-folder-fore.png?as=img";
 import { DndContext, type DragEndEvent, type DragOverEvent, useDraggable, useDroppable } from "@dnd-kit/core";
@@ -42,7 +43,7 @@ function AppIcon({ dropped, isOverFolder }: { dropped: boolean; isOverFolder: bo
         } ${isOverFolder ? "opacity-0" : ""}`}
       >
         <img
-          src="/app-icon.png"
+          src={appIconImg.src}
           alt="SlashTable"
           width={96}
           height={96}
@@ -88,7 +89,7 @@ function DownloadsFolder({ dropped, isOverFolder }: { dropped: boolean; isOverFo
         <AnimatePresence>
           {isOverFolder && (
             <motion.img
-              src="/app-icon.png"
+              src={appIconImg.src}
               alt=""
               width={48}
               height={48}

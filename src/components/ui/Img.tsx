@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/a11y/useAltText: not ready yet */
 import type { ComponentProps } from "react";
 
 export interface ImageData {
@@ -13,7 +12,7 @@ interface ImgProps extends Omit<ComponentProps<"img">, "src" | "srcSet" | "width
   sizes?: string;
 }
 
-export function Img({ image, sizes, loading = "lazy", decoding = "async", ...rest }: ImgProps) {
+export function Img({ image, sizes, loading = "lazy", decoding = "async", alt = "", ...rest }: ImgProps) {
   return (
     <img
       src={image.src}
@@ -23,6 +22,7 @@ export function Img({ image, sizes, loading = "lazy", decoding = "async", ...res
       height={image.h}
       loading={loading}
       decoding={decoding}
+      alt={alt}
       {...rest}
     />
   );

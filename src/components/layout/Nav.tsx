@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, ChevronDown, KeyRound, Menu, Network, ShieldCheck, Terminal, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import appIconImg from "../../assets/app-icon.png?as=img";
 import { NAME } from "../../lib/constants";
 import { NAV } from "../../lib/copy";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
@@ -95,7 +96,7 @@ export function Nav() {
       <header className="fixed top-0 right-0 left-0 z-50 border-border border-b border-dashed bg-bg/80 backdrop-blur-md">
         <nav className="mx-auto flex max-w-content items-center gap-6 px-4 py-3 sm:px-6 sm:py-4">
           <Link to="/" className="flex items-center gap-2.5">
-            <img src="/app-icon.png" alt={NAV.logoAlt} width={18} height={18} className="h-[18px] w-[18px]" />
+            <img src={appIconImg.src} alt={NAV.logoAlt} width={18} height={18} className="h-[18px] w-[18px]" />
             <span className="font-mono font-semibold text-[13px] text-text tracking-tight">{NAME.short}</span>
           </Link>
 
@@ -194,7 +195,7 @@ export function Nav() {
 
       {/* Mobile fullscreen menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col bg-bg/95 pt-[60px] backdrop-blur-xl sm:hidden animate-[menuSlideIn_0.25s_ease-out]">
+        <div className="fixed inset-0 z-40 flex animate-[menuSlideIn_0.25s_ease-out] flex-col bg-bg/95 pt-[60px] backdrop-blur-xl sm:hidden">
           <div className="relative flex flex-1 flex-col overflow-y-auto px-5 pt-6 pb-8">
             {/* All nav items in one unified list */}
             <div className="space-y-px">
@@ -227,10 +228,7 @@ export function Nav() {
                 onClick={() => setMenuOpen(false)}
                 className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
               >
-                <span
-                  className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted"
-                  aria-hidden="true"
-                />
+                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted" aria-hidden="true" />
                 <div>
                   <div className="font-display text-[14px] text-text">{NAV.pricing}</div>
                   <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">Free tier and Pro plans.</div>
@@ -243,10 +241,7 @@ export function Nav() {
                 onClick={() => setMenuOpen(false)}
                 className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
               >
-                <span
-                  className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted"
-                  aria-hidden="true"
-                />
+                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted" aria-hidden="true" />
                 <div>
                   <div className="font-display text-[14px] text-text">{NAV.changelog}</div>
                   <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">What's new and what's next.</div>

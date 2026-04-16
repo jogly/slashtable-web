@@ -22,7 +22,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-3 md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <Img image={logoImg} className="h-7 w-7" />
+              <Img image={logoImg} alt="SlashTable logo" className="h-7 w-7" />
               <span className="font-mono font-semibold text-sm text-text">{NAME.short}</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-text-secondary leading-relaxed">{FOOTER.tagline}</p>
@@ -30,7 +30,7 @@ export function Footer() {
 
           {FOOTER.sections.map((section, _i) => (
             <div key={section.title} className="col-span-1 md:col-span-1">
-              <h3 className="mb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest">{section.title}</h3>
+              <h2 className="mb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest">{section.title}</h2>
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
