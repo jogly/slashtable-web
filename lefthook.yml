@@ -1,0 +1,10 @@
+pre-commit:
+  parallel: false
+  jobs:
+    - name: typecheck
+      run: bun run tsc --noEmit
+
+    - name: biome
+      run: bunx biome check --write --unsafe {staged_files}
+      glob: "*.{ts,tsx,js,jsx,json}"
+      stage_fixed: true

@@ -37,7 +37,7 @@ export function Footer() {
                     {"to" in link ? (
                       <Link
                         to={link.to}
-                        hash={"hash" in link ? link.hash : undefined}
+                        hash={"hash" in link ? (link as { hash: string }).hash : undefined}
                         className="text-sm text-text-secondary transition-colors hover:text-text"
                       >
                         {link.label}
