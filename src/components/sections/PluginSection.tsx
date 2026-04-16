@@ -28,7 +28,7 @@ export function PluginSection() {
                     {PLUGIN.eyebrow}
                   </span>
                 </div>
-                <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{PLUGIN.heading}</h2>
+                <h2 className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h2>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
                   <p>
                     {before}

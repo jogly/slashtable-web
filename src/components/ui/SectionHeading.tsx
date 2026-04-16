@@ -13,7 +13,7 @@ export function SectionHeading({ eyebrow, children, description, className, alig
   return (
     <div className={cn("mb-12 lg:mb-16", align === "center" && "text-center", className)}>
       {eyebrow && <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">{eyebrow}</p>}
-      <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{children}</h2>
+      <h2 className="font-display text-3xl text-text lg:text-4xl">{children}</h2>
       {description && (
         <p className="mx-auto mt-4 max-w-2xl text-lg text-text-secondary leading-relaxed">{description}</p>
       )}

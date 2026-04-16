@@ -86,7 +86,7 @@ function ChangelogPage() {
         <span className="h-2 w-2 flex-shrink-0 bg-accent" />
         <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{CHANGELOG.eyebrow}</span>
       </div>
-      <h1 className="font-display text-4xl text-text tracking-tight">
+      <h1 className="font-display text-4xl text-text">
         What's new in <span className="font-mono">{NAME.short}</span>
       </h1>
       <p className="mt-3 text-text-secondary leading-relaxed">{CHANGELOG.description}</p>
@@ -121,7 +121,7 @@ function ChangelogPage() {
               className={`relative py-10 ${i < entries.length - 1 ? "border-border border-b" : ""}`}
             >
               <div className="mb-4 flex flex-wrap items-baseline gap-3">
-                <h2 className="font-mono font-semibold text-lg text-text tracking-tight">{entry.version}</h2>
+                <h2 className="font-mono font-semibold text-lg text-text">{entry.version}</h2>
                 <time className="font-mono text-[10px] text-text-muted uppercase tracking-widest" dateTime={entry.date}>
                   {formatDate(entry.date)}
                 </time>

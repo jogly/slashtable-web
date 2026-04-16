@@ -22,7 +22,7 @@ export function SchemaGraphSection() {
                   {SCHEMA_GRAPH.eyebrow}
                 </span>
               </div>
-              <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{SCHEMA_GRAPH.heading}</h2>
+              <h2 className="font-display text-3xl text-text lg:text-4xl">{SCHEMA_GRAPH.heading}</h2>
               <p className="mt-4 max-w-2xl text-text-secondary leading-relaxed">{SCHEMA_GRAPH.description}</p>
             </div>
 

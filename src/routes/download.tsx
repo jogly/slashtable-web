@@ -195,7 +195,7 @@ function DownloadPage() {
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-[0.2em]">
                   {NAME.full} / {DOWNLOAD_PAGE.platformTag}
                 </span>
-                <h1 className="font-mono font-semibold text-5xl text-text leading-none tracking-tight lg:text-7xl">
+                <h1 className="font-mono font-semibold text-5xl text-text leading-none lg:text-7xl">
                   {release ? (
                     <>
                       <span className="text-text-muted">v</span>
@@ -235,9 +235,7 @@ function DownloadPage() {
               className="group relative z-10 flex items-center justify-between gap-4 border-border border-t bg-surface-1/50 px-6 py-4 backdrop-blur-sm transition-colors hover:bg-surface-1/70 lg:px-12 lg:py-5"
             >
               <div className="flex flex-col gap-1 lg:flex-row lg:items-baseline lg:gap-4">
-                <span className="font-display text-base text-text tracking-tight lg:text-lg">
-                  {DOWNLOAD_PAGE.olderHeading}
-                </span>
+                <span className="font-display text-base text-text lg:text-lg">{DOWNLOAD_PAGE.olderHeading}</span>
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                   {manifestState === "ready"
                     ? DOWNLOAD_PAGE.allVersionsCount(versions.length)
@@ -256,9 +254,7 @@ function DownloadPage() {
         <FadeIn delay={0.08}>
           <div className="mt-16 lg:mt-24">
             <div className="mb-8 flex items-baseline justify-between gap-4">
-              <h2 className="font-display text-2xl text-text tracking-tight lg:text-3xl">
-                {DOWNLOAD_PAGE.archHeading}
-              </h2>
+              <h2 className="font-display text-2xl text-text lg:text-3xl">{DOWNLOAD_PAGE.archHeading}</h2>
               <span className="hidden font-mono text-[10px] text-text-muted uppercase tracking-widest md:inline">
                 2 builds available
               </span>
@@ -550,7 +546,7 @@ function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps
         <span className="font-mono text-[10px] text-text-muted/70 uppercase tracking-widest">{info.arch}</span>
       </div>
 
-      <h3 className="font-display text-2xl text-text tracking-tight lg:text-3xl">{info.label}</h3>
+      <h3 className="font-display text-2xl text-text lg:text-3xl">{info.label}</h3>
       <p className="mt-2 text-sm text-text-secondary leading-relaxed">{info.body}</p>
 
       {/* Separator with blueprint rule */}

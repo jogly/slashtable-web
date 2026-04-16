@@ -19,8 +19,8 @@ const markdownComponents: Components = {
   code: ({ children }) => (
     <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-text text-xs">{children}</code>
   ),
-  h1: ({ children }) => <h1 className="mt-10 mb-4 font-display text-3xl text-text tracking-tight">{children}</h1>,
-  h2: ({ children }) => <h2 className="mt-8 mb-3 font-display text-text text-xl tracking-tight">{children}</h2>,
+  h1: ({ children }) => <h1 className="mt-10 mb-4 font-display text-3xl text-text">{children}</h1>,
+  h2: ({ children }) => <h2 className="mt-8 mb-3 font-display text-text text-xl">{children}</h2>,
   h3: ({ children }) => <h3 className="mt-6 mb-2 font-medium font-mono text-sm text-text">{children}</h3>,
   li: ({ children }) => (
     <li className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
@@ -70,7 +70,7 @@ function PrivacyPage() {
         <span className="h-2 w-2 flex-shrink-0 bg-accent" />
         <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Legal</span>
       </div>
-      <h1 className="font-display text-4xl text-text tracking-tight">Privacy Policy</h1>
+      <h1 className="font-display text-4xl text-text">Privacy Policy</h1>
 
       <div className="mt-12 border-border border-t pt-10">
         {loading ? (

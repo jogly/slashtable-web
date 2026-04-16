@@ -134,7 +134,7 @@ export function Hero() {
         animate={prefersReducedMotion ? undefined : "visible"}
       >
         <motion.h1
-          className="text-balance font-semibold text-5xl text-text leading-snug tracking-tight sm:text-6xl"
+          className="text-balance font-semibold text-5xl text-text leading-snug sm:text-6xl"
           variants={prefersReducedMotion ? undefined : fadeUp}
         >
           The database client
@@ -152,7 +152,7 @@ export function Hero() {
           >
             <span className="ml-1 cursor-pointer font-display text-accent">*</span>
           </button>{" "}
-          for <span className="font-display italic tracking-wide">product engineers.</span>
+          for <span className="font-display italic">product engineers.</span>
         </motion.h1>
 
         <motion.p

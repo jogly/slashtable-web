@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Info } from "lucide-react";
 import { useRef, useState } from "react";
+import type { Components } from "react-markdown";
+import ReactMarkdown from "react-markdown";
 import { ContactSalesModal } from "../components/ui/ContactSalesModal";
 import { ContentContainer } from "../components/ui/ContentContainer";
 import { FadeIn } from "../components/ui/FadeIn";
@@ -10,6 +12,25 @@ import { useDownload } from "../hooks/useDownload";
 import { trackCheckoutClicked, trackContactSalesOpened } from "../lib/analytics";
 import { PRICING, polarCheckoutUrl } from "../lib/copy";
 import { cn } from "../lib/utils";
+
+const faqMarkdownComponents: Components = {
+  p: ({ children }) => <span>{children}</span>,
+  a: ({ href, children }) =>
+    href?.startsWith("/") ? (
+      <Link to={href} className="text-accent underline underline-offset-2 transition-colors hover:text-text">
+        {children}
+      </Link>
+    ) : (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-accent underline underline-offset-2 transition-colors hover:text-text"
+      >
+        {children}
+      </a>
+    ),
+};
 
 function parseDollars(price: string): number {
   const m = price.match(/\d+/);
@@ -92,7 +113,7 @@ function PricingPage() {
         {/* Header */}
         <div className="mb-10 text-center">
           <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">{PRICING.eyebrow}</p>
-          <h1 className="font-display text-4xl text-text tracking-tight lg:text-5xl">{PRICING.heading}</h1>
+          <h1 className="font-display text-4xl text-text lg:text-5xl">{PRICING.heading}</h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-text-secondary leading-relaxed">{PRICING.description}</p>
         </div>
 
@@ -104,7 +125,7 @@ function PricingPage() {
           >
             <SkyParallax targetRef={bannerRef} />
             <div className="relative z-10 flex items-start gap-4 lg:items-center">
-              <span className="mt-0.5 font-mono text-lg text-accent leading-none lg:text-xl">✦</span>
+              <span className="mt-0.5 font-mono text-accent text-lg leading-none lg:text-xl">✦</span>
               <div className="flex-1">
                 <p className="font-mono text-[10px] text-accent uppercase tracking-widest">
                   {PRICING.earlyAccess.eyebrow}
@@ -228,6 +249,18 @@ function PricingPage() {
           })}
         </div>
 
+        {/* Upgrade link */}
+        <FadeIn delay={0.25}>
+          <p className="mt-6 text-center">
+            <Link
+              to="/upgrade"
+              className="font-mono text-text-muted text-xs uppercase tracking-widest transition-colors hover:text-accent"
+            >
+              {PRICING.upgradeLink}
+            </Link>
+          </p>
+        </FadeIn>
+
         {/* Team tier */}
         {(() => {
           const team = PRICING.tiers[3];
@@ -272,14 +305,26 @@ function PricingPage() {
         })()}
 
         {/* FAQ */}
-        <div className="mx-auto mt-24 max-w-narrow">
-          <h2 className="mb-8 font-display text-2xl text-text tracking-tight">{PRICING.faq.heading}</h2>
-          <div className="border-border border-t">
-            {PRICING.faq.items.map((item) => (
-              <div key={item.q} className="border-border border-b py-6">
-                <h3 className="font-medium font-mono text-sm text-text">{item.q}</h3>
-                <p className="mt-2 text-sm text-text-secondary leading-relaxed">{item.a}</p>
-              </div>
+        <div className="mx-auto mt-24 max-w-4xl">
+          <FadeIn>
+            <div className="mb-4 flex items-center gap-2">
+              <span className="h-2 w-2 flex-shrink-0 bg-accent" />
+              <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                {PRICING.faq.eyebrow}
+              </span>
+            </div>
+            <h2 className="font-display text-4xl text-text">{PRICING.faq.heading}</h2>
+          </FadeIn>
+          <div className="mt-8 border-border border-t">
+            {PRICING.faq.items.map((item, i) => (
+              <FadeIn key={item.q} delay={i * 0.08}>
+                <div className="border-border border-b py-6">
+                  <h3 className="font-display text-lg text-text">{item.q}</h3>
+                  <p className="mt-2 text-sm text-text-secondary leading-relaxed">
+                    <ReactMarkdown components={faqMarkdownComponents}>{item.a}</ReactMarkdown>
+                  </p>
+                </div>
+              </FadeIn>
             ))}
           </div>
         </div>

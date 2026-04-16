@@ -30,7 +30,7 @@ function CheckoutSuccessPage() {
             </div>
 
             <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">Order Complete</p>
-            <h1 className="font-display text-4xl text-text tracking-tight lg:text-5xl">You're in.</h1>
+            <h1 className="font-display text-4xl text-text lg:text-5xl">You're in.</h1>
             <p className="mx-auto mt-4 max-w-md text-lg text-text-secondary leading-relaxed">
               Your license key is on its way to your inbox. Paste it into Settings &rarr; License &rarr; Activate.
             </p>

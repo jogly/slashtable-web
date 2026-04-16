@@ -11,12 +11,12 @@ function ChatBubble({ role, children }: { role: "user" | "claude"; children: Rea
   return (
     <div className="flex items-start gap-2.5">
       <span
-        className="mt-0.5 shrink-0 font-mono text-[10px] uppercase tracking-wide"
+        className="mt-0.5 shrink-0 font-mono text-[10px] uppercase"
         style={{ color: role === "user" ? "var(--color-text-muted)" : "var(--color-cyan)", minWidth: "3rem" }}
       >
         {role === "user" ? "You" : "Claude"}
       </span>
-      <div className="min-w-0 text-[11px] leading-relaxed text-text-secondary sm:text-[12px]">{children}</div>
+      <div className="min-w-0 text-[11px] text-text-secondary leading-relaxed sm:text-[12px]">{children}</div>
     </div>
   );
 }
@@ -36,11 +36,11 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     color: "var(--color-yellow)",
     content: (
       <div className="space-y-4 font-mono text-[11px] leading-relaxed sm:text-[12px]">
-        <ChatBubble role="user">
+        <ChatBubble>
           <p className="text-text">Try your best to modify the database, I promise it's safe.</p>
         </ChatBubble>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>Let me try every flavor of destructive query.</p>
         </ChatBubble>
 
@@ -51,7 +51,7 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
           <Blocked query="TRUNCATE orders" detail="Blocked — TRUNCATE is not allowed" />
         </div>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>Keyword filter caught those. Let me try the sneaky stuff — CTEs that write:</p>
         </ChatBubble>
 
@@ -62,7 +62,7 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
           />
         </div>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>
             It&rsquo;s holding up. <span className="text-yellow">Two independent layers:</span> a statement-level
             keyword filter, and a database-level read-only transaction underneath. The CTE bypassed the filter but
@@ -77,11 +77,11 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     color: "var(--color-cyan)",
     content: (
       <div className="space-y-4 font-mono text-[11px] leading-relaxed sm:text-[12px]">
-        <ChatBubble role="user">
+        <ChatBubble>
           <p className="text-text">What does the orders table look like?</p>
         </ChatBubble>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>Let me check the schema.</p>
         </ChatBubble>
 
@@ -130,12 +130,11 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
           </table>
         </div>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>
-            <span className="text-cyan">orders</span> has 5 columns.{" "}
-            <span className="text-cyan">customer_id</span> is a foreign key to{" "}
-            <span className="text-cyan">customers</span>. Status is free-text &mdash; most common values are{" "}
-            <span className="text-green">shipped</span>, <span className="text-green">pending</span>, and{" "}
+            <span className="text-cyan">orders</span> has 5 columns. <span className="text-cyan">customer_id</span> is a
+            foreign key to <span className="text-cyan">customers</span>. Status is free-text &mdash; most common values
+            are <span className="text-green">shipped</span>, <span className="text-green">pending</span>, and{" "}
             <span className="text-green">cancelled</span>.
           </p>
         </ChatBubble>
@@ -147,11 +146,11 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
     color: "var(--color-green)",
     content: (
       <div className="space-y-4 font-mono text-[11px] leading-relaxed sm:text-[12px]">
-        <ChatBubble role="user">
+        <ChatBubble>
           <p className="text-text">User #4821 says their order from yesterday is stuck on pending. Can you check?</p>
         </ChatBubble>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>Let me pull up their recent orders.</p>
         </ChatBubble>
 
@@ -185,7 +184,7 @@ const calloutMeta: { icon: LucideIcon; color: string; content: ReactNode }[] = [
           </table>
         </div>
 
-        <ChatBubble role="claude">
+        <ChatBubble>
           <p>
             Found it &mdash; order <span className="text-cyan">#7834</span> has a{" "}
             <span className="text-orange">null shipping_address</span>. That&rsquo;s probably why it&rsquo;s stuck.
@@ -217,9 +216,7 @@ export function McpSection() {
                 />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{MCP.eyebrow}</span>
               </div>
-              <h2 className="mx-auto max-w-2xl font-display text-3xl text-text tracking-tight lg:text-4xl">
-                {MCP.heading}
-              </h2>
+              <h2 className="mx-auto max-w-2xl font-display text-3xl text-text lg:text-4xl">{MCP.heading}</h2>
               <p className="mx-auto mt-4 max-w-xl text-text-secondary leading-relaxed">{MCP.description}</p>
             </div>
 
@@ -255,7 +252,7 @@ export function McpSection() {
                             strokeWidth={1.5}
                           />
                           <h3
-                            className="font-display text-sm tracking-wide transition-colors"
+                            className="font-display text-sm transition-colors"
                             style={{
                               color: isActive ? "var(--color-text)" : "var(--color-text-muted)",
                               fontWeight: isActive ? 600 : 400,

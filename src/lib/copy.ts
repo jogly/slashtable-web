@@ -468,11 +468,12 @@ export const PRICING = {
     ],
   },
   faq: {
+    eyebrow: "FAQ",
     heading: "Questions",
     items: [
       {
         q: "What happens after I buy?",
-        a: "License key via email. Settings \u2192 License \u2192 paste \u2192 Activate. Under a minute.",
+        a: "You\u2019ll be taken to Polar where you can access a customer portal to view and manage all keys purchased. To activate, open Settings \u2192 License in the app and paste your key.",
       },
       {
         q: "Is this a subscription?",
@@ -480,7 +481,7 @@ export const PRICING = {
       },
       {
         q: "Can I upgrade from Personal to Pro?",
-        a: "Yes. Pay the difference and your license upgrades instantly. No need to re-download or re-activate.",
+        a: "Yes. Visit the [upgrade page](/upgrade), paste your license key, and pay the difference. Your new Pro key arrives via email \u2014 paste it in the app and you\u2019re done.",
       },
       {
         q: "Can I use it on multiple devices?",
@@ -488,13 +489,31 @@ export const PRICING = {
       },
       {
         q: "Do license keys require an internet connection?",
-        a: "No. License keys are validated offline. Once activated, SlashTable never phones home.",
+        a: "An internet connection is required to activate your license key. After that, it\u2019s completely offline forever. You may need to reconnect to refresh entitlements added after your purchase \u2014 this can be done in-app.",
       },
       {
         q: "What are remote credential vaults?",
         a: "Pull database credentials from a secret manager instead of copy-pasting. 1Password is fully supported. Bitwarden, AWS Secrets Manager, and HashiCorp Vault are in alpha. Free and Personal tiers use macOS Keychain only.",
       },
     ],
+  },
+  upgradeLink: "Already on Personal? \u2192 Upgrade to Pro",
+};
+
+// \u2500\u2500\u2500 Upgrade \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+
+export const UPGRADE = {
+  eyebrow: "Upgrade",
+  heading: "Upgrade to Pro",
+  description: "Already on Personal? Paste your license key below and pay the difference.",
+  keyPlaceholder: "Paste your license key",
+  keyHint: "Find your key in Settings \u2192 License inside the app.",
+  cta: "Continue",
+  redirecting: "Redirecting to checkout\u2026",
+  errors: {
+    not_eligible: "This key isn\u2019t eligible for upgrade. Only Personal licenses can upgrade to Pro.",
+    checkout_failed: "Something went wrong creating checkout. Try again in a moment.",
+    network: "Couldn\u2019t reach the server. Check your connection.",
   },
 };
 

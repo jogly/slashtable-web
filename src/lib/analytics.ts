@@ -8,6 +8,7 @@ export const ANALYTICS_EVENTS = {
   CHECKOUT_COMPLETED: "checkout_completed",
   CONTACT_SALES_OPENED: "contact_sales_opened",
   EXTERNAL_LINK_CLICKED: "external_link_clicked",
+  UPGRADE_INITIATED: "upgrade_initiated",
 } as const;
 
 // ── Property Interfaces ────────────────────────────────────
@@ -49,6 +50,10 @@ interface ExternalLinkClickedProps {
   source: "community_section" | "footer";
 }
 
+interface UpgradeInitiatedProps {
+  source: "upgrade_page";
+}
+
 // ── Capture Helpers ────────────────────────────────────────
 export function trackDownloadStarted(props: DownloadStartedProps) {
   posthog.capture(ANALYTICS_EVENTS.DOWNLOAD_STARTED, props);
@@ -75,4 +80,8 @@ export function trackContactSalesOpened(props: ContactSalesOpenedProps) {
 
 export function trackExternalLinkClicked(props: ExternalLinkClickedProps) {
   posthog.capture(ANALYTICS_EVENTS.EXTERNAL_LINK_CLICKED, props);
+}
+
+export function trackUpgradeInitiated(props: UpgradeInitiatedProps) {
+  posthog.capture(ANALYTICS_EVENTS.UPGRADE_INITIATED, props);
 }

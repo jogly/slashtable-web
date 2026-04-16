@@ -27,7 +27,7 @@ export function ThankYouModal({ open, onClose }: ThankYouModalProps) {
 
   return (
     <Modal open={open} onClose={onClose} labelId="thank-you-heading" closeLabel={THANK_YOU.close}>
-      <h2 id="thank-you-heading" className="font-display text-2xl text-text tracking-tight">
+      <h2 id="thank-you-heading" className="font-display text-2xl text-text">
         {THANK_YOU.heading}
       </h2>
       <p className="mt-4 text-sm text-text-secondary leading-relaxed">{THANK_YOU.body}</p>

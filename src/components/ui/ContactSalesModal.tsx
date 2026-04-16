@@ -16,7 +16,7 @@ export function ContactSalesModal({ open, onClose }: ContactSalesModalProps) {
       closeLabel={CONTACT_SALES.close}
       focusableSelector='button, [href], input, textarea, [tabindex]:not([tabindex="-1"])'
     >
-      <h2 id="contact-sales-heading" className="font-display text-2xl text-text tracking-tight">
+      <h2 id="contact-sales-heading" className="font-display text-2xl text-text">
         {CONTACT_SALES.heading}
       </h2>
       <p className="mt-4 text-sm text-text-secondary leading-relaxed">{CONTACT_SALES.body}</p>

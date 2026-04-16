@@ -38,7 +38,7 @@ export function FeaturesGrid() {
                   {FEATURES_GRID.eyebrow}
                 </span>
               </div>
-              <h2 className="font-display text-3xl text-text tracking-tight lg:text-4xl">{FEATURES_GRID.heading}</h2>
+              <h2 className="font-display text-3xl text-text lg:text-4xl">{FEATURES_GRID.heading}</h2>
               <p className="mx-auto mt-3 max-w-lg text-sm text-text-secondary leading-relaxed">
                 {FEATURES_GRID.description}
               </p>

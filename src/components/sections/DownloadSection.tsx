@@ -52,7 +52,7 @@ function AppIcon({ dropped, isOverFolder }: { dropped: boolean; isOverFolder: bo
         />
       </div>
       <span
-        className={`select-none font-mono text-[11px] text-text-secondary tracking-wide transition-opacity duration-150 ${
+        className={`select-none font-mono text-[11px] text-text-secondary transition-opacity duration-150 ${
           isDragging ? "opacity-0" : ""
         }`}
       >
@@ -140,9 +140,7 @@ function DownloadsFolder({ dropped, isOverFolder }: { dropped: boolean; isOverFo
           )}
         </AnimatePresence>
       </div>
-      <span className="select-none font-mono text-[11px] text-text-secondary tracking-wide">
-        {DOWNLOAD.folderLabel}
-      </span>
+      <span className="select-none font-mono text-[11px] text-text-secondary">{DOWNLOAD.folderLabel}</span>
     </div>
   );
 }
@@ -226,13 +224,13 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
       <ContentContainer className="relative text-center">
         {!hideHeader && (
           <FadeIn>
-            <h2 className="font-display text-3xl text-text tracking-tight lg:text-5xl">
+            <h2 className="font-display text-3xl text-text lg:text-5xl">
               {(() => {
                 const [before, after] = DOWNLOAD.heading;
                 return (
                   <>
                     <span className="font-mono tracking-tighter">{before}</span>
-                    <span className="ml-2 font-display tracking-wide">{after}</span>
+                    <span className="ml-2 font-display">{after}</span>
                   </>
                 );
               })()}
@@ -311,7 +309,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
 
           {/* Button fallback — desktop */}
           <div className="mt-8 hidden flex-col items-center gap-3 lg:flex">
-            <p className="font-mono text-[10px] text-text-muted italic tracking-wide">{DOWNLOAD.buttonFallback}</p>
+            <p className="font-mono text-[10px] text-text-muted italic">{DOWNLOAD.buttonFallback}</p>
             <a
               href={primary}
               {...(primary ? { download: true } : { "aria-disabled": true })}
