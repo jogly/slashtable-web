@@ -121,7 +121,7 @@ function PricingPage() {
         <FadeIn>
           <div
             ref={bannerRef}
-            className="relative mx-auto mb-10 max-w-4xl overflow-hidden border border-border bg-surface-1/30 px-5 py-5 backdrop-blur-sm lg:px-7 lg:py-6"
+            className="relative mx-auto mb-10 overflow-hidden border border-border bg-surface-1/30 px-5 py-5 backdrop-blur-sm lg:px-7 lg:py-6"
           >
             <SkyParallax targetRef={bannerRef} />
             <div className="relative z-10 flex items-start gap-4 lg:items-center">
@@ -137,7 +137,7 @@ function PricingPage() {
         </FadeIn>
 
         {/* Individual tiers */}
-        <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-3">
+        <div className="mx-auto grid gap-6 lg:grid-cols-3">
           {individualTiers.map((tier, i) => {
             const highlighted = i === 1;
             const salePrice = "salePrice" in tier ? tier.salePrice : undefined;
@@ -266,7 +266,7 @@ function PricingPage() {
           const team = PRICING.tiers[3];
           return (
             <FadeIn delay={0.3}>
-              <div className="relative mx-auto mt-6 max-w-4xl border border-border bg-surface p-8 lg:p-10">
+              <div className="relative mx-auto mt-6 border border-border bg-surface p-8 lg:p-10">
                 <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                   <div className="lg:max-w-xs">
                     <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{team.name}</h2>
@@ -305,10 +305,10 @@ function PricingPage() {
         })()}
 
         {/* FAQ */}
-        <div className="mx-auto mt-24 max-w-4xl">
+        <div className="mx-auto mt-24">
           <FadeIn>
             <div className="mb-4 flex items-center gap-2">
-              <span className="h-2 w-2 flex-shrink-0 bg-accent" />
+              <span className="h-2 w-2 shrink-0 bg-accent" />
               <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                 {PRICING.faq.eyebrow}
               </span>
@@ -318,7 +318,7 @@ function PricingPage() {
           <div className="mt-8 border-border border-t">
             {PRICING.faq.items.map((item, i) => (
               <FadeIn key={item.q} delay={i * 0.08}>
-                <div className="border-border border-b py-6">
+                <div className="py-6">
                   <h3 className="font-display text-lg text-text">{item.q}</h3>
                   <p className="mt-2 text-sm text-text-secondary leading-relaxed">
                     <ReactMarkdown components={faqMarkdownComponents}>{item.a}</ReactMarkdown>

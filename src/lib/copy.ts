@@ -408,7 +408,7 @@ export const PRICING = {
   eyebrow: "Pricing",
   heading: "Pay once. Or bring the team.",
   description: "Individual plans are one-time purchases. Team plans are per seat. Updates are free on every plan.",
-  perpetual: "Buy once, yours forever. Updates included.",
+  perpetual: "Buy once, yours forever.",
   earlyAccess: {
     eyebrow: "Early access pricing",
     body: "Personal and Pro are discounted for early access purchasers as a personal thank you for supporting the development.",
@@ -469,7 +469,7 @@ export const PRICING = {
   },
   faq: {
     eyebrow: "FAQ",
-    heading: "Questions",
+    heading: "You have questions.",
     items: [
       {
         q: "What happens after I buy?",
