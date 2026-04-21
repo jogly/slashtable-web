@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { parseEntryDate } from "../../lib/dates";
 
 interface ReleaseCadenceEntry {
@@ -13,6 +13,8 @@ interface ReleaseCadenceProps {
 interface DotInfo {
   key: string;
   kind: "launch" | "weekend" | "weekday";
+  version: string;
+  dateLabel: string;
 }
 
 interface WeekColumn {
@@ -92,6 +94,8 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
       col.dots.push({
         key: `${p.localDateKey}-${p.version}`,
         kind: isLaunchRelease ? "launch" : isWeekend ? "weekend" : "weekday",
+        version: p.version,
+        dateLabel: p.date.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
       });
       totalReleases += 1;
       if (isWeekend) weekendBonus += 1;
@@ -128,6 +132,8 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
     };
   }, [entries]);
 
+  const [pipTooltip, setPipTooltip] = useState<{ dot: DotInfo; x: number; y: number } | null>(null);
+
   if (!data) return null;
 
   const { columns, totalReleases, weekendBonus, bestWeekCount, avgPerWeek } = data;
@@ -136,7 +142,9 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
   const DOT = 4;
   const DOT_GAP = 4;
   const COL_GAP = 6;
-  const chartHeight = maxDots * (DOT + DOT_GAP);
+  const CELL_W = DOT + COL_GAP;
+  const CELL_H = DOT + DOT_GAP;
+  const chartHeight = maxDots * CELL_H;
 
   const dotColor = (kind: DotInfo["kind"], dim: boolean) => {
     const base =
@@ -144,16 +152,21 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
     return dim ? `color-mix(in oklab, ${base} 25%, transparent)` : base;
   };
 
-  // Tick marks for month changes
+  // Tick marks for month changes. If a boundary falls within MIN_TICK_COLS of the previous
+  // label, nudge the display position forward rather than dropping the label entirely.
+  const MIN_TICK_COLS = 3;
   const monthTicks: { index: number; label: string }[] = [];
   let lastMonth = -1;
+  let lastDisplayedIndex = -MIN_TICK_COLS;
   columns.forEach((col, i) => {
     const d = new Date(`${col.key}T00:00:00`);
     const m = d.getMonth();
     if (m !== lastMonth) {
       lastMonth = m;
+      const displayIndex = Math.max(i, lastDisplayedIndex + MIN_TICK_COLS);
+      lastDisplayedIndex = displayIndex;
       monthTicks.push({
-        index: i,
+        index: displayIndex,
         label: d.toLocaleDateString(undefined, { month: "short" }).toUpperCase(),
       });
     }
@@ -183,42 +196,59 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
       </div>
 
       <div className="relative mt-6 overflow-x-auto overflow-y-hidden">
-        <div
-          className="relative flex items-end"
-          style={{ gap: `${COL_GAP}px`, height: `${chartHeight}px`, minWidth: "max-content" }}
-        >
+        <div className="relative flex items-end" style={{ height: `${chartHeight}px`, minWidth: "max-content" }}>
           {columns.map((col) => (
-            <div
-              key={col.key}
-              title={`${col.label} · ${col.dots.length} release${col.dots.length === 1 ? "" : "s"}${col.isFuture ? " (upcoming)" : ""}`}
-              className="flex flex-col-reverse items-center"
-              style={{ gap: `${DOT_GAP}px`, width: `${DOT}px` }}
-            >
-              {col.dots.length === 0 ? (
-                <span
-                  className="rounded-full"
-                  style={{
-                    width: `${DOT}px`,
-                    height: `${DOT}px`,
-                    background: col.isFuture
-                      ? "color-mix(in oklab, var(--color-text) 10%, transparent)"
-                      : "color-mix(in oklab, var(--color-text) 18%, transparent)",
-                  }}
-                  aria-hidden="true"
-                />
-              ) : (
-                col.dots.map((dot) => (
-                  <span
-                    key={dot.key}
-                    className="rounded-full"
-                    style={{
-                      width: `${DOT}px`,
-                      height: `${DOT}px`,
-                      background: dotColor(dot.kind, col.isFuture),
-                    }}
-                  />
-                ))
-              )}
+            <div key={col.key} className="flex flex-col-reverse" style={{ width: `${CELL_W}px` }}>
+              {Array.from({ length: maxDots }).map((_, row) => {
+                const dot = col.dots[row];
+                const isEmptyPlaceholder = !dot && row === 0;
+                return (
+                  <div
+                    // biome-ignore lint/suspicious/noArrayIndexKey: fixed row index within stable column
+                    key={row}
+                    className={
+                      dot ? "flex cursor-default items-center justify-center" : "flex items-center justify-center"
+                    }
+                    style={{ width: `${CELL_W}px`, height: `${CELL_H}px` }}
+                    onMouseEnter={
+                      dot
+                        ? (e) => {
+                            const r = e.currentTarget.getBoundingClientRect();
+                            setPipTooltip({
+                              dot,
+                              x: r.left + r.width / 2,
+                              y: r.top + (r.height - DOT) / 2,
+                            });
+                          }
+                        : undefined
+                    }
+                    onMouseLeave={dot ? () => setPipTooltip(null) : undefined}
+                  >
+                    {dot ? (
+                      <span
+                        className="rounded-full"
+                        style={{
+                          width: `${DOT}px`,
+                          height: `${DOT}px`,
+                          background: dotColor(dot.kind, col.isFuture),
+                        }}
+                      />
+                    ) : isEmptyPlaceholder ? (
+                      <span
+                        className="rounded-full"
+                        style={{
+                          width: `${DOT}px`,
+                          height: `${DOT}px`,
+                          background: col.isFuture
+                            ? "color-mix(in oklab, var(--color-text) 10%, transparent)"
+                            : "color-mix(in oklab, var(--color-text) 18%, transparent)",
+                        }}
+                        aria-hidden="true"
+                      />
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -230,7 +260,7 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
             <span
               key={`tick-${t.index}`}
               className="absolute top-0 font-mono text-[9px] text-text-muted uppercase tracking-widest"
-              style={{ left: `${t.index * (DOT + COL_GAP)}px` }}
+              style={{ left: `${t.index * CELL_W}px` }}
             >
               {t.label}
             </span>
@@ -244,6 +274,17 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
         <Stat label="Best week" value={`×${bestWeekCount}`} tone={bestWeekCount > 1 ? "text" : "muted"} />
         <Stat label="Weekend bonus" value={weekendBonus.toString()} tone={weekendBonus > 0 ? "magenta" : "muted"} />
       </div>
+
+      {pipTooltip && (
+        <div
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded border border-border bg-surface px-2 py-1 font-mono text-[10px] text-text shadow-md"
+          style={{ left: pipTooltip.x, top: pipTooltip.y - 6 }}
+        >
+          {pipTooltip.dot.version}
+          <span className="mx-1.5 text-text-muted">·</span>
+          {pipTooltip.dot.dateLabel}
+        </div>
+      )}
     </section>
   );
 }
