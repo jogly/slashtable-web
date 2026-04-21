@@ -40,7 +40,7 @@ function AppIcon({ dropped, isOverFolder }: { dropped: boolean; isOverFolder: bo
         {...attributes}
         className={`cursor-grab touch-none transition-opacity duration-150 active:cursor-grabbing ${
           isDragging && !isOverFolder ? "drop-shadow-[0_0_40px_var(--color-glow)]" : ""
-        } ${isOverFolder ? "opacity-0" : ""}`}
+        } ${isOverFolder || dropped ? "opacity-0" : ""}`}
       >
         <img
           src={appIconImg.src}

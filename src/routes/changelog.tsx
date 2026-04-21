@@ -2,8 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
+import { ReleaseCadence } from "../components/sections/ReleaseCadence";
 import { NAME } from "../lib/constants";
 import { CHANGELOG } from "../lib/copy";
+import { formatEntryDate } from "../lib/dates";
 
 const CHANGELOG_URL = "https://downloads.slashtable.dev/changelog.json";
 
@@ -13,15 +15,6 @@ interface ChangelogEntry {
   date: string;
   body: string;
   image: string | null;
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(`${dateStr}T00:00:00`);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 }
 
 const markdownComponents: Components = {
@@ -91,6 +84,8 @@ function ChangelogPage() {
       </h1>
       <p className="mt-3 text-text-secondary leading-relaxed">{CHANGELOG.description}</p>
 
+      {!loading && !error && entries.length > 0 && <ReleaseCadence entries={entries} />}
+
       <div className="mt-12 border-border border-t">
         {loading ? (
           <div className="space-y-10 py-10">
@@ -123,7 +118,7 @@ function ChangelogPage() {
               <div className="mb-4 flex flex-wrap items-baseline gap-3">
                 <h2 className="font-mono font-semibold text-lg text-text">{entry.version}</h2>
                 <time className="font-mono text-[10px] text-text-muted uppercase tracking-widest" dateTime={entry.date}>
-                  {formatDate(entry.date)}
+                  {formatEntryDate(entry.date)}
                 </time>
               </div>
               {entry.image && (
