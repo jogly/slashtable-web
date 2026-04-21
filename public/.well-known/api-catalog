@@ -1,0 +1,13 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://slashtable.dev/",
+      "service-doc": [
+        {
+          "href": "https://docs.slashtable.dev",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}
