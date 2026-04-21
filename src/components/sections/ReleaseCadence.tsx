@@ -136,7 +136,7 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
 
   if (!data) return null;
 
-  const { columns, totalReleases, weekendBonus, bestWeekCount, avgPerWeek } = data;
+  const { columns, bestWeekCount } = data;
 
   const maxDots = Math.max(bestWeekCount, 4);
   const DOT = 4;
@@ -174,28 +174,7 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
 
   return (
     <section className="relative mt-12 mb-14">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-        <div className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 shrink-0 bg-text-muted" aria-hidden="true" />
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Release cadence</span>
-        </div>
-        <div className="flex items-center gap-4 font-mono text-[10px] text-text-muted uppercase tracking-widest">
-          <span className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-yellow" />
-            Launch
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-magenta" />
-            Weekend
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-text" />
-            Weekday
-          </span>
-        </div>
-      </div>
-
-      <div className="relative mt-6 overflow-x-auto overflow-y-hidden">
+      <div className="relative overflow-x-auto overflow-y-hidden">
         <div className="relative flex items-end" style={{ height: `${chartHeight}px`, minWidth: "max-content" }}>
           {columns.map((col) => (
             <div key={col.key} className="flex flex-col-reverse" style={{ width: `${CELL_W}px` }}>
@@ -268,13 +247,6 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 font-mono text-[10px] text-text-muted uppercase tracking-widest">
-        <Stat label="Ships" value={totalReleases.toString()} />
-        <Stat label="Per week" value={avgPerWeek.toFixed(1)} />
-        <Stat label="Best week" value={`×${bestWeekCount}`} tone={bestWeekCount > 1 ? "text" : "muted"} />
-        <Stat label="Weekend bonus" value={weekendBonus.toString()} tone={weekendBonus > 0 ? "magenta" : "muted"} />
-      </div>
-
       {pipTooltip && (
         <div
           className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded border border-border bg-surface px-2 py-1 font-mono text-[10px] text-text shadow-md"
@@ -286,15 +258,5 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
         </div>
       )}
     </section>
-  );
-}
-
-function Stat({ label, value, tone = "text" }: { label: string; value: string; tone?: "text" | "muted" | "magenta" }) {
-  const color = tone === "magenta" ? "text-magenta" : tone === "muted" ? "text-text-muted" : "text-text";
-  return (
-    <div className="flex items-baseline gap-2">
-      <span className={`font-sans text-lg ${color}`}>{value}</span>
-      <span>{label}</span>
-    </div>
   );
 }
