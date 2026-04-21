@@ -182,7 +182,7 @@ export function ReleaseCadence({ entries }: ReleaseCadenceProps) {
         </div>
       </div>
 
-      <div className="relative mt-6 overflow-x-auto">
+      <div className="relative mt-6 overflow-x-auto overflow-y-hidden">
         <div
           className="relative flex items-end"
           style={{ gap: `${COL_GAP}px`, height: `${chartHeight}px`, minWidth: "max-content" }}
