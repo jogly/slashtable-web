@@ -101,7 +101,7 @@ export default class StatusBadge extends Plugin {
 
 export const FEATURES_GRID = {
   eyebrow: "Every plan",
-  heading: "Batteries included.",
+  heading: "Everything else.",
   description: "",
   features: [
     {
@@ -191,8 +191,7 @@ export const FEATURES_GRID = {
     },
     {
       title: "And more...",
-      description:
-        "Just download the app and find out what wouldn\u2019t fit in the list. New features and improving existing ones based on user feedback every week.",
+      description: "Download the app and find out what didn\u2019t fit in this list. Shipping daily.",
     },
   ],
 };
