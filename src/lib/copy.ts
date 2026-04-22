@@ -242,6 +242,9 @@ export const DOWNLOAD = {
   altAvailableLabel: "Also available for",
   platformNotice: "macOS only \u00b7 PostgreSQL (beta) \u00b7 MySQL (alpha)",
   moreVersionsLabel: "All versions & older builds",
+  homebrewHint: "Also available via",
+  homebrewCommand: "brew install slashtable",
+  homebrewTapNote: "brew tap slashtable/cask",
 };
 
 // ─── Dedicated /download page ───────────────────────────────
@@ -288,6 +291,11 @@ export const DOWNLOAD_PAGE = {
   latestBadge: "Latest",
   allVersionsError: "Version manifest unavailable. Try again in a moment.",
   allVersionsLoading: "Loading versions\u2026",
+  homebrew: {
+    heading: "Install via Homebrew",
+    description: "Prefer the terminal? Install and update with Homebrew.",
+    commands: ["brew tap slashtable/cask", "brew install slashtable"],
+  },
   agreement: "By downloading, you agree to the",
   termsLabel: "terms",
   privacyLabel: "privacy policy",
