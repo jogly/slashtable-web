@@ -145,6 +145,12 @@ export function Nav() {
             </div>
 
             <Link
+              to="/about"
+              className="font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
+            >
+              {NAV.about}
+            </Link>
+            <Link
               to="/pricing"
               className="font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
             >
@@ -221,6 +227,19 @@ export function Nav() {
 
               {/* Dashed separator */}
               <div className="mx-3 border-border border-t border-dashed" />
+
+              {/* About */}
+              <Link
+                to="/about"
+                onClick={() => setMenuOpen(false)}
+                className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
+              >
+                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted" aria-hidden="true" />
+                <div>
+                  <div className="font-display text-[14px] text-text">{NAV.about}</div>
+                  <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">Why /table exists.</div>
+                </div>
+              </Link>
 
               {/* Pricing */}
               <Link

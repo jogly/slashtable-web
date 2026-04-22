@@ -343,6 +343,7 @@ export const NAV = {
     { label: "MCP", hash: "mcp" },
     { label: "Schema", hash: "schema" },
   ],
+  about: "About",
   pricing: "Pricing",
   changelog: "Changelog",
   download: "Download",
