@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
 import { trackDownloadStarted } from "../../lib/analytics";
-import { DOWNLOAD } from "../../lib/copy";
+import { DOWNLOAD, KEEP_POSTED } from "../../lib/copy";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
 import { ContentContainer } from "../ui/ContentContainer";
 import { FadeIn } from "../ui/FadeIn";
@@ -178,6 +178,7 @@ function FlowIndicator() {
 export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const { release, isIntel, primary, secondary, label, altLabel, showThankYou, openThankYou, closeThankYou } =
     useDownload();
+  const [showKeepPosted, setShowKeepPosted] = useState(false);
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
   const downloadRef = useRef<HTMLAnchorElement>(null);
@@ -277,7 +278,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
           </div>
 
           {/* Mobile download button */}
-          <div className="mt-10 flex flex-col items-center gap-4 lg:hidden">
+          <div className="mx-auto mt-10 flex max-w-xs flex-col items-stretch gap-4 lg:hidden">
             <a
               href={primary}
               {...(primary ? { download: true } : { "aria-disabled": true })}
@@ -289,7 +290,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                 });
                 t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
-              className={`group relative inline-flex items-center gap-2.5 overflow-hidden rounded bg-accent px-8 py-3.5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.12)]${
+              className={`group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded bg-accent px-8 py-3.5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.12)]${
                 !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
@@ -301,6 +302,13 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
               </span>
               {release && <span className="relative whitespace-nowrap opacity-70">&mdash; v{release.version}</span>}
             </a>
+            <button
+              type="button"
+              onClick={() => setShowKeepPosted(true)}
+              className="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded border border-border bg-surface-2 px-8 py-3.5 font-mono text-text text-xs uppercase tracking-widest transition-colors hover:border-text-muted hover:bg-surface-1"
+            >
+              <span className="relative">{KEEP_POSTED.mobileLinkLabel}</span>
+            </button>
           </div>
 
           {/* Hidden download trigger */}
@@ -355,11 +363,19 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
           {/* Secondary links */}
           <div className="mt-4 flex flex-col items-center gap-2 lg:mt-6">
             <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DOWNLOAD.platformNotice}</p>
+            <button
+              type="button"
+              onClick={() => setShowKeepPosted(true)}
+              className="hidden font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text lg:inline"
+            >
+              {KEEP_POSTED.linkLabel}
+            </button>
           </div>
         </FadeIn>
       </ContentContainer>
 
       <ThankYouModal open={showThankYou} onClose={closeThankYou} />
+      <ThankYouModal open={showKeepPosted} onClose={() => setShowKeepPosted(false)} variant="keep-posted" />
     </section>
   );
 }

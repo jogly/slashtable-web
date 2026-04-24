@@ -296,12 +296,21 @@ export const DOWNLOAD_PAGE = {
 // ─── Thank You Modal ────────────────────────────────────────
 
 export const THANK_YOU = {
-  heading: "Thank you.",
-  body: "I\u2019m building SlashTable full-time as a solo developer. Every download genuinely means a lot. If you\u2019d be open to sharing your email, I\u2019d love to follow up and hear how things go.",
+  photoAlt: "Joe, waving from somewhere on the coast",
+  heading: "Thanks. Really.",
+  body: "Hey, I\u2019m Joe. I work on /table full-time, solo. You downloading this means more than you\u2019d think. If you\u2019d like, drop your email and I\u2019ll send a note when something lands that\u2019s worth your time. Written by me, a real human boy,",
+  signatureAlt: "Joe",
   emailPlaceholder: "you@company.com",
   emailSubmit: "Keep me posted",
-  emailSuccess: "You\u2019re on the list. Thank you again.",
+  emailSuccess: "You\u2019re on the list. Thanks again \u2014 talk soon.",
   close: "Close",
+};
+
+export const KEEP_POSTED = {
+  linkLabel: "Keep me posted \u2192",
+  mobileLinkLabel: "Email me the link \u2192",
+  heading: "Let\u2019s be friends.",
+  body: "Hey, I\u2019m Joe. I build /table full-time, solo. It sincerely helps knowing others are interested in the progress of this endeavor. Leave your email and I\u2019ll ping you when something cool ships. Thanks,",
 };
 
 // ─── Contact Sales Modal ────────────────────────────────────────
