@@ -24,6 +24,9 @@
   --color-magenta: #cc44ff;
   --color-green: #44ff88;
   --color-yellow: #ffcc00;
+  --color-neon: #00e599;
+  --color-role-supporter: #00d4ff;
+  --color-role-pro: #ffcc00;
 
   /* ── Primary accent (brand orange) ── */
   --color-accent: #c94a00;
@@ -69,6 +72,9 @@
   --color-magenta: #9b30d9;
   --color-green: #1a8a46;
   --color-yellow: #a88600;
+  --color-neon: #00a572;
+  --color-role-supporter: #00a8cc;
+  --color-role-pro: #c49a00;
 
   /* Accent */
   --color-accent: #b34200;
