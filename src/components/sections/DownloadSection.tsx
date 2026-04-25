@@ -361,8 +361,18 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
           </div>
 
           {/* Secondary links */}
-          <div className="mt-4 flex flex-col items-center gap-2 lg:mt-6">
+          <div className="mt-4 flex flex-col items-center gap-1.5 lg:mt-6">
             <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{DOWNLOAD.platformNotice}</p>
+            <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+              <span className="text-text">🍺</span> {DOWNLOAD.homebrewHint}{" "}
+              <Link
+                to="/download"
+                hash="homebrew"
+                className="underline underline-offset-2 transition-colors hover:text-text"
+              >
+                Homebrew
+              </Link>
+            </p>
             <button
               type="button"
               onClick={() => setShowKeepPosted(true)}
