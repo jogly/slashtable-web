@@ -34,6 +34,49 @@ const faqMarkdownComponents: Components = {
     ),
 };
 
+function NeonLink() {
+  return (
+    <a
+      href="https://neon.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-semibold text-neon underline-offset-2 transition-opacity hover:underline hover:opacity-80"
+    >
+      Neon
+    </a>
+  );
+}
+
+function FeatureText({ text }: { text: string }) {
+  const qtyMatch = text.match(/^(\d+|Unlimited)\s+(?:active\s+)?(connection|Neon branch|tab)/);
+  const neonIdx = text.indexOf("Neon");
+
+  const renderWithNeon = (str: string) => {
+    const idx = str.indexOf("Neon");
+    if (idx === -1) return <>{str}</>;
+    return (
+      <>
+        {str.slice(0, idx)}
+        <NeonLink />
+        {str.slice(idx + 4)}
+      </>
+    );
+  };
+
+  if (qtyMatch) {
+    const qty = qtyMatch[1];
+    return (
+      <span>
+        <span className="font-semibold text-text">{qty}</span>
+        {renderWithNeon(text.slice(qty.length))}
+      </span>
+    );
+  }
+
+  if (neonIdx !== -1) return <span>{renderWithNeon(text)}</span>;
+  return <>{text}</>;
+}
+
 function parseDollars(price: string): number {
   const m = price.match(/\d+/);
   return m ? Number(m[0]) : 0;
@@ -185,11 +228,11 @@ export default function PricingPage() {
                     )}
                   </div>
 
-                  <ul className="mb-8 h-40 space-y-3">
+                  <ul className="mb-8 h-52 space-y-3">
                     {tier.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2.5 text-sm text-text-secondary">
                         <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
-                        {feature === PRICING.vaults.label ? <VaultTooltip /> : feature}
+                        {feature === PRICING.vaults.label ? <VaultTooltip /> : <FeatureText text={feature} />}
                       </li>
                     ))}
                     {tier.role ? (
@@ -273,7 +316,7 @@ export default function PricingPage() {
                 {team.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2.5 text-sm text-text-secondary">
                     <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
-                    {feature === PRICING.vaults.label ? <VaultTooltip /> : feature}
+                    {feature === PRICING.vaults.label ? <VaultTooltip /> : <FeatureText text={feature} />}
                   </li>
                 ))}
               </ul>

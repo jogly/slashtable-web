@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CloudFog, Download } from "lucide-react";
+import { CheckCircle, CloudFog, Copy, Download, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
@@ -285,6 +285,12 @@ export default function DownloadPage() {
           </div>
         </FadeIn>
 
+        {/* ── Homebrew install ─────────────────────────────────── */}
+        <FadeIn delay={0.1}>
+          <HomebrewSection commands={DOWNLOAD_PAGE.homebrew.commands} heading={DOWNLOAD_PAGE.homebrew.heading} />
+        </FadeIn>
+
+        {/* ── Release notes + System requirements ─────────────── */}
         <div className="mt-20 grid gap-10 lg:mt-28 lg:grid-cols-5 lg:gap-12">
           <FadeIn delay={0.12} className="lg:col-span-3">
             <div className="mb-6 flex items-baseline justify-between gap-4 border-border border-b pb-4">
@@ -491,6 +497,99 @@ export default function DownloadPage() {
       </ContentContainer>
 
       <ThankYouModal open={showThankYou} onClose={closeThankYou} />
+    </div>
+  );
+}
+
+function HomebrewCommandRow({ command }: { command: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleClick() {
+    navigator.clipboard.writeText(command).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className={cn(
+        "flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-2 transition-colors hover:bg-surface-1/50",
+        copied && "bg-surface-1/50",
+      )}
+    >
+      <code className="font-mono text-text text-xs">
+        <span className="mr-2 select-none text-text-muted/50">$</span>
+        {command}
+      </code>
+      <span className="flex shrink-0 items-center gap-1.5 font-mono text-[10px] text-text-muted uppercase tracking-widest opacity-0 transition-[color,opacity] hover:text-text group-hover:opacity-100 [button:hover>&]:opacity-100">
+        {copied ? <CheckCircle className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+        {copied ? "Copied" : "Copy"}
+      </span>
+    </button>
+  );
+}
+
+function HomebrewSection({ commands, heading }: { commands: string[]; heading: string }) {
+  const [copied, setCopied] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [highlight, setHighlight] = useState(false);
+
+  useEffect(() => {
+    if (window.location.hash === "#homebrew") {
+      setHighlight(true);
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      const timer = setTimeout(() => setHighlight(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const allCommands = commands.join("\n");
+
+  function handleCopyAll() {
+    navigator.clipboard.writeText(allCommands).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }
+
+  return (
+    <div
+      ref={ref}
+      id="homebrew"
+      className={cn(
+        "mt-10 scroll-mt-28 transition-shadow duration-700 lg:mt-14",
+        highlight && "shadow-[0_0_40px_-10px_var(--color-glow)]",
+      )}
+    >
+      <div
+        className={cn(
+          "relative border bg-surface-1/30 transition-[border-color] duration-700",
+          highlight ? "border-accent/50" : "border-border",
+        )}
+      >
+        <div className="flex items-center justify-between gap-4 border-border border-b px-6 py-3">
+          <div className="flex items-center gap-2">
+            <Terminal className="h-3 w-3 text-text-muted" />
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{heading}</span>
+          </div>
+          <button
+            type="button"
+            onClick={handleCopyAll}
+            className="flex shrink-0 items-center gap-1.5 font-mono text-[10px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
+          >
+            {copied ? <CheckCircle className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            {copied ? "Copied" : "Copy all"}
+          </button>
+        </div>
+        <div className="py-1">
+          {commands.map((cmd) => (
+            <HomebrewCommandRow key={cmd} command={cmd} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
