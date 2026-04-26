@@ -11,6 +11,9 @@ interface LatestRelease {
 }
 
 function detectIsIntel(): boolean {
+  // Runs during the lazy `useState` initializer, which executes on SSR too —
+  // navigator is browser-only so guard before touching it.
+  if (typeof navigator === "undefined") return false;
   const arch = (navigator as unknown as { userAgentData?: { architecture?: string } }).userAgentData?.architecture;
   if (arch) return arch === "x86";
   return false;
@@ -18,11 +21,14 @@ function detectIsIntel(): boolean {
 
 export function useDownload() {
   const [release, setRelease] = useState<LatestRelease | null>(null);
-  const [isIntel] = useState(() => detectIsIntel());
+  // Start false on server + first client paint to keep hydration stable, then
+  // detect on mount. Intel users see a Silicon-default UI for one frame.
+  const [isIntel, setIsIntel] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const timerRef = useRef<number>(undefined);
 
   useEffect(() => {
+    setIsIntel(detectIsIntel());
     fetch("https://downloads.slashtable.dev/latest.json")
       .then((r) => r.json())
       .then(setRelease)
