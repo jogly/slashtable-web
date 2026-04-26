@@ -153,8 +153,7 @@ export const FEATURES_GRID = {
     },
     {
       title: "Customizable keybindings",
-      description:
-        "Every global action is rebindable, with multiple bindings per action. Make the app fit your hands.",
+      description: "Every global action is rebindable, with multiple bindings per action. Make the app fit your hands.",
     },
     {
       title: "Connection paint",
@@ -202,9 +201,8 @@ export const FEATURES_GRID = {
 
 export const CONNECT = {
   eyebrow: "Connect",
-  heading: "Find your databases. Or let them find you.",
-  description:
-    "A normal day is three worktrees, two compose stacks, and a bastion host. /table lives in that mess.",
+  heading: "Parallel development is the new normal.",
+  description: "A normal day is 7 worktrees, 2 compose stacks, and a bastion host.",
   items: [
     {
       title: "Docker auto-detect",
