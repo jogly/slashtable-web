@@ -5,6 +5,8 @@
  * and handle presentation (styling, icons, images, colors) themselves.
  */
 
+import { SITE_URL } from "./constants";
+
 // ─── Hero ────────────────────────────────────────────────────────
 
 export const HERO = {
@@ -416,8 +418,6 @@ export const COOKIE_CONSENT = {
 };
 
 // ─── Pricing ────────────────────────────────────────────────────
-
-const SITE_URL = "https://www.slashtable.dev";
 
 export function polarCheckoutUrl(polarId: string) {
   const successUrl = `${SITE_URL}/checkout/success?cid={CHECKOUT_ID}`;

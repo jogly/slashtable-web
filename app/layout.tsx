@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { LayoutGuides } from "@/components/ui/LayoutGuides";
+import { OG_IMAGE, SITE_URL } from "@/lib/constants";
 import { Providers } from "./providers";
 import "@/theme/base.css";
 
@@ -13,8 +15,6 @@ const OG_DESCRIPTION =
   "Navigate tables by real relationships, generate schema diagrams, provide AI agents safe read-only access via MCP, and extend everything with plugins in a native macOS app.";
 const TWITTER_DESCRIPTION =
   "Navigate foreign keys by clicking, generate schema diagrams, give AI agents safe read-only access via MCP, and extend everything with plugins. macOS app for PostgreSQL and MySQL.";
-const SITE_URL = "https://www.slashtable.dev";
-const OG_IMAGE = "https://www.slashtable.dev/og-image.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -133,9 +133,12 @@ const softwareApplicationLd = {
   applicationCategory: "DeveloperApplication",
   applicationSubCategory: "Database Client",
   operatingSystem: "macOS 12.0 or later",
+  processorRequirements: "Apple Silicon (aarch64) or Intel (x86_64)",
+  softwareRequirements: "PostgreSQL 12+ or MySQL 8.0+",
+  fileSize: "~40 MB",
   url: SITE_URL,
   downloadUrl: `${SITE_URL}/download/`,
-  softwareVersion: "Stable",
+  installUrl: `${SITE_URL}/download/`,
   releaseNotes: `${SITE_URL}/changelog/`,
   screenshot: OG_IMAGE,
   image: OG_IMAGE,
@@ -184,21 +187,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://downloads.slashtable.dev" />
         <link rel="preconnect" href="https://tr.slashtable.dev" />
         <link rel="service-doc" href="https://docs.slashtable.dev" />
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted server-side JSON
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
-        />
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted server-side JSON
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
-        />
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted server-side JSON
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationLd) }}
-        />
+        <JsonLd data={organizationLd} />
+        <JsonLd data={websiteLd} />
+        <JsonLd data={softwareApplicationLd} />
       </head>
       <body>
         <Providers>
