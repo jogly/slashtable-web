@@ -1,14 +1,10 @@
+import type { StaticImageData } from "next/image";
 import type { ComponentProps } from "react";
 
-export interface ImageData {
-  src: string;
-  w: number;
-  h: number;
-  srcset?: string;
-}
+export type ImageData = StaticImageData;
 
 interface ImgProps extends Omit<ComponentProps<"img">, "src" | "srcSet" | "width" | "height"> {
-  image: ImageData;
+  image: StaticImageData;
   sizes?: string;
 }
 
@@ -16,10 +12,9 @@ export function Img({ image, sizes, loading = "lazy", decoding = "async", alt = 
   return (
     <img
       src={image.src}
-      srcSet={image.srcset}
-      sizes={image.srcset ? sizes : undefined}
-      width={image.w}
-      height={image.h}
+      sizes={sizes}
+      width={image.width}
+      height={image.height}
       loading={loading}
       decoding={decoding}
       alt={alt}

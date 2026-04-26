@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { useEffect, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
-import { ReleaseCadence } from "../components/sections/ReleaseCadence";
-import { NAME } from "../lib/constants";
-import { CHANGELOG } from "../lib/copy";
-import { formatEntryDate } from "../lib/dates";
+import { ReleaseCadence } from "@/components/sections/ReleaseCadence";
+import { NAME } from "@/lib/constants";
+import { CHANGELOG } from "@/lib/copy";
+import { formatEntryDate } from "@/lib/dates";
 
 const CHANGELOG_URL = "https://downloads.slashtable.dev/changelog.json";
 
@@ -42,11 +43,7 @@ const markdownComponents: Components = {
   ul: ({ children }) => <ul className="space-y-2">{children}</ul>,
 };
 
-export const Route = createFileRoute("/changelog")({
-  component: ChangelogPage,
-});
-
-function ChangelogPage() {
+export default function ChangelogPage() {
   const [entries, setEntries] = useState<ChangelogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -122,6 +119,7 @@ function ChangelogPage() {
                 </time>
               </div>
               {entry.image && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={entry.image}
                   alt={`Screenshot for ${entry.version}`}

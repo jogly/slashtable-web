@@ -1,3 +1,5 @@
+"use client";
+
 import { CONTACT_SALES } from "../../lib/copy";
 import { ButtonOverlays } from "./ButtonOverlays";
 import { Modal } from "./Modal";

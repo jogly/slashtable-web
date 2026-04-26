@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { trackWaitlistSignedUp } from "../../lib/analytics";
 import { THANK_YOU } from "../../lib/copy";

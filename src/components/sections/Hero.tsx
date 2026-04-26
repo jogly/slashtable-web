@@ -1,5 +1,7 @@
-import heroDark from "@screenshots/hero-dark.png?w=1952&as=img";
-import heroLight from "@screenshots/hero-light.png?w=1952&as=img";
+"use client";
+
+import heroDark from "@screenshots/hero-dark.png";
+import heroLight from "@screenshots/hero-light.png";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { HERO } from "../../lib/copy";

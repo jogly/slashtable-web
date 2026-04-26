@@ -1,3 +1,5 @@
+"use client";
+
 import { ThumbsUp, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import posthog from "posthog-js";
@@ -88,7 +90,7 @@ export function CookieConsent() {
           {/* Background image — cover on mobile, zoomed + shifted on desktop */}
           <div
             className="absolute inset-0 bg-cover bg-right-bottom sm:rounded-lg sm:[background-position:right_bottom_-10px] sm:[background-size:100%]"
-            style={{ backgroundImage: `url(${bannerBg})` }}
+            style={{ backgroundImage: `url(${bannerBg.src})` }}
           />
           {/* Uniform overlay — plant shows through at reduced opacity */}
           <div className="absolute inset-0 bg-surface/80 sm:rounded-lg sm:bg-surface/50" />

@@ -32,7 +32,7 @@ export function NoiseTexture({ variant = "grain", opacity = 0.5, className }: No
     <div
       className={cn("pointer-events-none absolute inset-0 [[data-theme=light]_&]:invert", className)}
       style={{
-        backgroundImage: `url(${textures[variant]})`,
+        backgroundImage: `url(${textures[variant].src})`,
         backgroundRepeat: "repeat",
         backgroundSize: "256px 256px",
         opacity,

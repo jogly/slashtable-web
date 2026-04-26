@@ -1,18 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { ContentContainer } from "../components/ui/ContentContainer";
-import { FadeIn } from "../components/ui/FadeIn";
-import { trackUpgradeInitiated } from "../lib/analytics";
-import { UPGRADE } from "../lib/copy";
-
-export const Route = createFileRoute("/upgrade")({
-  component: UpgradePage,
-});
+import { ContentContainer } from "@/components/ui/ContentContainer";
+import { FadeIn } from "@/components/ui/FadeIn";
+import { trackUpgradeInitiated } from "@/lib/analytics";
+import { UPGRADE } from "@/lib/copy";
 
 type Status = "idle" | "loading" | "redirecting";
 
-function UpgradePage() {
+export default function UpgradePage() {
   const [key, setKey] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);

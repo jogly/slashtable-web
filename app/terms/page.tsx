@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { useEffect, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
-const PRIVACY_URL = "https://downloads.slashtable.dev/legal/privacy.md";
+const TERMS_URL = "https://downloads.slashtable.dev/legal/terms.md";
 
 const markdownComponents: Components = {
   a: ({ href, children }) => (
@@ -33,18 +34,14 @@ const markdownComponents: Components = {
   ul: ({ children }) => <ul className="mb-4 space-y-2">{children}</ul>,
 };
 
-export const Route = createFileRoute("/privacy")({
-  component: PrivacyPage,
-});
-
-function PrivacyPage() {
+export default function TermsPage() {
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(PRIVACY_URL)
+    fetch(TERMS_URL)
       .then((r) => {
         if (!r.ok) throw new Error(r.statusText);
         return r.text();
@@ -70,7 +67,7 @@ function PrivacyPage() {
         <span className="h-2 w-2 flex-shrink-0 bg-accent" />
         <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Legal</span>
       </div>
-      <h1 className="font-display text-4xl text-text">Privacy Policy</h1>
+      <h1 className="font-display text-4xl text-text">Terms of Service</h1>
 
       <div className="mt-12 border-border border-t pt-10">
         {loading ? (
@@ -82,7 +79,7 @@ function PrivacyPage() {
           </div>
         ) : error ? (
           <p className="font-mono text-[11px] text-text-muted uppercase tracking-widest">
-            Failed to load privacy policy.
+            Failed to load terms of service.
           </p>
         ) : (
           <ReactMarkdown components={markdownComponents}>{body}</ReactMarkdown>

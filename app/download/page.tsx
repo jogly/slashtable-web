@@ -1,21 +1,23 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { CloudFog, Download } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
-import { BlueprintRule } from "../components/ui/BlueprintRule";
-import { ButtonOverlays } from "../components/ui/ButtonOverlays";
-import { ContentContainer } from "../components/ui/ContentContainer";
-import { FadeIn } from "../components/ui/FadeIn";
-import { NoiseTexture } from "../components/ui/NoiseTexture";
-import { Diamond } from "../components/ui/SectionBorder";
-import { SkyParallax } from "../components/ui/SkyParallax";
-import { ThankYouModal } from "../components/ui/ThankYouModal";
-import { useDownload } from "../hooks/useDownload";
-import { trackDownloadStarted } from "../lib/analytics";
-import { NAME } from "../lib/constants";
-import { DOWNLOAD_PAGE } from "../lib/copy";
-import { cn } from "../lib/utils";
+import { BlueprintRule } from "@/components/ui/BlueprintRule";
+import { ButtonOverlays } from "@/components/ui/ButtonOverlays";
+import { ContentContainer } from "@/components/ui/ContentContainer";
+import { FadeIn } from "@/components/ui/FadeIn";
+import { NoiseTexture } from "@/components/ui/NoiseTexture";
+import { Diamond } from "@/components/ui/SectionBorder";
+import { SkyParallax } from "@/components/ui/SkyParallax";
+import { ThankYouModal } from "@/components/ui/ThankYouModal";
+import { useDownload } from "@/hooks/useDownload";
+import { trackDownloadStarted } from "@/lib/analytics";
+import { NAME } from "@/lib/constants";
+import { DOWNLOAD_PAGE } from "@/lib/copy";
+import { cn } from "@/lib/utils";
 
 const CHANGELOG_URL = "https://downloads.slashtable.dev/changelog.json";
 const MANIFEST_URL = "https://downloads.slashtable.dev/manifest.json";
@@ -84,13 +86,9 @@ const markdownComponents: Components = {
   ul: ({ children }) => <ul className="space-y-2">{children}</ul>,
 };
 
-export const Route = createFileRoute("/download")({
-  component: DownloadPage,
-});
-
 type ArchKey = "silicon" | "intel";
 
-function DownloadPage() {
+export default function DownloadPage() {
   const { release, isIntel, showThankYou, openThankYou, closeThankYou } = useDownload();
   const [changelogEntry, setChangelogEntry] = useState<ChangelogEntry | null>(null);
   const [changelogState, setChangelogState] = useState<"loading" | "ready" | "error">("loading");
@@ -147,7 +145,7 @@ function DownloadPage() {
     trackDownloadStarted({
       architecture: arch === "intel" ? "intel" : "silicon",
       version: release?.version,
-      source: arch === detected ? "download_section_button" : "download_section_button",
+      source: arch === detected ? "download_section_button" : "download_page_alt_arch",
     });
     window.setTimeout(openThankYou, 600);
   }
@@ -158,7 +156,6 @@ function DownloadPage() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-glow-soft)_0%,transparent_55%)]" />
 
       <ContentContainer className="relative">
-        {/* ── Hero: version manifest ───────────────────────────── */}
         <FadeIn>
           <div className="flex items-center justify-between gap-4 pb-4">
             <div className="flex items-center gap-3">
@@ -172,7 +169,7 @@ function DownloadPage() {
               </span>
             </div>
             <Link
-              to="/changelog"
+              href="/changelog"
               className="font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-4 transition-colors hover:text-text"
             >
               {DOWNLOAD_PAGE.viewChangelog} &rarr;
@@ -229,7 +226,6 @@ function DownloadPage() {
               </div>
             </div>
 
-            {/* Older-builds strip at bottom of version card */}
             <a
               href="#all-versions"
               className="group relative z-10 flex items-center justify-between gap-4 border-border border-t bg-surface-1/50 px-6 py-4 backdrop-blur-sm transition-colors hover:bg-surface-1/70 lg:px-12 lg:py-5"
@@ -250,7 +246,6 @@ function DownloadPage() {
           </div>
         </FadeIn>
 
-        {/* ── Architecture picker ─────────────────────────────── */}
         <FadeIn delay={0.08}>
           <div className="mt-16 lg:mt-24">
             <div className="mb-8 flex items-baseline justify-between gap-4">
@@ -279,20 +274,18 @@ function DownloadPage() {
 
             <p className="mt-6 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest lg:text-left">
               {DOWNLOAD_PAGE.agreement}{" "}
-              <Link to="/terms" className="underline underline-offset-2 transition-colors hover:text-text">
+              <Link href="/terms" className="underline underline-offset-2 transition-colors hover:text-text">
                 {DOWNLOAD_PAGE.termsLabel}
               </Link>{" "}
               &middot;{" "}
-              <Link to="/privacy" className="underline underline-offset-2 transition-colors hover:text-text">
+              <Link href="/privacy" className="underline underline-offset-2 transition-colors hover:text-text">
                 {DOWNLOAD_PAGE.privacyLabel}
               </Link>
             </p>
           </div>
         </FadeIn>
 
-        {/* ── Release notes + System requirements ─────────────── */}
         <div className="mt-20 grid gap-10 lg:mt-28 lg:grid-cols-5 lg:gap-12">
-          {/* Release notes column */}
           <FadeIn delay={0.12} className="lg:col-span-3">
             <div className="mb-6 flex items-baseline justify-between gap-4 border-border border-b pb-4">
               <div className="flex items-baseline gap-3">
@@ -304,7 +297,7 @@ function DownloadPage() {
                 )}
               </div>
               <Link
-                to="/changelog"
+                href="/changelog"
                 className="font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-4 transition-colors hover:text-text"
               >
                 {DOWNLOAD_PAGE.viewFullChangelog} &rarr;
@@ -340,7 +333,6 @@ function DownloadPage() {
             )}
           </FadeIn>
 
-          {/* System requirements column */}
           <FadeIn delay={0.16} className="lg:col-span-2">
             <div className="relative border border-border bg-surface-1/30 p-6 lg:p-8">
               <div className="mb-5 flex items-center gap-2">
@@ -371,7 +363,6 @@ function DownloadPage() {
           </FadeIn>
         </div>
 
-        {/* ── All versions ──────────────────────────────────── */}
         <FadeIn delay={0.2}>
           <section id="all-versions" className="mt-20 scroll-mt-28 lg:mt-28">
             <div className="mb-6 flex items-baseline justify-between gap-4 border-border border-b pb-4">
@@ -470,7 +461,6 @@ function DownloadPage() {
                   </table>
                 </div>
 
-                {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex items-center justify-between border-border border-t px-6 py-3">
                     <button
@@ -524,13 +514,11 @@ function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps
         isDetected ? "border-border shadow-[0_0_50px_-20px_var(--color-glow)]" : "border-border/60 hover:border-border",
       )}
     >
-      {/* Blueprint frame */}
       <Diamond className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2" />
       <Diamond className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2" />
       <Diamond className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2" />
       <Diamond className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2" />
 
-      {/* Detected badge */}
       <div className="mb-5 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span
@@ -549,17 +537,14 @@ function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps
       <h3 className="font-display text-2xl text-text lg:text-3xl">{info.label}</h3>
       <p className="mt-2 text-sm text-text-secondary leading-relaxed">{info.body}</p>
 
-      {/* Separator with blueprint rule */}
       <div className="relative my-6 h-px w-full">
         <BlueprintRule orientation="horizontal" className="inset-x-0" />
       </div>
 
-      {/* Filename */}
       <div className="flex items-center justify-between gap-3">
         <span className="truncate font-mono text-[11px] text-text-muted">{filename ?? "—"}</span>
       </div>
 
-      {/* CTA */}
       <div className="mt-6">
         {isDetected ? (
           <a

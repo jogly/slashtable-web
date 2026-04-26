@@ -1,12 +1,15 @@
-import appIconImg from "@assets/app-icon.png?as=img";
-import macosFolderBack from "@assets/macos-folder-back.png?as=img";
-import macosFolderFore from "@assets/macos-folder-fore.png?as=img";
+"use client";
+
+import appIconImg from "@assets/app-icon.png";
+import macosFolderBack from "@assets/macos-folder-back.png";
+import macosFolderFore from "@assets/macos-folder-fore.png";
 import { DndContext, type DragEndEvent, type DragOverEvent, useDraggable, useDroppable } from "@dnd-kit/core";
-import { Link } from "@tanstack/react-router";
 import { Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
+import { useMounted } from "../../hooks/useMounted";
 import { trackDownloadStarted } from "../../lib/analytics";
 import { DOWNLOAD } from "../../lib/copy";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
@@ -77,8 +80,8 @@ function DownloadsFolder({ dropped, isOverFolder }: { dropped: boolean; isOverFo
         {/* Back layer (rear wall) — same size/position as fore */}
         <img
           src={macosFolderBack.src}
-          width={macosFolderBack.w}
-          height={macosFolderBack.h}
+          width={macosFolderBack.width}
+          height={macosFolderBack.height}
           alt=""
           className="absolute inset-0 h-full w-full select-none"
           style={{ zIndex: 1 }}
@@ -114,8 +117,8 @@ function DownloadsFolder({ dropped, isOverFolder }: { dropped: boolean; isOverFo
         >
           <motion.img
             src={macosFolderFore.src}
-            width={macosFolderFore.w}
-            height={macosFolderFore.h}
+            width={macosFolderFore.width}
+            height={macosFolderFore.height}
             alt="Downloads folder"
             className="h-full w-full select-none"
             draggable={false}
@@ -180,6 +183,9 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
     useDownload();
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
+  // @dnd-kit generates IDs from a module-level counter that isn't SSR-stable —
+  // only mount DndContext after hydration to avoid the mismatch.
+  const mounted = useMounted();
   const downloadRef = useRef<HTMLAnchorElement>(null);
   const t1Ref = useRef<number>(undefined);
   const t2Ref = useRef<number>(undefined);
@@ -242,13 +248,51 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
         <FadeIn delay={hideHeader ? 0 : 0.1}>
           {/* DMG-style drag area — desktop */}
           <div className="mx-auto mt-10 hidden max-w-md rounded-md border border-border bg-surface-2/50 px-8 py-10 shadow-[0_0_80px_-20px_var(--color-glow-soft)] backdrop-blur-sm lg:block">
-            <DndContext onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-              <div className="flex items-center justify-center">
-                <AppIcon dropped={dropped} isOverFolder={isOverFolder} />
+            {mounted && (
+              <DndContext onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+                <div className="flex items-center justify-center">
+                  <AppIcon dropped={dropped} isOverFolder={isOverFolder} />
+                  <FlowIndicator />
+                  <DownloadsFolder dropped={dropped} isOverFolder={isOverFolder} />
+                </div>
+              </DndContext>
+            )}
+            {!mounted && (
+              // Static preview during SSR/pre-hydration — matches the layout
+              // so there's no shift when the DndContext mounts.
+              <div className="flex items-center justify-center" aria-hidden>
+                <div className="flex flex-col items-center gap-2.5">
+                  <img
+                    src={appIconImg.src}
+                    alt=""
+                    width={96}
+                    height={96}
+                    className="h-20 w-20 drop-shadow-[0_0_30px_var(--color-glow)] lg:h-24 lg:w-24"
+                  />
+                  <span className="font-mono text-[11px] text-text-secondary">{DOWNLOAD.appLabel}</span>
+                </div>
                 <FlowIndicator />
-                <DownloadsFolder dropped={dropped} isOverFolder={isOverFolder} />
+                <div className="flex flex-col items-center gap-2.5">
+                  <div className="relative h-20 w-20 lg:h-24 lg:w-24">
+                    <img
+                      src={macosFolderBack.src}
+                      width={macosFolderBack.width}
+                      height={macosFolderBack.height}
+                      alt=""
+                      className="absolute inset-0 h-full w-full"
+                    />
+                    <img
+                      src={macosFolderFore.src}
+                      width={macosFolderFore.width}
+                      height={macosFolderFore.height}
+                      alt=""
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                  <span className="font-mono text-[11px] text-text-secondary">{DOWNLOAD.folderLabel}</span>
+                </div>
               </div>
-            </DndContext>
+            )}
 
             <AnimatePresence mode="wait">
               {dropped ? (
@@ -344,7 +388,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
               </a>
               <span className="font-mono text-[10px] text-text-muted/50">&middot;</span>
               <Link
-                to="/download"
+                href="/download"
                 className="font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text"
               >
                 {DOWNLOAD.moreVersionsLabel}

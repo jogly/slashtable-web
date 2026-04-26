@@ -1,20 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { Check } from "lucide-react";
-import { useEffect } from "react";
-import { DownloadSection } from "../../components/sections/DownloadSection";
-import { ContentContainer } from "../../components/ui/ContentContainer";
-import { FadeIn } from "../../components/ui/FadeIn";
-import { trackCheckoutCompleted } from "../../lib/analytics";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { DownloadSection } from "@/components/sections/DownloadSection";
+import { ContentContainer } from "@/components/ui/ContentContainer";
+import { FadeIn } from "@/components/ui/FadeIn";
+import { trackCheckoutCompleted } from "@/lib/analytics";
 
-export const Route = createFileRoute("/checkout/success")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    cid: typeof search.cid === "string" ? search.cid : undefined,
-  }),
-  component: CheckoutSuccessPage,
-});
-
-function CheckoutSuccessPage() {
-  const { cid } = Route.useSearch();
+function CheckoutSuccessInner() {
+  const searchParams = useSearchParams();
+  const cid = searchParams.get("cid") ?? undefined;
 
   useEffect(() => {
     trackCheckoutCompleted({ checkout_id: cid });
@@ -42,5 +38,13 @@ function CheckoutSuccessPage() {
 
       <DownloadSection hideHeader />
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={null}>
+      <CheckoutSuccessInner />
+    </Suspense>
   );
 }

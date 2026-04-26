@@ -1,5 +1,7 @@
-import skyDay from "@assets/sky-day.png?as=img";
-import skyNight from "@assets/sky-night.png?as=img";
+"use client";
+
+import skyDay from "@assets/sky-day.png";
+import skyNight from "@assets/sky-night.png";
 import { motion, useScroll, useTransform } from "motion/react";
 import type { RefObject } from "react";
 import { useTheme } from "../providers/ThemeProvider";
