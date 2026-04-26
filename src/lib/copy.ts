@@ -310,7 +310,11 @@ export const THANK_YOU = {
   signatureAlt: "Joe",
   emailPlaceholder: "you@company.com",
   emailSubmit: "Keep me posted",
-  emailSuccess: "You\u2019re on the list. Thanks again \u2014 talk soon.",
+  emailSubmitting: "Sending\u2026",
+  emailSuccess: ["You\u2019re on the list.", "Thanks again \u2014 talk soon."],
+  emailInvalid: "That email doesn\u2019t look right.",
+  emailRateLimited: "Too many signups from here \u2014 give it a minute and try again.",
+  emailError: "Something went wrong. Try again?",
   close: "Close",
 };
 

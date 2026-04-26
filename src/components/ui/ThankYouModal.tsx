@@ -46,28 +46,79 @@ export function ThankYouModal({ open, onClose, variant = "thanks" }: ThankYouMod
   const copy =
     variant === "keep-posted" ? { ...THANK_YOU, heading: KEEP_POSTED.heading, body: KEEP_POSTED.body } : THANK_YOU;
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [formState, setFormState] = useState<"init" | "submitting" | "success" | "error">("init");
+  const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open || submitted) return;
+    if (!open || formState === "success") return;
     const id = requestAnimationFrame(() => {
       requestAnimationFrame(() => inputRef.current?.focus());
     });
     return () => cancelAnimationFrame(id);
-  }, [open, submitted]);
+  }, [open, formState]);
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleInputFocus() {
+    // On mobile, when the soft keyboard opens, make sure the field is in view.
+    setTimeout(() => {
+      inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+    }, 250);
+  }
+
+  function hasRecentSubmission() {
+    const now = Date.now();
+    const previous = Number(localStorage.getItem("loops-form-timestamp") || 0);
+    if (previous && previous + 60_000 > now) return true;
+    localStorage.setItem("loops-form-timestamp", String(now));
+    return false;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (formState !== "init") return;
+
     const trimmed = email.trim();
+    if (!/.+@.+/.test(trimmed)) {
+      setErrorMessage(copy.emailInvalid);
+      setFormState("error");
+      return;
+    }
+    if (hasRecentSubmission()) {
+      setErrorMessage(copy.emailRateLimited);
+      setFormState("error");
+      return;
+    }
+
+    setFormState("submitting");
     trackWaitlistSignedUp({ email: trimmed });
-    fetch("https://app.loops.so/api/newsletter-form/cmo39ee1601m80i2b81bu6fls", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `email=${encodeURIComponent(trimmed)}&mailingLists=${encodeURIComponent("cmod37awu0oqb0ixb53s8eozp")}`,
-    }).catch(() => {});
-    setSubmitted(true);
+
+    try {
+      const body =
+        `email=${encodeURIComponent(trimmed)}` + `&mailingLists=${encodeURIComponent("cmod37awu0oqb0ixb53s8eozp")}`;
+      const res = await fetch("https://app.loops.so/api/newsletter-form/cmo39ee1601m80i2b81bu6fls", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+      if (res.ok) {
+        setFormState("success");
+        return;
+      }
+      localStorage.setItem("loops-form-timestamp", "");
+      const data = await res.json().catch(() => null);
+      setErrorMessage(data?.message || res.statusText || copy.emailError);
+      setFormState("error");
+    } catch (err) {
+      localStorage.setItem("loops-form-timestamp", "");
+      const msg = err instanceof Error ? err.message : "";
+      setErrorMessage(msg === "Failed to fetch" ? copy.emailRateLimited : msg || copy.emailError);
+      setFormState("error");
+    }
+  }
+
+  function resetToInit() {
+    setErrorMessage("");
+    setFormState("init");
   }
 
   return (
@@ -90,27 +141,55 @@ export function ThankYouModal({ open, onClose, variant = "thanks" }: ThankYouMod
         <Signature label={copy.signatureAlt} />
       </div>
 
-      {submitted ? (
-        <p className="mt-6 font-mono text-[11px] text-green uppercase tracking-widest">{copy.emailSuccess}</p>
+      {formState === "success" ? (
+        <div className="mt-6 space-y-1 font-mono text-[11px] text-green uppercase tracking-widest">
+          {copy.emailSuccess.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2 sm:flex-row">
-          <input
-            ref={inputRef}
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder={copy.emailPlaceholder}
-            className="h-11 w-full min-w-0 rounded-[4px] border border-border bg-bg px-3 font-mono text-[13px] text-text placeholder:text-text-muted focus:border-accent focus:outline-none sm:h-9 sm:flex-1"
-          />
-          <button
-            type="submit"
-            className="group relative inline-flex h-11 shrink-0 items-center justify-center overflow-hidden rounded-[4px] bg-accent px-4 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)] sm:h-9"
-          >
-            <ButtonOverlays grainOpacity={0.14} />
-            <span className="relative">{copy.emailSubmit}</span>
-          </button>
-        </form>
+        <>
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2 sm:flex-row">
+            <input
+              ref={inputRef}
+              type="email"
+              name="email"
+              inputMode="email"
+              autoComplete="email"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="send"
+              required
+              disabled={formState === "submitting"}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onFocus={handleInputFocus}
+              placeholder={copy.emailPlaceholder}
+              className="h-11 w-full min-w-0 rounded-[4px] border border-border bg-bg px-3 font-mono text-[13px] text-text placeholder:text-text-muted focus:border-accent focus:outline-none disabled:opacity-60 sm:h-9 sm:flex-1"
+            />
+            <button
+              type="submit"
+              disabled={formState === "submitting"}
+              className="group relative inline-flex h-11 shrink-0 items-center justify-center overflow-hidden rounded-[4px] bg-accent px-4 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)] disabled:cursor-not-allowed disabled:opacity-70 sm:h-9"
+            >
+              <ButtonOverlays grainOpacity={0.14} />
+              <span className="relative">{formState === "submitting" ? copy.emailSubmitting : copy.emailSubmit}</span>
+            </button>
+          </form>
+          {formState === "error" && (
+            <p className="mt-3 font-mono text-[#ff6b5b] text-[11px] uppercase tracking-widest" role="alert">
+              {errorMessage || copy.emailError}
+              <button
+                type="button"
+                onClick={resetToInit}
+                className="ml-2 underline underline-offset-2 transition-colors hover:text-text"
+              >
+                ← Back
+              </button>
+            </p>
+          )}
+        </>
       )}
     </Modal>
   );

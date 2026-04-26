@@ -329,7 +329,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                 });
                 t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
-              className={`group relative inline-flex items-center gap-2.5 overflow-hidden rounded bg-accent px-8 py-3.5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.12)]${
+              className={`group relative inline-flex min-w-[22rem] items-center justify-center gap-2.5 overflow-hidden rounded bg-accent px-8 py-3.5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.12)]${
                 !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
@@ -376,9 +376,9 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
             <button
               type="button"
               onClick={() => setShowKeepPosted(true)}
-              className="hidden font-mono text-[10px] text-text-muted uppercase tracking-widest underline underline-offset-2 transition-colors hover:text-text lg:inline"
+              className="group relative mt-3 inline-flex min-w-[22rem] items-center justify-center gap-2.5 overflow-hidden rounded border border-border bg-surface-2 px-8 py-3.5 font-mono text-text text-xs uppercase tracking-widest transition-colors hover:border-text-muted hover:bg-surface-1 max-lg:hidden"
             >
-              {KEEP_POSTED.linkLabel}
+              <span className="relative">{KEEP_POSTED.linkLabel}</span>
             </button>
           </div>
         </FadeIn>

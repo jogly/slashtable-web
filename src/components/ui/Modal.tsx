@@ -63,15 +63,18 @@ export function Modal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="presentation">
-      <div className="absolute inset-0 bg-bg/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
+    <div
+      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto overscroll-contain p-4 sm:items-center"
+      role="presentation"
+    >
+      <div className="fixed inset-0 bg-bg/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelId}
         onKeyDown={handleKeyDown}
-        className="relative w-full max-w-md rounded-md border border-border bg-surface-2 p-8 shadow-2xl"
+        className="relative my-auto w-full max-w-md rounded-md border border-border bg-surface-2 p-8 shadow-2xl"
       >
         <button
           ref={closeRef}
