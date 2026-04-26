@@ -7,12 +7,14 @@ import { type ReactNode, Suspense, useEffect } from "react";
 
 function PageviewTracker() {
   const pathname = usePathname();
-  const _searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!pathname) return;
-    posthog.capture("$pageview");
-  }, [pathname]);
+    const qs = searchParams?.toString();
+    const url = qs ? `${window.location.origin}${pathname}?${qs}` : `${window.location.origin}${pathname}`;
+    posthog.capture("$pageview", { $current_url: url });
+  }, [pathname, searchParams]);
 
   return null;
 }
