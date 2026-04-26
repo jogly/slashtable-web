@@ -1,4 +1,4 @@
-import { GitFork, Network, ShieldCheck } from "lucide-react";
+import { Cable, GitFork, Network } from "lucide-react";
 import { VALUE_PILLARS } from "../../lib/copy";
 import { FadeIn } from "../ui/FadeIn";
 import { NoiseTexture } from "../ui/NoiseTexture";
@@ -6,7 +6,7 @@ import { SectionBorder } from "../ui/SectionBorder";
 
 const pillarMeta = [
   { color: "#44ff88", icon: GitFork, href: "#features" },
-  { color: "#00d4ff", icon: ShieldCheck, href: "#mcp" },
+  { color: "#00d4ff", icon: Cable, href: "#connect" },
   { color: "#cc44ff", icon: Network, href: "#schema" },
 ];
 

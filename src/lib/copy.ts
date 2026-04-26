@@ -20,7 +20,7 @@ export const HERO = {
   leader: "You aren\u2019t a database administrator. Use the right tool for the job.",
   ctaDownload: "Download for macOS",
   ctaFeatures: "See features",
-  availability: "macOS \u00b7 PostgreSQL (beta) \u00b7 MySQL (alpha)",
+  availability: "macOS \u00b7 Postgres \u00b7 MySQL \u00b7 SQLite \u00b7 Neon",
   screenshotAlt:
     "SlashTable main window showing a data table with foreign key relationships highlighted and breadcrumb navigation \u2014 dark mode left, light mode right",
 };
@@ -41,22 +41,22 @@ export const MCP = {
   eyebrow: "MCP Server",
   heading: "Controlled access for AI agents.",
   description:
-    "Built-in MCP gives Claude, Cursor, or any MCP client regulated access to data. Agents never access credentials.",
+    "Two clicks of setup for Claude Desktop, Claude Code, Cursor, or Windsurf. Per-connection policy: hidden, read, or write. Every call is logged.",
   callouts: [
     {
       title: "Battle-tested guardrails",
       description:
-        "All queries are validated and run in an engine-level READ ONLY transaction that always rolls back. Your data is safe, and agents can\u2019t accidentally, or intentionally, make changes.",
+        "Statement-level keyword filter plus an engine-level READ ONLY transaction that always rolls back. Two independent layers between an agent and a write.",
     },
     {
       title: "Schema introspection",
       description:
-        "Agents can explore every table, column, type, and all their relationships, without overwhelming the token count.",
+        "Agents explore tables, columns, types, and relationships \u2014 and can request a scoped schema graph from a starting table instead of dumping the universe.",
     },
     {
-      title: "Live data queries",
+      title: "Per-connection access",
       description:
-        "SELECT against your actual database, or block all arbitrary SQL. Configure per-connection or globally for peace of mind.",
+        "Mark prod as hidden so the agent can\u2019t even see it. Let it rip on dev. The MCP Log tab shows every request with method, tool, connection, and duration.",
     },
   ],
   cta: "Try it free",
@@ -109,12 +109,22 @@ export const FEATURES_GRID = {
     {
       title: "SQL editor",
       description:
-        "Autocomplete that knows your schema, tables, and columns. Multi-statement execution with per-statement timing. Auto-format for the queries you\u2019re not proud of.",
+        "Autocomplete that knows your schema, tables, and columns. Multi-statement execution with per-statement timing. Auto-format for the queries you\u2019re not proud of. Run active query (\u2303\u23ce), all (\u21e7\u23ce), or selection (\u2318\u23ce).",
     },
     {
-      title: "Multiple connections",
+      title: "Filter from the keyboard",
       description:
-        "Connect to dev, staging, and prod at the same time. Each connection keeps its own tabs and state. Alt-tab between databases.",
+        "Press f in any table to start typing. One command input instead of a builder. NOT toggle is its own switch. Fuzzy match across columns and the command palette too.",
+    },
+    {
+      title: "Saved favorites",
+      description:
+        "Pin a configured filter set to a table. Drag to reorder, drop into folders. The filters you reach for, where you reach for them.",
+    },
+    {
+      title: "Array & JSON cell editors",
+      description:
+        "First-class editors for text[], int[], uuid[], and json/jsonb cells. No more composing literal SQL by hand.",
     },
     {
       title: "Safe data mutations",
@@ -122,69 +132,59 @@ export const FEATURES_GRID = {
         "Edit rows inline. Changes queue with a SQL diff preview before anything commits. Revert one edit, or nuke them all.",
     },
     {
-      title: "Read-only enforcement",
+      title: "Schema-aware grid",
       description:
-        "Keyword scanning, query parsing, and a transaction-level rollback. Three layers between your agent and a write query. Belt, suspenders, and a parachute.",
-    },
-    {
-      title: "Docker auto-detection",
-      description:
-        "Finds your running Postgres and MySQL containers and pulls credentials from their env vars. No YAML required.",
-    },
-    {
-      title: "Credential vaults",
-      description:
-        "Pull credentials from System Keychain or 1Password. Browse vaults, pick an item, connect. Passwords stay out of your shell history.",
+        "Composite primary keys, Postgres user-defined types (enums, domains, citext), and inet/cidr render and edit correctly. Fewer 'your schema isn\u2019t supported' walls.",
     },
     {
       title: "Virtual scrolling",
       description:
-        "Renders only what\u2019s on screen. Scroll through millions of rows without pagination, memory spikes, or a LIMIT clause you\u2019ll forget to remove.",
+        "Renders only what\u2019s on screen. Scroll through millions of rows and 200-column tables without pagination, memory spikes, or a LIMIT clause you\u2019ll forget to remove.",
     },
     {
-      title: "Saved views",
+      title: "Schema graph, scoped",
       description:
-        "Save filters, sorts, and column layout as a named view. Open it next week and everything is exactly where you left it.",
+        "Open a graph from any table\u2019s context menu and start there, not in a 500-node soup. Adjust depth, pin starting tables, hide the noise.",
     },
     {
-      title: "Dark & light themes",
+      title: "Prefix grouping",
       description:
-        "Dark by default. Light for the brave. CSS-variable theming so plugins can match your terminal color scheme.",
+        "Snake- or camel-case tokenizer rolls user_*, billing_*, and friends into collapsible groups in the Explorer. Real schemas with hundreds of tables stop being a scroll-fatigue exercise.",
+    },
+    {
+      title: "Customizable keybindings",
+      description:
+        "Every global action is rebindable, with multiple bindings per action. Make the app fit your hands.",
+    },
+    {
+      title: "Connection paint",
+      description:
+        "Color-and-icon tags on connections. Trivial to set up, surprisingly load-bearing once you have prod, staging, and dev side by side.",
     },
     {
       title: "Connection organization",
       description:
-        "Folders, color tags, and environment badges (prod, dev, staging). Tell databases apart at a glance. Run a query against the wrong one less often.",
+        "Folders, color tags, and environment badges. Tell databases apart at a glance. Run a query against the wrong one less often.",
     },
     {
-      title: "Tab management",
+      title: "Tab workspaces per connection",
       description:
-        "Explorer, SQL, and Schema Graph tabs with independent state. Keyboard shortcuts to jump between them. Drag to reorder because we\u2019re civilized.",
+        "Explorer, SQL, and Schema Graph tabs with independent state, preserved per connection and per database. Switching context doesn\u2019t blow away your open tables.",
+    },
+    {
+      title: "Command palette",
+      description:
+        "\u2318K opens it. New connection, disconnect, reconnect (\u21e7R), release notes \u2014 all from the keyboard. Keyword aliases too.",
     },
     {
       title: "Semantic column types",
       description:
-        "Detects emails, URLs, images, currency, and dates in your data. Renders them as clickable links, formatted values, and relative timestamps.",
+        "Detects emails, URLs, images, currency, and dates. Renders them as clickable links, formatted values, and relative timestamps. Per-column override.",
     },
     {
       title: "SQL execution logging",
       description:
         "Every query logged with timing, row count, and parameters. When something goes wrong at 2am, you\u2019ll know exactly which query did it.",
-    },
-    {
-      title: "Instant tab restore",
-      description:
-        "Switch tabs or restart the app. Your last query results are already there. No re-running queries, no loading spinners.",
-    },
-    {
-      title: "Table statistics",
-      description:
-        "Distinct counts, null fractions, most common values, min/max ranges. The stats your database already tracks, surfaced where you can see them.",
-    },
-    {
-      title: "Column configuration",
-      description:
-        "Show, hide, reorder, resize. Preferences persist across sessions. The grid remembers how you like it.",
     },
     {
       title: "Regret-driven development",
@@ -198,6 +198,42 @@ export const FEATURES_GRID = {
   ],
 };
 
+// ─── Connect Section ─────────────────────────────────────────────
+
+export const CONNECT = {
+  eyebrow: "Connect",
+  heading: "Find your databases. Or let them find you.",
+  description:
+    "A normal day is three worktrees, two compose stacks, and a bastion host. /table lives in that mess.",
+  items: [
+    {
+      title: "Docker auto-detect",
+      body: "Detects running Postgres and MySQL containers, reads creds from their env, and groups them by docker-compose project. Spin a stack up, your DB is in the sidebar. Tear it down, it’s gone.",
+    },
+    {
+      title: "Neon branch sync",
+      body: "Paste a Neon API key. Every project and branch shows up automatically. Create a branch from a PR, it appears; delete it, it disappears.",
+    },
+    {
+      title: "Multi-database, one connection",
+      body: "Hit ⌘D to flip between every database on the server. Each one keeps its own tabs, so context switching doesn’t blow away your work.",
+    },
+    {
+      title: "First-class SSH tunneling",
+      body: "Production behind a bastion is a normal connection, not a hack with a separate terminal window.",
+    },
+    {
+      title: "From the terminal you’re in",
+      body: "slashtable postgres://user:pw@host/db opens the app on that connection. Drop it in package.json scripts or .envrc — your terminal muscle memory works.",
+    },
+    {
+      title: "Credentials where they already live",
+      body: "macOS Keychain, 1Password, Bitwarden, AWS Secrets Manager, HashiCorp Vault. Stop pasting passwords into text fields.",
+    },
+  ],
+  cta: "Try it free",
+};
+
 // ─── Navigation Section ──────────────────────────────────────────
 
 export const NAVIGATION = {
@@ -206,7 +242,7 @@ export const NAVIGATION = {
   body: [
     "Click a foreign key value to drill into the related records. A novel breadcrumb tree tracks your full path and every level is clickable.",
     "Reverse FK lookups show every record that points to the current one. Pure join tables collapse into direct relationships so navigation stays clean.",
-    "Stack your own filters on top and keep drilling without losing context.",
+    "Stack your own filters on top and keep drilling. Traverse the tree from the keyboard with ⌘← ⌘→ ⌘↑ ⌘↓ — no mouse required.",
   ],
   cta: "Try it free",
 };
@@ -220,8 +256,8 @@ export const VALUE_PILLARS = {
       body: "A graph navigation model so good it will convert keyboard diehards. FKs, reverse FKs, join tables, all navigable.",
     },
     {
-      title: "Safe access for AI agents",
-      body: "Built-in MCP server. Agents query the schema, get live data, and never see the credentials, while keeping the token count to a minimum.",
+      title: "Connects to where you work",
+      body: "Docker containers, Neon branches, SSH-tunneled prod, SQLite files. Spin one up, /table picks it up. Tear it down, it’s gone.",
     },
     {
       title: "Screenshot-worthy schema diagrams",
@@ -242,7 +278,7 @@ export const DOWNLOAD = {
   buttonFallback: "Or if you\u2019re, like, really into buttons",
   downloadLabel: "Download for Mac",
   altAvailableLabel: "Also available for",
-  platformNotice: "macOS only \u00b7 PostgreSQL (beta) \u00b7 MySQL (alpha)",
+  platformNotice: "macOS only \u00b7 Postgres \u00b7 MySQL \u00b7 SQLite \u00b7 Neon",
   moreVersionsLabel: "All versions & older builds",
   homebrewHint: "Also available via",
   homebrewCommand: "brew install slashtable",
@@ -276,7 +312,7 @@ export const DOWNLOAD_PAGE = {
   requirements: [
     { label: "Operating system", value: "macOS 12.0 Monterey or later" },
     { label: "Architecture", value: "Apple Silicon or Intel" },
-    { label: "Databases", value: ["PostgreSQL 12+ (beta)", "MySQL 8.0+ (alpha)"] },
+    { label: "Databases", value: ["PostgreSQL 12+", "MySQL 8.0+", "SQLite", "Neon"] },
     { label: "Install size", value: "~40 MB" },
   ],
   releaseNotesHeading: "In this release",
