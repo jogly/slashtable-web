@@ -1,4 +1,5 @@
 import { CommunitySection } from "@/components/sections/CommunitySection";
+import { ConnectSection } from "@/components/sections/ConnectSection";
 import { DownloadSection } from "@/components/sections/DownloadSection";
 import { FeaturesGrid } from "@/components/sections/FeaturesGrid";
 import { Hero } from "@/components/sections/Hero";
@@ -13,10 +14,11 @@ export default function HomePage() {
     <>
       <Hero />
       <ValuePillars />
-      <McpSection />
+      <ConnectSection />
       <NavigationSection />
-      <PluginSection />
       <SchemaGraphSection />
+      <PluginSection />
+      <McpSection />
       <FeaturesGrid />
       <DownloadSection />
       <CommunitySection />
