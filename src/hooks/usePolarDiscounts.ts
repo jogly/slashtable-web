@@ -19,7 +19,7 @@ export interface CheckoutLinkDiscount {
 }
 
 const POLAR_API = "https://api.polar.sh/v1";
-const TOKEN = import.meta.env.VITE_PUBLIC_POLAR_TOKEN;
+const TOKEN = process.env.NEXT_PUBLIC_POLAR_TOKEN;
 
 interface CheckoutLink {
   client_secret: string;

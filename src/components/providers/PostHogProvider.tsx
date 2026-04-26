@@ -1,21 +1,20 @@
-import { useRouter } from "@tanstack/react-router";
+"use client";
+
+import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, Suspense, useEffect } from "react";
 
 function PageviewTracker() {
-  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    posthog.capture("$pageview");
-
-    const unsubscribe = router.subscribe("onResolved", (event) => {
-      if (!event.pathChanged) return;
-      posthog.capture("$pageview");
-    });
-
-    return unsubscribe;
-  }, [router]);
+    if (!pathname) return;
+    const qs = searchParams?.toString();
+    const url = qs ? `${window.location.origin}${pathname}?${qs}` : `${window.location.origin}${pathname}`;
+    posthog.capture("$pageview", { $current_url: url });
+  }, [pathname, searchParams]);
 
   return null;
 }
@@ -23,7 +22,9 @@ function PageviewTracker() {
 export function AnalyticsProvider({ children }: { children: ReactNode }) {
   return (
     <PHProvider client={posthog}>
-      <PageviewTracker />
+      <Suspense fallback={null}>
+        <PageviewTracker />
+      </Suspense>
       {children}
     </PHProvider>
   );

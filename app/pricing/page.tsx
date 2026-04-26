@@ -1,23 +1,25 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { Check, Info } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
-import { ContactSalesModal } from "../components/ui/ContactSalesModal";
-import { ContentContainer } from "../components/ui/ContentContainer";
-import { FadeIn } from "../components/ui/FadeIn";
-import { SkyParallax } from "../components/ui/SkyParallax";
-import { ThankYouModal } from "../components/ui/ThankYouModal";
-import { useDownload } from "../hooks/useDownload";
-import { trackCheckoutClicked, trackContactSalesOpened } from "../lib/analytics";
-import { PRICING, polarCheckoutUrl } from "../lib/copy";
-import { cn } from "../lib/utils";
+import { ContactSalesModal } from "@/components/ui/ContactSalesModal";
+import { ContentContainer } from "@/components/ui/ContentContainer";
+import { FadeIn } from "@/components/ui/FadeIn";
+import { SkyParallax } from "@/components/ui/SkyParallax";
+import { ThankYouModal } from "@/components/ui/ThankYouModal";
+import { useDownload } from "@/hooks/useDownload";
+import { trackCheckoutClicked, trackContactSalesOpened } from "@/lib/analytics";
+import { PRICING, polarCheckoutUrl } from "@/lib/copy";
+import { cn } from "@/lib/utils";
 
 const faqMarkdownComponents: Components = {
   p: ({ children }) => <span>{children}</span>,
   a: ({ href, children }) =>
     href?.startsWith("/") ? (
-      <Link to={href} className="text-accent underline underline-offset-2 transition-colors hover:text-text">
+      <Link href={href} className="text-accent underline underline-offset-2 transition-colors hover:text-text">
         {children}
       </Link>
     ) : (
@@ -80,10 +82,6 @@ function parseDollars(price: string): number {
   return m ? Number(m[0]) : 0;
 }
 
-export const Route = createFileRoute("/pricing")({
-  component: PricingPage,
-});
-
 function VaultTooltip() {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -136,13 +134,13 @@ function VaultTooltip() {
   );
 }
 
-function PricingPage() {
+export default function PricingPage() {
   const { showThankYou, closeThankYou, triggerDownload } = useDownload();
   const [showContactSales, setShowContactSales] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
 
-  // Biggest discount across individual tiers — we give that badge extra visual weight.
   const individualTiers = PRICING.tiers.slice(0, 3);
+  const team = PRICING.tiers[3];
   const biggestDiscount = Math.max(
     ...individualTiers.map((t) => {
       if (!("salePrice" in t) || !t.salePrice) return 0;
@@ -153,14 +151,12 @@ function PricingPage() {
   return (
     <div className="pt-32 pb-20">
       <ContentContainer>
-        {/* Header */}
         <div className="mb-10 text-center">
           <p className="mb-3 font-mono text-accent text-xs uppercase tracking-widest">{PRICING.eyebrow}</p>
           <h1 className="font-display text-4xl text-text lg:text-5xl">{PRICING.heading}</h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-text-secondary leading-relaxed">{PRICING.description}</p>
         </div>
 
-        {/* Early-access banner — friendly sky-parallax card, no warning styling */}
         <FadeIn>
           <div
             ref={bannerRef}
@@ -179,7 +175,6 @@ function PricingPage() {
           </div>
         </FadeIn>
 
-        {/* Individual tiers */}
         <div className="mx-auto grid gap-6 lg:grid-cols-3">
           {individualTiers.map((tier, i) => {
             const highlighted = i === 1;
@@ -292,11 +287,10 @@ function PricingPage() {
           })}
         </div>
 
-        {/* Upgrade link */}
         <FadeIn delay={0.25}>
           <p className="mt-6 text-center">
             <Link
-              to="/upgrade"
+              href="/upgrade"
               className="font-mono text-text-muted text-xs uppercase tracking-widest transition-colors hover:text-accent"
             >
               {PRICING.upgradeLink}
@@ -304,50 +298,43 @@ function PricingPage() {
           </p>
         </FadeIn>
 
-        {/* Team tier */}
-        {(() => {
-          const team = PRICING.tiers[3];
-          return (
-            <FadeIn delay={0.3}>
-              <div className="relative mx-auto mt-6 border border-border bg-surface p-8 lg:p-10">
-                <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-                  <div className="lg:max-w-xs">
-                    <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{team.name}</h2>
-                    <div className="mt-3 flex items-baseline gap-2">
-                      <span className="font-display text-4xl text-text">{team.price}</span>
-                      <span className="font-mono text-text-muted text-xs">{team.pricePer}</span>
-                    </div>
-                    <p className="mt-1 font-mono text-[10px] text-text-muted">{team.priceBilling}</p>
-                    {team.description && <p className="mt-2 text-sm text-text-secondary">{team.description}</p>}
-                    <p className="mt-2 font-mono text-text-muted text-xs">{team.priceAlt}</p>
-                  </div>
-
-                  <ul className="flex-1 space-y-3">
-                    {team.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2.5 text-sm text-text-secondary">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
-                        {feature === PRICING.vaults.label ? <VaultTooltip /> : <FeatureText text={feature} />}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      trackContactSalesOpened({ source: "pricing_team_tier" });
-                      setShowContactSales(true);
-                    }}
-                    className="flex shrink-0 items-center justify-center rounded-[6px] border border-border-strong border-dashed bg-bg/40 px-5 py-[calc(0.625rem-1px)] font-mono text-text-secondary text-xs uppercase tracking-widest transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
-                  >
-                    {team.cta}
-                  </button>
+        <FadeIn delay={0.3}>
+          <div className="relative mx-auto mt-6 border border-border bg-surface p-8 lg:p-10">
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <div className="lg:max-w-xs">
+                <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{team.name}</h2>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="font-display text-4xl text-text">{team.price}</span>
+                  <span className="font-mono text-text-muted text-xs">{team.pricePer}</span>
                 </div>
+                <p className="mt-1 font-mono text-[10px] text-text-muted">{team.priceBilling}</p>
+                {team.description && <p className="mt-2 text-sm text-text-secondary">{team.description}</p>}
+                <p className="mt-2 font-mono text-text-muted text-xs">{team.priceAlt}</p>
               </div>
-            </FadeIn>
-          );
-        })()}
 
-        {/* FAQ */}
+              <ul className="flex-1 space-y-3">
+                {team.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5 text-sm text-text-secondary">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+                    {feature === PRICING.vaults.label ? <VaultTooltip /> : <FeatureText text={feature} />}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                type="button"
+                onClick={() => {
+                  trackContactSalesOpened({ source: "pricing_team_tier" });
+                  setShowContactSales(true);
+                }}
+                className="flex shrink-0 items-center justify-center rounded-[6px] border border-border-strong border-dashed bg-bg/40 px-5 py-[calc(0.625rem-1px)] font-mono text-text-secondary text-xs uppercase tracking-widest transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
+              >
+                {team.cta}
+              </button>
+            </div>
+          </div>
+        </FadeIn>
+
         <div className="mx-auto mt-24">
           <FadeIn>
             <div className="mb-4 flex items-center gap-2">

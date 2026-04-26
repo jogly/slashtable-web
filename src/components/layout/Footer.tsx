@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import logoImg from "../../assets/app-icon.png?as=img";
+import Link from "next/link";
+import logoImg from "../../assets/app-icon.png";
 import { NAME } from "../../lib/constants";
 import { FOOTER } from "../../lib/copy";
 import { ContentContainer } from "../ui/ContentContainer";
@@ -35,11 +35,7 @@ export function Footer() {
                 {section.links.map((link) => (
                   <li key={link.label}>
                     {"to" in link ? (
-                      <Link
-                        to={link.to}
-                        hash={"hash" in link ? (link as { hash: string }).hash : undefined}
-                        className="text-sm text-text-secondary transition-colors hover:text-text"
-                      >
+                      <Link href={link.to} className="text-sm text-text-secondary transition-colors hover:text-text">
                         {link.label}
                       </Link>
                     ) : (

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://slashtable.dev/sitemap.xml
+Sitemap: https://www.slashtable.dev/sitemap.xml

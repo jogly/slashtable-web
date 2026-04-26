@@ -2,11 +2,11 @@
   "serverInfo": {
     "name": "slashtable",
     "description": "/table — A native macOS database client with a built-in MCP server for AI agents. PostgreSQL and MySQL.",
-    "url": "https://slashtable.dev"
+    "url": "https://www.slashtable.dev"
   },
   "transport": {
     "type": "stdio",
-    "description": "The /table MCP server runs locally as part of the desktop application. Install /table from https://slashtable.dev/download and enable the MCP server in Settings."
+    "description": "The /table MCP server runs locally as part of the desktop application. Install /table from https://www.slashtable.dev/download and enable the MCP server in Settings."
   },
   "capabilities": {
     "tools": true,

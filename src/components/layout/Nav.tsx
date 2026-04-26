@@ -1,7 +1,9 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+
 import { BookOpen, ChevronDown, KeyRound, Menu, Network, ShieldCheck, Terminal, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import appIconImg from "../../assets/app-icon.png?as=img";
+import appIconImg from "../../assets/app-icon.png";
 import { NAME } from "../../lib/constants";
 import { NAV } from "../../lib/copy";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
@@ -95,7 +97,7 @@ export function Nav() {
     <>
       <header className="fixed top-0 right-0 left-0 z-50 border-border border-b border-dashed bg-bg/80 backdrop-blur-md">
         <nav className="mx-auto flex max-w-content items-center gap-6 px-4 py-3 sm:px-6 sm:py-4">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2.5">
             <img src={appIconImg.src} alt={NAV.logoAlt} width={18} height={18} className="h-[18px] w-[18px]" />
             <span className="font-mono font-semibold text-[13px] text-text tracking-tight">{NAME.short}</span>
           </Link>
@@ -123,8 +125,7 @@ export function Nav() {
                     {featurePopoverItems.map((item) => (
                       <Link
                         key={item.label}
-                        to="/"
-                        hash={item.hash}
+                        href={`/#${item.hash}`}
                         onClick={() => setPopoverOpen(false)}
                         className="group flex items-start gap-3 border border-transparent p-3 transition-colors hover:border-border hover:bg-border/10"
                       >
@@ -145,13 +146,13 @@ export function Nav() {
             </div>
 
             <Link
-              to="/pricing"
+              href="/pricing"
               className="font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
             >
               {NAV.pricing}
             </Link>
             <Link
-              to="/changelog"
+              href="/changelog"
               className="font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
             >
               {NAV.changelog}
@@ -163,8 +164,7 @@ export function Nav() {
             <ThemeToggle />
             <Link
               ref={downloadRef}
-              to="/"
-              hash="download"
+              href="/#download"
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[4px] bg-accent py-1.5 pr-1.5 pl-3.5 font-mono text-[11px] text-white uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)]"
             >
               <ButtonOverlays grainOpacity={0.14} />
@@ -202,8 +202,7 @@ export function Nav() {
               {featurePopoverItems.map((item) => (
                 <Link
                   key={item.label}
-                  to="/"
-                  hash={item.hash}
+                  href={`/#${item.hash}`}
                   onClick={() => setMenuOpen(false)}
                   className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
                 >
@@ -224,7 +223,7 @@ export function Nav() {
 
               {/* Pricing */}
               <Link
-                to="/pricing"
+                href="/pricing"
                 onClick={() => setMenuOpen(false)}
                 className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
               >
@@ -237,7 +236,7 @@ export function Nav() {
 
               {/* Changelog */}
               <Link
-                to="/changelog"
+                href="/changelog"
                 onClick={() => setMenuOpen(false)}
                 className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
               >
@@ -254,8 +253,7 @@ export function Nav() {
 
             {/* Download CTA */}
             <Link
-              to="/"
-              hash="download"
+              href="/#download"
               onClick={() => setMenuOpen(false)}
               className="group relative mt-8 flex items-center justify-center overflow-hidden rounded-[4px] bg-accent px-5 py-3.5 font-mono text-[12px] text-white uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.2)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)]"
             >

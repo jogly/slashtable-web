@@ -1,5 +1,7 @@
-import heroDark from "@screenshots/hero-dark.png?w=1952&as=img";
-import heroLight from "@screenshots/hero-light.png?w=1952&as=img";
+"use client";
+
+import heroDark from "@screenshots/hero-dark.png";
+import heroLight from "@screenshots/hero-light.png";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { HERO } from "../../lib/copy";
@@ -34,7 +36,7 @@ function CtaDownload() {
   return (
     <a
       href="#download"
-      className="group relative inline-flex h-10 items-center gap-1.5 overflow-hidden rounded-sm bg-accent px-5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)]"
+      className="group relative inline-flex h-10 items-center justify-center gap-1.5 overflow-hidden rounded-sm bg-accent px-5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)]"
     >
       <ButtonOverlays grainOpacity={0.36} />
       <span className="relative">{HERO.ctaDownload}</span>
@@ -47,7 +49,7 @@ function CtaFeatures() {
   return (
     <a
       href="#features"
-      className="group relative inline-flex h-10 items-center gap-1.5 overflow-hidden rounded-sm border border-border-strong border-dashed bg-bg/40 px-5 font-mono text-text-secondary text-xs uppercase tracking-widest backdrop-blur-sm transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
+      className="group relative inline-flex h-10 items-center justify-center gap-1.5 overflow-hidden rounded-sm border border-border-strong border-dashed bg-bg/40 px-5 font-mono text-text-secondary text-xs uppercase tracking-widest backdrop-blur-sm transition-[background-color,border-color,color] duration-150 hover:border-text/50 hover:bg-bg/70 hover:text-text"
     >
       <ButtonOverlays grainOpacity={0.1} sheen="subtle" />
       <span className="relative">{HERO.ctaFeatures}</span>
@@ -191,8 +193,8 @@ export function Hero() {
               {/*<BlueprintRule orientation="horizontal" className="right-0 bottom-0 left-0" />*/}
             </div>
           </div>
-          {/* Mobile: plain button row, no frame */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:hidden">
+          {/* Mobile: plain button stack, no frame */}
+          <div className="mx-auto flex max-w-xs flex-col items-stretch gap-3 sm:hidden [&>a]:w-full">
             <CtaDownload />
             <CtaFeatures />
           </div>

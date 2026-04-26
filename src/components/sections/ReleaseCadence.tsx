@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useState } from "react";
 import { parseEntryDate } from "../../lib/dates";
 

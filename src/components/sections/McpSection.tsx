@@ -1,3 +1,5 @@
+"use client";
+
 import type { LucideIcon } from "lucide-react";
 import { Network, ShieldCheck, Terminal } from "lucide-react";
 import type { ReactNode } from "react";

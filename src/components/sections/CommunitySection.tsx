@@ -1,3 +1,5 @@
+"use client";
+
 import { MessageCircle } from "lucide-react";
 import type { ComponentProps } from "react";
 import { trackExternalLinkClicked } from "../../lib/analytics";

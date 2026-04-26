@@ -1,5 +1,8 @@
+"use client";
+
 import { ChevronsLeftRight } from "lucide-react";
 import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
+import { useMounted } from "../../hooks/useMounted";
 import type { ImageData } from "./Img";
 
 interface ImageCompareProps {
@@ -21,6 +24,10 @@ interface ImageCompareProps {
  * While either prop is missing, a styled placeholder is shown instead.
  */
 export function ImageCompare({ dark, light, alt, className = "", initialPosition = 70 }: ImageCompareProps) {
+  // ReactCompareSlider writes an inline-style object with vendor prefixes that
+  // doesn't roundtrip through SSR cleanly — render it only after mount.
+  const mounted = useMounted();
+
   const handle = (
     <div className="relative flex h-full w-8 items-center justify-center">
       <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-accent/60" />
@@ -39,23 +46,33 @@ export function ImageCompare({ dark, light, alt, className = "", initialPosition
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {dark && light ? (
+      {dark && light && !mounted ? (
+        // Pre-hydration: render just the dark image (what the slider mostly
+        // shows at initialPosition=70) so there's no visual flash when the
+        // slider takes over after mount.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={dark.src}
+          width={dark.width}
+          height={dark.height}
+          alt={`${alt} — dark mode`}
+          className="block w-full"
+        />
+      ) : dark && light ? (
         <ReactCompareSlider
           itemOne={
             <ReactCompareSliderImage
               src={dark.src}
-              srcSet={dark.srcset}
-              width={dark.w}
-              height={dark.h}
+              width={dark.width}
+              height={dark.height}
               alt={`${alt} — dark mode`}
             />
           }
           itemTwo={
             <ReactCompareSliderImage
               src={light.src}
-              srcSet={light.srcset}
-              width={light.w}
-              height={light.h}
+              width={light.width}
+              height={light.height}
               alt={`${alt} — light mode`}
             />
           }

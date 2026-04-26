@@ -16,7 +16,8 @@ export type DownloadSource =
   | "pricing_free_tier"
   | "download_section_drag"
   | "download_section_button"
-  | "download_section_mobile";
+  | "download_section_mobile"
+  | "download_page_alt_arch";
 
 interface DownloadStartedProps {
   architecture: "silicon" | "intel";

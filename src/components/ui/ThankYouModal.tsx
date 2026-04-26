@@ -1,4 +1,6 @@
-import joePhoto from "@assets/joe-from-distance.png?as=img";
+"use client";
+
+import joePhoto from "@assets/joe-from-distance.png";
 import { useEffect, useRef, useState } from "react";
 import { trackWaitlistSignedUp } from "../../lib/analytics";
 import { KEEP_POSTED, THANK_YOU } from "../../lib/copy";
@@ -127,8 +129,8 @@ export function ThankYouModal({ open, onClose, variant = "thanks" }: ThankYouMod
         <img
           src={joePhoto.src}
           alt={copy.photoAlt}
-          width={joePhoto.w}
-          height={joePhoto.h}
+          width={joePhoto.width}
+          height={joePhoto.height}
           className="block h-full w-full object-cover object-[center_40%] saturate-[0.50]"
         />
       </div>

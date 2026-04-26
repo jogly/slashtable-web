@@ -5,7 +5,7 @@
       "name": "mcp-database-client",
       "type": "mcp",
       "description": "Give AI agents safe, read-only access to PostgreSQL and MySQL databases through /table's built-in MCP server.",
-      "url": "https://slashtable.dev/.well-known/mcp/server-card.json"
+      "url": "https://www.slashtable.dev/.well-known/mcp/server-card.json"
     }
   ]
 }
