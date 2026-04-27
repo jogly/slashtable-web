@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
@@ -34,32 +31,14 @@ const markdownComponents: Components = {
   ul: ({ children }) => <ul className="mb-4 space-y-2">{children}</ul>,
 };
 
-export default function PrivacyPage() {
-  const [body, setBody] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+async function fetchPrivacy(): Promise<string> {
+  const res = await fetch(PRIVACY_URL);
+  if (!res.ok) throw new Error(`Failed to fetch privacy policy: ${res.status} ${res.statusText}`);
+  return res.text();
+}
 
-  useEffect(() => {
-    let cancelled = false;
-    fetch(PRIVACY_URL)
-      .then((r) => {
-        if (!r.ok) throw new Error(r.statusText);
-        return r.text();
-      })
-      .then((text) => {
-        if (cancelled) return;
-        setBody(text);
-      })
-      .catch(() => {
-        if (!cancelled) setError(true);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+export default async function PrivacyPage() {
+  const body = await fetchPrivacy();
 
   return (
     <div className="mx-auto max-w-narrow px-6 pt-32 pb-20">
@@ -70,20 +49,7 @@ export default function PrivacyPage() {
       <h1 className="font-display text-4xl text-text">Privacy Policy</h1>
 
       <div className="mt-12 border-border border-t pt-10">
-        {loading ? (
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 w-3/4 rounded bg-surface-2" />
-            <div className="h-4 w-full rounded bg-surface-2" />
-            <div className="h-4 w-5/6 rounded bg-surface-2" />
-            <div className="h-4 w-2/3 rounded bg-surface-2" />
-          </div>
-        ) : error ? (
-          <p className="font-mono text-[11px] text-text-muted uppercase tracking-widest">
-            Failed to load privacy policy.
-          </p>
-        ) : (
-          <ReactMarkdown components={markdownComponents}>{body}</ReactMarkdown>
-        )}
+        <ReactMarkdown components={markdownComponents}>{body}</ReactMarkdown>
       </div>
     </div>
   );
