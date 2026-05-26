@@ -45,7 +45,7 @@ export function ImageCompare({ dark, light, alt, className = "", initialPosition
   );
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`relative touch-pan-y overflow-hidden ${className}`}>
       {dark && light && !mounted ? (
         // Pre-hydration: render just the dark image (what the slider mostly
         // shows at initialPosition=70) so there's no visual flash when the
