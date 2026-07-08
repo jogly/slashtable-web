@@ -5,7 +5,7 @@ import { breadcrumb, pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Pricing — Database client for product engineers",
   description:
-    "Buy /table once, yours forever. Free for one connection, Personal for $29 (early access), Pro for $49, and Team plans per seat. macOS database client for PostgreSQL and MySQL.",
+    "Buy /table once, yours forever. Free for one connection, Personal for $49, Pro for $99, and Team plans per seat. macOS database client for PostgreSQL and MySQL.",
   path: "/pricing/",
 });
 

@@ -463,10 +463,6 @@ export const PRICING = {
   heading: "Pay once. Or bring the team.",
   description: "Individual plans are one-time purchases. Team plans are per seat. Updates are free on every plan.",
   perpetual: "Buy once, yours forever.",
-  earlyAccess: {
-    eyebrow: "Early access pricing",
-    body: "Personal and Pro are discounted for early access purchasers as a personal thank you for supporting the development.",
-  },
   tiers: [
     {
       name: "Free",
@@ -478,7 +474,6 @@ export const PRICING = {
     {
       name: "Personal",
       price: "$49",
-      salePrice: "$29",
       description: "For multi-tasking engineers",
       features: ["3 active connections", "Unlimited tabs", "10 Neon branches synced", "Docker DB sync"],
       role: { tag: "@supporter", color: "var(--color-role-supporter)" },
@@ -488,7 +483,6 @@ export const PRICING = {
     {
       name: "Pro",
       price: "$99",
-      salePrice: "$49",
       description: "Fully unlocked.",
       features: [
         "Unlimited connections",
