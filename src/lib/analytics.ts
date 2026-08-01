@@ -32,8 +32,6 @@ interface WaitlistSignedUpProps {
 interface CheckoutClickedProps {
   tier: string;
   price: string;
-  discount_active: boolean;
-  discount_amount: string | null;
   polar_id: string;
 }
 

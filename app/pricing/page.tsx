@@ -8,7 +8,6 @@ import ReactMarkdown from "react-markdown";
 import { ContactSalesModal } from "@/components/ui/ContactSalesModal";
 import { ContentContainer } from "@/components/ui/ContentContainer";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { SkyParallax } from "@/components/ui/SkyParallax";
 import { ThankYouModal } from "@/components/ui/ThankYouModal";
 import { useDownload } from "@/hooks/useDownload";
 import { trackCheckoutClicked, trackContactSalesOpened } from "@/lib/analytics";
@@ -77,11 +76,6 @@ function FeatureText({ text }: { text: string }) {
   return <>{text}</>;
 }
 
-function parseDollars(price: string): number {
-  const m = price.match(/\d+/);
-  return m ? Number(m[0]) : 0;
-}
-
 function VaultTooltip() {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -137,16 +131,9 @@ function VaultTooltip() {
 export default function PricingPage() {
   const { showThankYou, closeThankYou, triggerDownload } = useDownload();
   const [showContactSales, setShowContactSales] = useState(false);
-  const bannerRef = useRef<HTMLDivElement>(null);
 
   const individualTiers = PRICING.tiers.slice(0, 3);
   const team = PRICING.tiers[3];
-  const biggestDiscount = Math.max(
-    ...individualTiers.map((t) => {
-      if (!("salePrice" in t) || !t.salePrice) return 0;
-      return parseDollars(t.price) - parseDollars(t.salePrice);
-    }),
-  );
 
   return (
     <div className="pt-32 pb-20">
@@ -157,31 +144,9 @@ export default function PricingPage() {
           <p className="mx-auto mt-4 max-w-xl text-lg text-text-secondary leading-relaxed">{PRICING.description}</p>
         </div>
 
-        <FadeIn>
-          <div
-            ref={bannerRef}
-            className="relative mx-auto mb-10 overflow-hidden border border-border bg-surface-1/30 px-5 py-5 backdrop-blur-sm lg:px-7 lg:py-6"
-          >
-            <SkyParallax targetRef={bannerRef} />
-            <div className="relative z-10 flex items-start gap-4 lg:items-center">
-              <span className="mt-0.5 font-mono text-accent text-lg leading-none lg:text-xl">✦</span>
-              <div className="flex-1">
-                <p className="font-mono text-[10px] text-accent uppercase tracking-widest">
-                  {PRICING.earlyAccess.eyebrow}
-                </p>
-                <p className="mt-1 text-sm text-text-secondary leading-relaxed">{PRICING.earlyAccess.body}</p>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-
         <div className="mx-auto grid gap-6 lg:grid-cols-3">
           {individualTiers.map((tier, i) => {
             const highlighted = i === 1;
-            const salePrice = "salePrice" in tier ? tier.salePrice : undefined;
-            const hasDiscount = !!salePrice;
-            const discountAmount = hasDiscount ? parseDollars(tier.price) - parseDollars(salePrice) : 0;
-            const isBestDeal = hasDiscount && discountAmount === biggestDiscount;
             return (
               <FadeIn key={tier.name} delay={i * 0.15}>
                 <div
@@ -194,30 +159,11 @@ export default function PricingPage() {
                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent to-transparent" />
                   )}
 
-                  {hasDiscount &&
-                    (isBestDeal ? (
-                      <div className="absolute top-0 right-4 flex -translate-y-1/2 items-center gap-1.5 bg-accent px-3.5 py-1.5 font-mono font-semibold text-white text-xs uppercase tracking-widest shadow-[0_0_24px_-2px_var(--color-accent),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.18)]">
-                        <span className="h-1 w-1 rounded-full bg-white/80 shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
-                        <span>${discountAmount} off</span>
-                      </div>
-                    ) : (
-                      <div className="absolute top-0 right-4 -translate-y-1/2 border border-accent/40 bg-surface px-3 py-1 font-mono text-[10px] text-accent uppercase tracking-widest">
-                        ${discountAmount} off
-                      </div>
-                    ))}
-
                   <div className="flex-1">
                     <div className="mb-6">
                       <h2 className="font-mono text-text-muted text-xs uppercase tracking-widest">{tier.name}</h2>
                       <div className="mt-3 flex items-baseline gap-2">
-                        {hasDiscount && salePrice ? (
-                          <>
-                            <span className="font-display text-4xl text-text">{salePrice}</span>
-                            <span className="font-display text-lg text-text-muted line-through">{tier.price}</span>
-                          </>
-                        ) : (
-                          <span className="font-display text-4xl text-text">{tier.price}</span>
-                        )}
+                        <span className="font-display text-4xl text-text">{tier.price}</span>
                         {tier.price !== "$0" && <span className="font-mono text-text-muted text-xs">one-time</span>}
                       </div>
                       <p className="mt-2 text-sm text-text-secondary">{tier.description}</p>
@@ -265,9 +211,7 @@ export default function PricingPage() {
                       onClick={() =>
                         trackCheckoutClicked({
                           tier: tier.name,
-                          price: salePrice ?? tier.price,
-                          discount_active: hasDiscount,
-                          discount_amount: hasDiscount ? `$${discountAmount} off` : null,
+                          price: tier.price,
                           polar_id: tier.polarId as string,
                         })
                       }
