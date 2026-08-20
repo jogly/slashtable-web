@@ -7,16 +7,33 @@ interface LatestRelease {
   downloads: {
     macos_arm64: string;
     macos_x64: string;
+    linux_amd64?: string;
   };
 }
 
-function detectIsIntel(): boolean {
+type NavigatorUAData = {
+  architecture?: string;
+  platform?: string;
+};
+
+function getUserAgentData(): NavigatorUAData | undefined {
+  return (navigator as unknown as { userAgentData?: NavigatorUAData }).userAgentData;
+}
+
+export function detectIsIntel(): boolean {
   // Runs during the lazy `useState` initializer, which executes on SSR too —
   // navigator is browser-only so guard before touching it.
   if (typeof navigator === "undefined") return false;
-  const arch = (navigator as unknown as { userAgentData?: { architecture?: string } }).userAgentData?.architecture;
+  const arch = getUserAgentData()?.architecture;
   if (arch) return arch === "x86";
   return false;
+}
+
+export function detectIsLinux(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const platform = getUserAgentData()?.platform;
+  if (platform) return /linux/i.test(platform);
+  return /linux/i.test(navigator.userAgent) && !/android/i.test(navigator.userAgent);
 }
 
 export function useDownload() {
@@ -24,11 +41,13 @@ export function useDownload() {
   // Start false on server + first client paint to keep hydration stable, then
   // detect on mount. Intel users see a Silicon-default UI for one frame.
   const [isIntel, setIsIntel] = useState(false);
+  const [isLinux, setIsLinux] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const timerRef = useRef<number>(undefined);
 
   useEffect(() => {
     setIsIntel(detectIsIntel());
+    setIsLinux(detectIsLinux());
     fetch("https://downloads.slashtable.dev/latest.json")
       .then((r) => r.json())
       .then(setRelease)
@@ -36,10 +55,21 @@ export function useDownload() {
     return () => window.clearTimeout(timerRef.current);
   }, []);
 
-  const primary = release ? (isIntel ? release.downloads.macos_x64 : release.downloads.macos_arm64) : undefined;
-  const secondary = release ? (isIntel ? release.downloads.macos_arm64 : release.downloads.macos_x64) : undefined;
-  const label = isIntel ? "Intel" : "Silicon";
-  const altLabel = isIntel ? "Silicon" : "Intel";
+  const linuxAvailable = Boolean(release?.downloads.linux_amd64);
+  const linuxPrimary = isLinux && linuxAvailable;
+
+  const primary = release
+    ? linuxPrimary
+      ? release.downloads.linux_amd64
+      : isIntel
+        ? release.downloads.macos_x64
+        : release.downloads.macos_arm64
+    : undefined;
+  const secondary =
+    release && !linuxPrimary ? (isIntel ? release.downloads.macos_arm64 : release.downloads.macos_x64) : undefined;
+  const label = linuxPrimary ? "Linux" : isIntel ? "Intel" : "Silicon";
+  const altLabel = linuxPrimary ? "" : isIntel ? "Silicon" : "Intel";
+  const architecture: "linux" | "intel" | "silicon" = linuxPrimary ? "linux" : isIntel ? "intel" : "silicon";
 
   const openThankYou = useCallback(() => setShowThankYou(true), []);
 
@@ -47,7 +77,7 @@ export function useDownload() {
     (source: DownloadSource = "download_section_button") => {
       if (!primary) return;
       trackDownloadStarted({
-        architecture: isIntel ? "intel" : "silicon",
+        architecture,
         version: release?.version,
         source,
       });
@@ -60,7 +90,7 @@ export function useDownload() {
       document.body.removeChild(a);
       timerRef.current = window.setTimeout(() => setShowThankYou(true), 500);
     },
-    [primary, isIntel, release],
+    [primary, architecture, release],
   );
 
   const closeThankYou = useCallback(() => setShowThankYou(false), []);
@@ -68,6 +98,10 @@ export function useDownload() {
   return {
     release,
     isIntel,
+    isLinux,
+    linuxAvailable,
+    linuxPrimary,
+    architecture,
     primary,
     secondary,
     label,
