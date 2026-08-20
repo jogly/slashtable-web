@@ -21,6 +21,7 @@ interface ManifestVersion {
   downloads: {
     macos_arm64: string;
     macos_x64: string;
+    linux_amd64?: string;
   };
 }
 
@@ -30,6 +31,7 @@ interface LatestRelease {
   downloads: {
     macos_arm64: string;
     macos_x64: string;
+    linux_amd64?: string;
   };
 }
 

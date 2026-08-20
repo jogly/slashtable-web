@@ -13,6 +13,7 @@ import { NoiseTexture } from "@/components/ui/NoiseTexture";
 import { Diamond } from "@/components/ui/SectionBorder";
 import { SkyParallax } from "@/components/ui/SkyParallax";
 import { ThankYouModal } from "@/components/ui/ThankYouModal";
+import { detectIsIntel, detectIsLinux } from "@/hooks/useDownload";
 import { trackDownloadStarted } from "@/lib/analytics";
 import { NAME } from "@/lib/constants";
 import { DOWNLOAD_PAGE } from "@/lib/copy";
@@ -33,6 +34,7 @@ interface ManifestVersion {
   downloads: {
     macos_arm64: string;
     macos_x64: string;
+    linux_amd64?: string;
   };
 }
 
@@ -42,6 +44,7 @@ interface LatestRelease {
   downloads: {
     macos_arm64: string;
     macos_x64: string;
+    linux_amd64?: string;
   };
 }
 
@@ -72,13 +75,6 @@ function filenameFromUrl(url: string | undefined): string | null {
   }
 }
 
-function detectIsIntel(): boolean {
-  if (typeof navigator === "undefined") return false;
-  const arch = (navigator as unknown as { userAgentData?: { architecture?: string } }).userAgentData?.architecture;
-  if (arch) return arch === "x86";
-  return false;
-}
-
 const markdownComponents: Components = {
   a: ({ href, children }) => (
     <a
@@ -104,16 +100,18 @@ const markdownComponents: Components = {
   ul: ({ children }) => <ul className="space-y-2">{children}</ul>,
 };
 
-type ArchKey = "silicon" | "intel";
+type ArchKey = "silicon" | "intel" | "linux";
 
 export function DownloadView({ release, versions, changelogEntry }: DownloadViewProps) {
   const [isIntel, setIsIntel] = useState(false);
+  const [isLinux, setIsLinux] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [versionPage, setVersionPage] = useState(0);
   const heroCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsIntel(detectIsIntel());
+    setIsLinux(detectIsLinux());
   }, []);
 
   const openThankYou = useCallback(() => setShowThankYou(true), []);
@@ -121,15 +119,20 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
 
   const totalPages = Math.max(1, Math.ceil(versions.length / VERSIONS_PER_PAGE));
   const visibleVersions = versions.slice(versionPage * VERSIONS_PER_PAGE, (versionPage + 1) * VERSIONS_PER_PAGE);
-  const detected: ArchKey = isIntel ? "intel" : "silicon";
+  const linuxUrl = release?.downloads.linux_amd64;
+  const linuxAvailable = Boolean(linuxUrl);
+  const detected: ArchKey = isLinux && linuxAvailable ? "linux" : isIntel ? "intel" : "silicon";
   const siliconUrl = release?.downloads.macos_arm64;
   const intelUrl = release?.downloads.macos_x64;
   const siliconFile = filenameFromUrl(siliconUrl);
   const intelFile = filenameFromUrl(intelUrl);
+  const linuxFile = filenameFromUrl(linuxUrl);
+  const buildCount = linuxAvailable ? 3 : 2;
+  const showLinuxColumn = linuxAvailable || versions.some((v) => Boolean(v.downloads.linux_amd64));
 
   function handleDownload(arch: ArchKey) {
     trackDownloadStarted({
-      architecture: arch === "intel" ? "intel" : "silicon",
+      architecture: arch,
       version: release?.version,
       source: arch === detected ? "download_section_button" : "download_page_alt_arch",
     });
@@ -176,7 +179,7 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
             <div className="relative z-10 flex flex-col items-stretch px-6 py-10 lg:flex-row lg:items-center lg:justify-between lg:px-12 lg:py-16">
               <div className="flex flex-col gap-2">
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-[0.2em]">
-                  {NAME.full} / {DOWNLOAD_PAGE.platformTag}
+                  {NAME.full} / {linuxAvailable ? DOWNLOAD_PAGE.platformTagLinux : DOWNLOAD_PAGE.platformTag}
                 </span>
                 <h1 className="font-mono font-semibold text-5xl text-text leading-none lg:text-7xl">
                   {release ? (
@@ -235,11 +238,11 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
             <div className="mb-8 flex items-baseline justify-between gap-4">
               <h2 className="font-display text-2xl text-text lg:text-3xl">{DOWNLOAD_PAGE.archHeading}</h2>
               <span className="hidden font-mono text-[10px] text-text-muted uppercase tracking-widest md:inline">
-                2 builds available
+                {DOWNLOAD_PAGE.buildsAvailable(buildCount)}
               </span>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
+            <div className={cn("grid gap-4 lg:gap-6", linuxAvailable ? "lg:grid-cols-3" : "lg:grid-cols-2")}>
               <ArchCard
                 arch="silicon"
                 isDetected={detected === "silicon"}
@@ -254,6 +257,15 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                 filename={intelFile}
                 onDownload={() => handleDownload("intel")}
               />
+              {linuxAvailable && (
+                <ArchCard
+                  arch="linux"
+                  isDetected={detected === "linux"}
+                  url={linuxUrl}
+                  filename={linuxFile}
+                  onDownload={() => handleDownload("linux")}
+                />
+              )}
             </div>
 
             <p className="mt-6 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest lg:text-left">
@@ -378,6 +390,11 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                         <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
                           {DOWNLOAD_PAGE.intelColumn}
                         </th>
+                        {showLinuxColumn && (
+                          <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                            {DOWNLOAD_PAGE.linuxColumn}
+                          </th>
+                        )}
                       </tr>
                     </thead>
                     <tbody>
@@ -424,6 +441,22 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                                 x86_64
                               </a>
                             </td>
+                            {showLinuxColumn && (
+                              <td className="px-6 py-4 text-right">
+                                {v.downloads.linux_amd64 ? (
+                                  <a
+                                    href={v.downloads.linux_amd64}
+                                    download
+                                    className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
+                                  >
+                                    <Download className="h-3 w-3" />
+                                    amd64
+                                  </a>
+                                ) : (
+                                  <span className="font-mono text-[11px] text-text-muted">&mdash;</span>
+                                )}
+                              </td>
+                            )}
                           </tr>
                         );
                       })}
@@ -567,7 +600,9 @@ interface ArchCardProps {
 }
 
 function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps) {
-  const info = arch === "silicon" ? DOWNLOAD_PAGE.silicon : DOWNLOAD_PAGE.intel;
+  const info = arch === "silicon" ? DOWNLOAD_PAGE.silicon : arch === "intel" ? DOWNLOAD_PAGE.intel : DOWNLOAD_PAGE.linux;
+  const cta = arch === "linux" ? DOWNLOAD_PAGE.downloadCtaLinux : DOWNLOAD_PAGE.downloadCta;
+  const recommendedBadge = arch === "linux" ? DOWNLOAD_PAGE.recommendedBadgeLinux : DOWNLOAD_PAGE.recommendedBadge;
   const disabled = !url;
 
   return (
@@ -591,7 +626,7 @@ function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps
             )}
           />
           <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-            {isDetected ? DOWNLOAD_PAGE.recommendedBadge : DOWNLOAD_PAGE.alsoAvailable}
+            {isDetected ? recommendedBadge : DOWNLOAD_PAGE.alsoAvailable}
           </span>
         </div>
         <span className="font-mono text-[10px] text-text-muted/70 uppercase tracking-widest">{info.arch}</span>
@@ -621,7 +656,7 @@ function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps
           >
             <ButtonOverlays grainOpacity={0.18} />
             <Download className="relative h-4 w-4" />
-            <span className="relative">{DOWNLOAD_PAGE.downloadCta}</span>
+            <span className="relative">{cta}</span>
           </a>
         ) : (
           <a
@@ -634,7 +669,7 @@ function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps
             )}
           >
             <Download className="h-4 w-4" />
-            <span>{DOWNLOAD_PAGE.downloadCta}</span>
+            <span>{cta}</span>
           </a>
         )}
       </div>

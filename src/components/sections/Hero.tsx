@@ -4,6 +4,7 @@ import heroDark from "@screenshots/hero-dark.png";
 import heroLight from "@screenshots/hero-light.png";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { useDownload } from "../../hooks/useDownload";
 import { HERO } from "../../lib/copy";
 import { useTheme } from "../providers/ThemeProvider";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
@@ -32,14 +33,14 @@ const fadeUp = {
   },
 };
 
-function CtaDownload() {
+function CtaDownload({ label }: { label: string }) {
   return (
     <a
       href="#download"
       className="group relative inline-flex h-10 items-center justify-center gap-1.5 overflow-hidden rounded-sm bg-accent px-5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.12)]"
     >
       <ButtonOverlays grainOpacity={0.36} />
-      <span className="relative">{HERO.ctaDownload}</span>
+      <span className="relative">{label}</span>
       <span className="relative opacity-70">&rsaquo;</span>
     </a>
   );
@@ -60,6 +61,9 @@ function CtaFeatures() {
 
 export function Hero() {
   const { theme } = useTheme();
+  const { isLinux, linuxAvailable } = useDownload();
+  const ctaLabel = isLinux && linuxAvailable ? HERO.ctaDownloadLinux : HERO.ctaDownload;
+  const availability = linuxAvailable ? HERO.availabilityLinux : HERO.availability;
   const prefersReducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
@@ -182,7 +186,7 @@ export function Hero() {
             <div className="relative flex items-stretch">
               {/*<BlueprintRule orientation="vertical" />*/}
               <div className="flex items-center p-4">
-                <CtaDownload />
+                <CtaDownload label={ctaLabel} />
               </div>
               {/*<BlueprintRule orientation="vertical" />*/}
               <div className="flex items-center p-4">
@@ -195,10 +199,10 @@ export function Hero() {
           </div>
           {/* Mobile: plain button stack, no frame */}
           <div className="mx-auto flex max-w-xs flex-col items-stretch gap-3 sm:hidden [&>a]:w-full">
-            <CtaDownload />
+            <CtaDownload label={ctaLabel} />
             <CtaFeatures />
           </div>
-          <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{HERO.availability}</p>
+          <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{availability}</p>
         </motion.div>
       </motion.div>
 
