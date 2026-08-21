@@ -35,6 +35,7 @@ interface ManifestVersion {
     macos_arm64: string;
     macos_x64: string;
     linux_amd64?: string;
+    linux_aarch64?: string;
     linux_x86?: string;
   };
 }
@@ -46,6 +47,7 @@ interface LatestRelease {
     macos_arm64: string;
     macos_x64: string;
     linux_amd64?: string;
+    linux_aarch64?: string;
     linux_x86?: string;
   };
 }
@@ -122,8 +124,9 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
   const totalPages = Math.max(1, Math.ceil(versions.length / VERSIONS_PER_PAGE));
   const visibleVersions = versions.slice(versionPage * VERSIONS_PER_PAGE, (versionPage + 1) * VERSIONS_PER_PAGE);
   const linuxAmd64Url = release?.downloads.linux_amd64;
+  const linuxAarch64Url = release?.downloads.linux_aarch64;
   const linuxX86Url = release?.downloads.linux_x86;
-  const linuxAvailable = Boolean(linuxAmd64Url || linuxX86Url);
+  const linuxAvailable = Boolean(linuxAmd64Url || linuxAarch64Url || linuxX86Url);
   // Linux x86 and amd64 are distinct. OS detection cannot tell them apart,
   // so never mark a Linux card detected. On Linux, also do not recommend a Mac build.
   const detected: ArchKey | null = isLinux ? null : isIntel ? "intel" : "silicon";
@@ -134,8 +137,8 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
   const linuxAmd64File = filenameFromUrl(linuxAmd64Url);
   const buildCount = [siliconUrl, intelUrl, linuxAmd64Url, linuxX86Url].filter(Boolean).length;
   const showLinuxColumn =
-    Boolean(linuxAmd64Url || linuxX86Url) ||
-    versions.some((v) => Boolean(v.downloads.linux_amd64 || v.downloads.linux_x86));
+    Boolean(linuxAmd64Url || linuxAarch64Url || linuxX86Url) ||
+    versions.some((v) => Boolean(v.downloads.linux_amd64 || v.downloads.linux_aarch64 || v.downloads.linux_x86));
 
   function handleDownload(arch: ArchKey) {
     trackDownloadStarted({
@@ -379,22 +382,37 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                   <table className="w-full">
                     <thead>
                       <tr className="border-border border-b">
-                        <th className="px-6 py-3 text-left font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                        <th rowSpan={2} className="px-6 py-3 text-left font-mono text-[10px] text-text-muted uppercase tracking-widest align-bottom">
                           {DOWNLOAD_PAGE.versionColumn}
                         </th>
-                        <th className="px-6 py-3 text-left font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                        <th rowSpan={2} className="px-6 py-3 text-left font-mono text-[10px] text-text-muted uppercase tracking-widest align-bottom">
                           {DOWNLOAD_PAGE.releasedColumn}
                         </th>
-                        <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                          {DOWNLOAD_PAGE.siliconColumn}
-                        </th>
-                        <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                          {DOWNLOAD_PAGE.intelColumn}
+                        <th colSpan={2} className="px-6 py-2 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                          {DOWNLOAD_PAGE.macosGroup}
                         </th>
                         {showLinuxColumn && (
-                          <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                            {DOWNLOAD_PAGE.linuxColumn}
+                          <th colSpan={2} className="px-6 py-2 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                            {DOWNLOAD_PAGE.linuxGroup}
                           </th>
+                        )}
+                      </tr>
+                      <tr className="border-border border-b">
+                        <th className="px-6 py-2 text-right font-mono text-[10px] text-text-muted/80 uppercase tracking-widest">
+                          {DOWNLOAD_PAGE.archAarch64}
+                        </th>
+                        <th className="px-6 py-2 text-right font-mono text-[10px] text-text-muted/80 uppercase tracking-widest">
+                          {DOWNLOAD_PAGE.archX64}
+                        </th>
+                        {showLinuxColumn && (
+                          <>
+                            <th className="px-6 py-2 text-right font-mono text-[10px] text-text-muted/80 uppercase tracking-widest">
+                              {DOWNLOAD_PAGE.archAarch64}
+                            </th>
+                            <th className="px-6 py-2 text-right font-mono text-[10px] text-text-muted/80 uppercase tracking-widest">
+                              {DOWNLOAD_PAGE.archAmd64}
+                            </th>
+                          </>
                         )}
                       </tr>
                     </thead>
@@ -444,6 +462,22 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                             </td>
                             {showLinuxColumn && (
                               <td className="px-6 py-4 text-right">
+                                {v.downloads.linux_aarch64 ? (
+                                  <a
+                                    href={v.downloads.linux_aarch64}
+                                    download
+                                    className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
+                                  >
+                                    <Download className="h-3 w-3" />
+                                    {DOWNLOAD_PAGE.archAarch64}
+                                  </a>
+                                ) : (
+                                  <span className="font-mono text-[11px] text-text-muted">–</span>
+                                )}
+                              </td>
+                            )}
+                            {showLinuxColumn && (
+                              <td className="px-6 py-4 text-right">
                                 {v.downloads.linux_amd64 ? (
                                   <a
                                     href={v.downloads.linux_amd64}
@@ -451,10 +485,10 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                                     className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
                                   >
                                     <Download className="h-3 w-3" />
-                                    amd64
+                                    {DOWNLOAD_PAGE.archAmd64}
                                   </a>
                                 ) : (
-                                  <span className="font-mono text-[11px] text-text-muted">—</span>
+                                  <span className="font-mono text-[11px] text-text-muted">–</span>
                                 )}
                               </td>
                             )}
