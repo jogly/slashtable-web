@@ -644,12 +644,9 @@ function LinuxPlatform({
   onDownload: (arch: ArchKey) => void;
 }) {
   const copy = DOWNLOAD_PAGE.linuxPlatform;
-  const options = (
-    [
-      aarch64Url ? { key: "aarch64" as const, url: aarch64Url, event: "linux_aarch64" as const } : null,
-      amd64Url ? { key: "amd64" as const, url: amd64Url, event: "linux_amd64" as const } : null,
-    ] as const
-  ).filter((o): o is { key: LinuxArch; url: string; event: "linux_aarch64" | "linux_amd64" } => o !== null);
+  const options: { key: LinuxArch; url: string; event: "linux_aarch64" | "linux_amd64" }[] = [];
+  if (aarch64Url) options.push({ key: "aarch64", url: aarch64Url, event: "linux_aarch64" });
+  if (amd64Url) options.push({ key: "amd64", url: amd64Url, event: "linux_amd64" });
 
   const [picked, setPicked] = useState<LinuxArch | null>(null);
   const selected =
