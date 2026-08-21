@@ -8,6 +8,7 @@ interface LatestRelease {
     macos_arm64: string;
     macos_x64: string;
     linux_amd64?: string;
+    linux_x86?: string;
   };
 }
 
@@ -55,21 +56,20 @@ export function useDownload() {
     return () => window.clearTimeout(timerRef.current);
   }, []);
 
-  const linuxAvailable = Boolean(release?.downloads.linux_amd64);
-  const linuxPrimary = isLinux && linuxAvailable;
+  const linuxAvailable = Boolean(release?.downloads.linux_amd64 || release?.downloads.linux_x86);
+  // Never treat Linux as the primary download. x86 and amd64 are distinct and
+  // OS detection cannot tell them apart, so the user has to pick on /download.
+  const linuxChooser = isLinux && linuxAvailable;
 
   const primary = release
-    ? linuxPrimary
-      ? release.downloads.linux_amd64
-      : isIntel
-        ? release.downloads.macos_x64
-        : release.downloads.macos_arm64
+    ? isIntel
+      ? release.downloads.macos_x64
+      : release.downloads.macos_arm64
     : undefined;
-  const secondary =
-    release && !linuxPrimary ? (isIntel ? release.downloads.macos_arm64 : release.downloads.macos_x64) : undefined;
-  const label = linuxPrimary ? "Linux" : isIntel ? "Intel" : "Silicon";
-  const altLabel = linuxPrimary ? "" : isIntel ? "Silicon" : "Intel";
-  const architecture: "linux" | "intel" | "silicon" = linuxPrimary ? "linux" : isIntel ? "intel" : "silicon";
+  const secondary = release ? (isIntel ? release.downloads.macos_arm64 : release.downloads.macos_x64) : undefined;
+  const label = isIntel ? "Intel" : "Silicon";
+  const altLabel = isIntel ? "Silicon" : "Intel";
+  const architecture: "intel" | "silicon" = isIntel ? "intel" : "silicon";
 
   const openThankYou = useCallback(() => setShowThankYou(true), []);
 
@@ -100,7 +100,8 @@ export function useDownload() {
     isIntel,
     isLinux,
     linuxAvailable,
-    linuxPrimary,
+    linuxChooser,
+    linuxPrimary: false,
     architecture,
     primary,
     secondary,

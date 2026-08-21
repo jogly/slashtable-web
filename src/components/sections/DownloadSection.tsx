@@ -182,7 +182,8 @@ function FlowIndicator() {
 export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const {
     release,
-    linuxPrimary,
+    isLinux,
+    linuxAvailable,
     architecture,
     primary,
     secondary,
@@ -192,6 +193,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
     openThankYou,
     closeThankYou,
   } = useDownload();
+  const linuxChooser = isLinux && linuxAvailable;
   const [showKeepPosted, setShowKeepPosted] = useState(false);
   const [dropped, setDropped] = useState(false);
   const [isOverFolder, setIsOverFolder] = useState(false);
@@ -259,7 +261,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
 
         <FadeIn delay={hideHeader ? 0 : 0.1}>
           {/* DMG-style drag area — desktop Mac only */}
-          {!linuxPrimary && (
+          {!linuxChooser && (
           <div className="mx-auto mt-10 hidden max-w-md rounded-md border border-border bg-surface-2/50 px-8 py-10 shadow-[0_0_80px_-20px_var(--color-glow-soft)] backdrop-blur-sm lg:block">
             {mounted && (
               <DndContext onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
@@ -337,9 +339,10 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
           {/* Mobile download button */}
           <div className="mx-auto mt-10 flex max-w-xs flex-col items-stretch gap-4 lg:hidden">
             <a
-              href={primary}
-              {...(primary ? { download: true } : { "aria-disabled": true })}
+              href={linuxChooser ? "/download" : primary}
+              {...(!linuxChooser && primary ? { download: true } : linuxChooser ? {} : { "aria-disabled": true })}
               onClick={() => {
+                if (linuxChooser) return;
                 trackDownloadStarted({
                   architecture,
                   version: release?.version,
@@ -348,16 +351,16 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                 t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
               className={`group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded bg-accent px-8 py-3.5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.12)]${
-                !primary ? "pointer-events-none opacity-50" : ""
+                !linuxChooser && !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
               <ButtonOverlays grainOpacity={0.18} />
               <Download className="relative h-4 w-4" />
               <span className="relative flex flex-wrap justify-center gap-x-1">
                 <span className="whitespace-nowrap">
-                  {linuxPrimary ? DOWNLOAD.downloadLabelLinux : DOWNLOAD.downloadLabel}
+                  {linuxChooser ? DOWNLOAD.downloadLabelLinux : DOWNLOAD.downloadLabel}
                 </span>
-                {!linuxPrimary && <span className="whitespace-nowrap">({label})</span>}
+                {!linuxChooser && <span className="whitespace-nowrap">({label})</span>}
               </span>
               {release && <span className="relative whitespace-nowrap opacity-70">&mdash; v{release.version}</span>}
             </a>
@@ -375,14 +378,15 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
           <a ref={downloadRef} href={primary} download className="hidden" tabIndex={-1} aria-hidden="true" />
 
           {/* Button fallback — desktop */}
-          <div className={cn("hidden flex-col items-center gap-3 lg:flex", linuxPrimary ? "mt-10" : "mt-8")}>
-            {!linuxPrimary && (
+          <div className={cn("hidden flex-col items-center gap-3 lg:flex", linuxChooser ? "mt-10" : "mt-8")}>
+            {!linuxChooser && (
               <p className="font-mono text-[10px] text-text-muted italic">{DOWNLOAD.buttonFallback}</p>
             )}
             <a
-              href={primary}
-              {...(primary ? { download: true } : { "aria-disabled": true })}
+              href={linuxChooser ? "/download" : primary}
+              {...(!linuxChooser && primary ? { download: true } : linuxChooser ? {} : { "aria-disabled": true })}
               onClick={() => {
+                if (linuxChooser) return;
                 trackDownloadStarted({
                   architecture,
                   version: release?.version,
@@ -391,18 +395,18 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                 t3Ref.current = window.setTimeout(openThankYou, 500);
               }}
               className={`group relative inline-flex min-w-[22rem] items-center justify-center gap-2.5 overflow-hidden rounded bg-accent px-8 py-3.5 font-mono text-white text-xs uppercase tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_srgb,var(--color-accent)_92%,white)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.12)] active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.12)]${
-                !primary ? "pointer-events-none opacity-50" : ""
+                !linuxChooser && !primary ? "pointer-events-none opacity-50" : ""
               }`}
             >
               <ButtonOverlays grainOpacity={0.18} />
               <Download className="relative h-4 w-4" />
               <span className="relative">
-                {linuxPrimary ? DOWNLOAD.downloadLabelLinux : `${DOWNLOAD.downloadLabel} (${label})`}
+                {linuxChooser ? DOWNLOAD.downloadLabelLinux : `${DOWNLOAD.downloadLabel} (${label})`}
               </span>
               {release && <span className="relative opacity-70">&mdash; v{release.version}</span>}
             </a>
             <div className="flex items-center gap-3">
-              {!linuxPrimary && (
+              {!linuxChooser && (
                 <>
                   <a
                     href={secondary}
@@ -427,15 +431,10 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
 
           {/* Secondary links */}
           <div className="mt-4 flex flex-col items-center gap-1.5 lg:mt-6">
-            {linuxPrimary ? (
-              <>
-                <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                  {DOWNLOAD.linuxHint}
-                </p>
-                <p className="font-mono text-[11px] text-text-secondary">
-                  <code>{DOWNLOAD.linuxInstall}</code>
-                </p>
-              </>
+            {linuxChooser ? (
+              <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                {DOWNLOAD.linuxHint}
+              </p>
             ) : (
               <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
                 <span className="text-text">🍺</span> {DOWNLOAD.homebrewHint}{" "}
