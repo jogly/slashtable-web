@@ -132,13 +132,10 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
   const siliconFile = filenameFromUrl(siliconUrl);
   const intelFile = filenameFromUrl(intelUrl);
   const linuxAmd64File = filenameFromUrl(linuxAmd64Url);
-  const linuxX86File = filenameFromUrl(linuxX86Url);
   const buildCount = [siliconUrl, intelUrl, linuxAmd64Url, linuxX86Url].filter(Boolean).length;
   const showLinuxColumn =
     Boolean(linuxAmd64Url || linuxX86Url) ||
     versions.some((v) => Boolean(v.downloads.linux_amd64 || v.downloads.linux_x86));
-  const showLinuxAmd64Column = showLinuxColumn;
-  const showLinuxX86Column = showLinuxColumn;
 
   function handleDownload(arch: ArchKey) {
     trackDownloadStarted({
