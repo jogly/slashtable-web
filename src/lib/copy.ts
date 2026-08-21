@@ -316,14 +316,25 @@ export const DOWNLOAD_PAGE = {
     body: "Intel-based Macs running macOS 12 or later.",
   },
   linux: {
-    label: "Linux (alpha)",
+    label: "Linux",
     arch: "amd64",
     body: "Debian/Ubuntu, amd64. Alpha.",
   },
   linuxX86: {
-    label: "Linux (alpha)",
+    label: "Linux",
     arch: "x86",
     body: "Debian/Ubuntu, x86. Alpha.",
+  },
+  linuxPlatform: {
+    eyebrow: "Also on",
+    label: "Linux",
+    badge: "alpha",
+    body: "Debian/Ubuntu. x86 and amd64 are separate builds.",
+    distro: "Debian/Ubuntu",
+    x86: "x86",
+    amd64: "amd64",
+    cta: "Download .deb",
+    installAmd64: "sudo apt-get install ./SlashTable_*_amd64.deb",
   },
   requirementsHeading: "System requirements",
   requirements: [
