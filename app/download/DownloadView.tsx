@@ -35,6 +35,7 @@ interface ManifestVersion {
     macos_arm64: string;
     macos_x64: string;
     linux_amd64?: string;
+    linux_x86?: string;
   };
 }
 
@@ -45,6 +46,7 @@ interface LatestRelease {
     macos_arm64: string;
     macos_x64: string;
     linux_amd64?: string;
+    linux_x86?: string;
   };
 }
 
@@ -100,7 +102,7 @@ const markdownComponents: Components = {
   ul: ({ children }) => <ul className="space-y-2">{children}</ul>,
 };
 
-type ArchKey = "silicon" | "intel" | "linux";
+type ArchKey = "silicon" | "intel" | "linux_amd64" | "linux_x86";
 
 export function DownloadView({ release, versions, changelogEntry }: DownloadViewProps) {
   const [isIntel, setIsIntel] = useState(false);
@@ -119,16 +121,24 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
 
   const totalPages = Math.max(1, Math.ceil(versions.length / VERSIONS_PER_PAGE));
   const visibleVersions = versions.slice(versionPage * VERSIONS_PER_PAGE, (versionPage + 1) * VERSIONS_PER_PAGE);
-  const linuxUrl = release?.downloads.linux_amd64;
-  const linuxAvailable = Boolean(linuxUrl);
-  const detected: ArchKey = isLinux && linuxAvailable ? "linux" : isIntel ? "intel" : "silicon";
+  const linuxAmd64Url = release?.downloads.linux_amd64;
+  const linuxX86Url = release?.downloads.linux_x86;
+  const linuxAvailable = Boolean(linuxAmd64Url || linuxX86Url);
+  // Linux x86 and amd64 are distinct. OS detection cannot tell them apart,
+  // so never mark a Linux card detected. On Linux, also do not recommend a Mac build.
+  const detected: ArchKey | null = isLinux ? null : isIntel ? "intel" : "silicon";
   const siliconUrl = release?.downloads.macos_arm64;
   const intelUrl = release?.downloads.macos_x64;
   const siliconFile = filenameFromUrl(siliconUrl);
   const intelFile = filenameFromUrl(intelUrl);
-  const linuxFile = filenameFromUrl(linuxUrl);
-  const buildCount = linuxAvailable ? 3 : 2;
-  const showLinuxColumn = linuxAvailable || versions.some((v) => Boolean(v.downloads.linux_amd64));
+  const linuxAmd64File = filenameFromUrl(linuxAmd64Url);
+  const linuxX86File = filenameFromUrl(linuxX86Url);
+  const buildCount = [siliconUrl, intelUrl, linuxAmd64Url, linuxX86Url].filter(Boolean).length;
+  const showLinuxColumn =
+    Boolean(linuxAmd64Url || linuxX86Url) ||
+    versions.some((v) => Boolean(v.downloads.linux_amd64 || v.downloads.linux_x86));
+  const showLinuxAmd64Column = showLinuxColumn;
+  const showLinuxX86Column = showLinuxColumn;
 
   function handleDownload(arch: ArchKey) {
     trackDownloadStarted({
@@ -242,7 +252,7 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
               </span>
             </div>
 
-            <div className={cn("grid gap-4 lg:gap-6", linuxAvailable ? "lg:grid-cols-3" : "lg:grid-cols-2")}>
+            <div className={cn("grid gap-4 lg:gap-6", showLinuxColumn ? "lg:grid-cols-2 xl:grid-cols-4" : "lg:grid-cols-2")}>
               <ArchCard
                 arch="silicon"
                 isDetected={detected === "silicon"}
@@ -257,13 +267,22 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                 filename={intelFile}
                 onDownload={() => handleDownload("intel")}
               />
-              {linuxAvailable && (
+              {showLinuxColumn && (
                 <ArchCard
-                  arch="linux"
-                  isDetected={detected === "linux"}
-                  url={linuxUrl}
-                  filename={linuxFile}
-                  onDownload={() => handleDownload("linux")}
+                  arch="linux_x86"
+                  isDetected={false}
+                  url={linuxX86Url}
+                  filename={linuxX86File}
+                  onDownload={() => handleDownload("linux_x86")}
+                />
+              )}
+              {showLinuxColumn && (
+                <ArchCard
+                  arch="linux_amd64"
+                  isDetected={false}
+                  url={linuxAmd64Url}
+                  filename={linuxAmd64File}
+                  onDownload={() => handleDownload("linux_amd64")}
                 />
               )}
             </div>
@@ -390,9 +409,14 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                         <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
                           {DOWNLOAD_PAGE.intelColumn}
                         </th>
-                        {showLinuxColumn && (
+                        {showLinuxX86Column && (
                           <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                            {DOWNLOAD_PAGE.linuxColumn}
+                            {DOWNLOAD_PAGE.linuxX86Column}
+                          </th>
+                        )}
+                        {showLinuxAmd64Column && (
+                          <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
+                            {DOWNLOAD_PAGE.linuxAmd64Column}
                           </th>
                         )}
                       </tr>
@@ -441,7 +465,23 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                                 x86_64
                               </a>
                             </td>
-                            {showLinuxColumn && (
+                            {showLinuxX86Column && (
+                              <td className="px-6 py-4 text-right">
+                                {v.downloads.linux_x86 ? (
+                                  <a
+                                    href={v.downloads.linux_x86}
+                                    download
+                                    className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
+                                  >
+                                    <Download className="h-3 w-3" />
+                                    x86
+                                  </a>
+                                ) : (
+                                  <span className="font-mono text-[11px] text-text-muted">&mdash;</span>
+                                )}
+                              </td>
+                            )}
+                            {showLinuxAmd64Column && (
                               <td className="px-6 py-4 text-right">
                                 {v.downloads.linux_amd64 ? (
                                   <a
@@ -450,7 +490,7 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                                     className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
                                   >
                                     <Download className="h-3 w-3" />
-                                    x86_64
+                                    amd64
                                   </a>
                                 ) : (
                                   <span className="font-mono text-[11px] text-text-muted">&mdash;</span>
@@ -600,9 +640,16 @@ interface ArchCardProps {
 }
 
 function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps) {
-  const info = arch === "silicon" ? DOWNLOAD_PAGE.silicon : arch === "intel" ? DOWNLOAD_PAGE.intel : DOWNLOAD_PAGE.linux;
-  const cta = arch === "linux" ? DOWNLOAD_PAGE.downloadCtaLinux : DOWNLOAD_PAGE.downloadCta;
-  const recommendedBadge = arch === "linux" ? DOWNLOAD_PAGE.recommendedBadgeLinux : DOWNLOAD_PAGE.recommendedBadge;
+  const info =
+    arch === "silicon"
+      ? DOWNLOAD_PAGE.silicon
+      : arch === "intel"
+        ? DOWNLOAD_PAGE.intel
+        : arch === "linux_x86"
+          ? DOWNLOAD_PAGE.linuxX86
+          : DOWNLOAD_PAGE.linux;
+  const cta = arch === "silicon" || arch === "intel" ? DOWNLOAD_PAGE.downloadCta : DOWNLOAD_PAGE.downloadCtaLinux;
+  const recommendedBadge = DOWNLOAD_PAGE.recommendedBadge;
   const disabled = !url;
 
   return (
