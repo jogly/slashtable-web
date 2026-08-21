@@ -268,14 +268,8 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                 onDownload={() => handleDownload("intel")}
               />
             </div>
-            {showLinuxColumn && (
-              <LinuxPlatform
-                x86Url={linuxX86Url}
-                amd64Url={linuxAmd64Url}
-                x86File={linuxX86File}
-                amd64File={linuxAmd64File}
-                onDownload={handleDownload}
-              />
+            {linuxAmd64Url && (
+              <LinuxPlatform url={linuxAmd64Url} filename={linuxAmd64File} onDownload={() => handleDownload("linux_amd64")} />
             )}
 
             <p className="mt-6 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest lg:text-left">
@@ -453,32 +447,18 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                             </td>
                             {showLinuxColumn && (
                               <td className="px-6 py-4 text-right">
-                                <div className="flex flex-col items-end gap-1.5">
-                                  {v.downloads.linux_x86 ? (
-                                    <a
-                                      href={v.downloads.linux_x86}
-                                      download
-                                      className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
-                                    >
-                                      <Download className="h-3 w-3" />
-                                      x86
-                                    </a>
-                                  ) : (
-                                    <span className="font-mono text-[11px] text-text-muted">x86</span>
-                                  )}
-                                  {v.downloads.linux_amd64 ? (
-                                    <a
-                                      href={v.downloads.linux_amd64}
-                                      download
-                                      className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
-                                    >
-                                      <Download className="h-3 w-3" />
-                                      amd64
-                                    </a>
-                                  ) : (
-                                    <span className="font-mono text-[11px] text-text-muted">amd64</span>
-                                  )}
-                                </div>
+                                {v.downloads.linux_amd64 ? (
+                                  <a
+                                    href={v.downloads.linux_amd64}
+                                    download
+                                    className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
+                                  >
+                                    <Download className="h-3 w-3" />
+                                    amd64
+                                  </a>
+                                ) : (
+                                  <span className="font-mono text-[11px] text-text-muted">—</span>
+                                )}
                               </td>
                             )}
                           </tr>
@@ -616,94 +596,43 @@ function HomebrewSection({ commands, heading }: { commands: string[]; heading: s
 }
 
 function LinuxPlatform({
-  x86Url,
-  amd64Url,
-  x86File,
-  amd64File,
+  url,
+  filename,
   onDownload,
 }: {
-  x86Url: string | undefined;
-  amd64Url: string | undefined;
-  x86File: string | null;
-  amd64File: string | null;
-  onDownload: (arch: ArchKey) => void;
+  url: string;
+  filename: string | null;
+  onDownload: () => void;
 }) {
   const copy = DOWNLOAD_PAGE.linuxPlatform;
   return (
-    <div className="mt-6 border border-dashed border-border/70 bg-surface-1/15 px-6 py-5 lg:px-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.eyebrow}</span>
-            <span className="border border-border bg-bg px-1.5 py-0.5 font-mono text-[9px] text-text-muted uppercase tracking-widest">
-              {copy.badge}
-            </span>
-          </div>
-          <h3 className="mt-1 font-display text-xl text-text">{copy.label}</h3>
-          <p className="mt-1 max-w-md text-sm text-text-secondary leading-relaxed">{copy.body}</p>
-        </div>
-        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.distro}</span>
-      </div>
-      <div className="mt-5 grid gap-2 sm:grid-cols-2">
-        <LinuxArchRow
-          archLabel={copy.x86}
-          url={x86Url}
-          filename={x86File}
-          cta={copy.cta}
-          onDownload={() => onDownload("linux_x86")}
-        />
-        <LinuxArchRow
-          archLabel={copy.amd64}
-          url={amd64Url}
-          filename={amd64File}
-          cta={copy.cta}
-          onDownload={() => onDownload("linux_amd64")}
-        />
-      </div>
-      {amd64Url && (
-        <p className="mt-4 font-mono text-[11px] text-text-muted">
-          <span className="uppercase tracking-widest">{copy.amd64}</span>
-          <code className="ml-2 text-text-secondary">{copy.installAmd64}</code>
-        </p>
-      )}
-    </div>
-  );
-}
-
-function LinuxArchRow({
-  archLabel,
-  url,
-  filename,
-  cta,
-  onDownload,
-}: {
-  archLabel: string;
-  url: string | undefined;
-  filename: string | null;
-  cta: string;
-  onDownload: () => void;
-}) {
-  const disabled = !url;
-  const className = cn(
-    "flex items-center justify-between gap-3 border border-border/50 bg-bg/30 px-3 py-2.5 transition-colors",
-    disabled ? "opacity-50" : "hover:border-border hover:bg-bg/50",
-  );
-  const inner = (
-    <>
+    <div className="mt-6 flex flex-col gap-4 border border-dashed border-border/70 bg-surface-1/10 px-6 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-8">
       <div className="min-w-0">
-        <span className="font-mono text-xs text-text">{archLabel}</span>
-        <span className="mt-0.5 block truncate font-mono text-[10px] text-text-muted">{filename ?? cta}</span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.eyebrow}</span>
+          <span className="border border-border bg-bg px-1.5 py-0.5 font-mono text-[9px] text-text-muted uppercase tracking-widest">
+            {copy.badge}
+          </span>
+        </div>
+        <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 className="font-display text-xl text-text">{copy.label}</h3>
+          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.body}</span>
+        </div>
+        <p className="mt-2 truncate font-mono text-[11px] text-text-muted">{filename}</p>
+        <p className="mt-1 font-mono text-[11px] text-text-secondary">
+          <code>{copy.install}</code>
+        </p>
       </div>
-      <Download className="h-3.5 w-3.5 shrink-0 text-text-muted" />
-    </>
-  );
-  if (disabled) {
-    return <div className={className}>{inner}</div>;
-  }
-  return (
-    <a href={url} download onClick={onDownload} className={className}>
-      {inner}
-    </a>
+      <a
+        href={url}
+        download
+        onClick={onDownload}
+        className="relative inline-flex shrink-0 items-center justify-center gap-2 rounded border border-border bg-transparent px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-text/40 hover:text-text"
+      >
+        <Download className="h-3.5 w-3.5" />
+        <span>{copy.cta}</span>
+      </a>
+    </div>
   );
 }
 
