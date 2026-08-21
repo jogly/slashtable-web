@@ -252,7 +252,7 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
               </span>
             </div>
 
-            <div className={cn("grid gap-4 lg:gap-6", showLinuxColumn ? "lg:grid-cols-2 xl:grid-cols-4" : "lg:grid-cols-2")}>
+            <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
               <ArchCard
                 arch="silicon"
                 isDetected={detected === "silicon"}
@@ -267,25 +267,16 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                 filename={intelFile}
                 onDownload={() => handleDownload("intel")}
               />
-              {showLinuxColumn && (
-                <ArchCard
-                  arch="linux_x86"
-                  isDetected={false}
-                  url={linuxX86Url}
-                  filename={linuxX86File}
-                  onDownload={() => handleDownload("linux_x86")}
-                />
-              )}
-              {showLinuxColumn && (
-                <ArchCard
-                  arch="linux_amd64"
-                  isDetected={false}
-                  url={linuxAmd64Url}
-                  filename={linuxAmd64File}
-                  onDownload={() => handleDownload("linux_amd64")}
-                />
-              )}
             </div>
+            {showLinuxColumn && (
+              <LinuxPlatform
+                x86Url={linuxX86Url}
+                amd64Url={linuxAmd64Url}
+                x86File={linuxX86File}
+                amd64File={linuxAmd64File}
+                onDownload={handleDownload}
+              />
+            )}
 
             <p className="mt-6 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest lg:text-left">
               {DOWNLOAD_PAGE.agreement}{" "}
@@ -409,14 +400,9 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                         <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
                           {DOWNLOAD_PAGE.intelColumn}
                         </th>
-                        {showLinuxX86Column && (
+                        {showLinuxColumn && (
                           <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                            {DOWNLOAD_PAGE.linuxX86Column}
-                          </th>
-                        )}
-                        {showLinuxAmd64Column && (
-                          <th className="px-6 py-3 text-right font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                            {DOWNLOAD_PAGE.linuxAmd64Column}
+                            {DOWNLOAD_PAGE.linuxColumn}
                           </th>
                         )}
                       </tr>
@@ -465,36 +451,34 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                                 x86_64
                               </a>
                             </td>
-                            {showLinuxX86Column && (
+                            {showLinuxColumn && (
                               <td className="px-6 py-4 text-right">
-                                {v.downloads.linux_x86 ? (
-                                  <a
-                                    href={v.downloads.linux_x86}
-                                    download
-                                    className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
-                                  >
-                                    <Download className="h-3 w-3" />
-                                    x86
-                                  </a>
-                                ) : (
-                                  <span className="font-mono text-[11px] text-text-muted">&mdash;</span>
-                                )}
-                              </td>
-                            )}
-                            {showLinuxAmd64Column && (
-                              <td className="px-6 py-4 text-right">
-                                {v.downloads.linux_amd64 ? (
-                                  <a
-                                    href={v.downloads.linux_amd64}
-                                    download
-                                    className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
-                                  >
-                                    <Download className="h-3 w-3" />
-                                    amd64
-                                  </a>
-                                ) : (
-                                  <span className="font-mono text-[11px] text-text-muted">&mdash;</span>
-                                )}
+                                <div className="flex flex-col items-end gap-1.5">
+                                  {v.downloads.linux_x86 ? (
+                                    <a
+                                      href={v.downloads.linux_x86}
+                                      download
+                                      className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
+                                    >
+                                      <Download className="h-3 w-3" />
+                                      x86
+                                    </a>
+                                  ) : (
+                                    <span className="font-mono text-[11px] text-text-muted">x86</span>
+                                  )}
+                                  {v.downloads.linux_amd64 ? (
+                                    <a
+                                      href={v.downloads.linux_amd64}
+                                      download
+                                      className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
+                                    >
+                                      <Download className="h-3 w-3" />
+                                      amd64
+                                    </a>
+                                  ) : (
+                                    <span className="font-mono text-[11px] text-text-muted">amd64</span>
+                                  )}
+                                </div>
                               </td>
                             )}
                           </tr>
@@ -631,6 +615,98 @@ function HomebrewSection({ commands, heading }: { commands: string[]; heading: s
   );
 }
 
+function LinuxPlatform({
+  x86Url,
+  amd64Url,
+  x86File,
+  amd64File,
+  onDownload,
+}: {
+  x86Url: string | undefined;
+  amd64Url: string | undefined;
+  x86File: string | null;
+  amd64File: string | null;
+  onDownload: (arch: ArchKey) => void;
+}) {
+  const copy = DOWNLOAD_PAGE.linuxPlatform;
+  return (
+    <div className="mt-6 border border-dashed border-border/70 bg-surface-1/15 px-6 py-5 lg:px-8">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.eyebrow}</span>
+            <span className="border border-border bg-bg px-1.5 py-0.5 font-mono text-[9px] text-text-muted uppercase tracking-widest">
+              {copy.badge}
+            </span>
+          </div>
+          <h3 className="mt-1 font-display text-xl text-text">{copy.label}</h3>
+          <p className="mt-1 max-w-md text-sm text-text-secondary leading-relaxed">{copy.body}</p>
+        </div>
+        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.distro}</span>
+      </div>
+      <div className="mt-5 grid gap-2 sm:grid-cols-2">
+        <LinuxArchRow
+          archLabel={copy.x86}
+          url={x86Url}
+          filename={x86File}
+          cta={copy.cta}
+          onDownload={() => onDownload("linux_x86")}
+        />
+        <LinuxArchRow
+          archLabel={copy.amd64}
+          url={amd64Url}
+          filename={amd64File}
+          cta={copy.cta}
+          onDownload={() => onDownload("linux_amd64")}
+        />
+      </div>
+      {amd64Url && (
+        <p className="mt-4 font-mono text-[11px] text-text-muted">
+          <span className="uppercase tracking-widest">{copy.amd64}</span>
+          <code className="ml-2 text-text-secondary">{copy.installAmd64}</code>
+        </p>
+      )}
+    </div>
+  );
+}
+
+function LinuxArchRow({
+  archLabel,
+  url,
+  filename,
+  cta,
+  onDownload,
+}: {
+  archLabel: string;
+  url: string | undefined;
+  filename: string | null;
+  cta: string;
+  onDownload: () => void;
+}) {
+  const disabled = !url;
+  const className = cn(
+    "flex items-center justify-between gap-3 border border-border/50 bg-bg/30 px-3 py-2.5 transition-colors",
+    disabled ? "opacity-50" : "hover:border-border hover:bg-bg/50",
+  );
+  const inner = (
+    <>
+      <div className="min-w-0">
+        <span className="font-mono text-xs text-text">{archLabel}</span>
+        <span className="mt-0.5 block truncate font-mono text-[10px] text-text-muted">{filename ?? cta}</span>
+      </div>
+      <Download className="h-3.5 w-3.5 shrink-0 text-text-muted" />
+    </>
+  );
+  if (disabled) {
+    return <div className={className}>{inner}</div>;
+  }
+  return (
+    <a href={url} download onClick={onDownload} className={className}>
+      {inner}
+    </a>
+  );
+}
+
 interface ArchCardProps {
   arch: ArchKey;
   isDetected: boolean;
@@ -640,15 +716,8 @@ interface ArchCardProps {
 }
 
 function ArchCard({ arch, isDetected, url, filename, onDownload }: ArchCardProps) {
-  const info =
-    arch === "silicon"
-      ? DOWNLOAD_PAGE.silicon
-      : arch === "intel"
-        ? DOWNLOAD_PAGE.intel
-        : arch === "linux_x86"
-          ? DOWNLOAD_PAGE.linuxX86
-          : DOWNLOAD_PAGE.linux;
-  const cta = arch === "silicon" || arch === "intel" ? DOWNLOAD_PAGE.downloadCta : DOWNLOAD_PAGE.downloadCtaLinux;
+  const info = arch === "intel" ? DOWNLOAD_PAGE.intel : DOWNLOAD_PAGE.silicon;
+  const cta = DOWNLOAD_PAGE.downloadCta;
   const recommendedBadge = DOWNLOAD_PAGE.recommendedBadge;
   const disabled = !url;
 
