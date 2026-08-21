@@ -450,7 +450,7 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                                     className="inline-flex items-center gap-1.5 font-mono text-[11px] text-text-secondary underline underline-offset-4 transition-colors hover:text-accent"
                                   >
                                     <Download className="h-3 w-3" />
-                                    amd64
+                                    x86_64
                                   </a>
                                 ) : (
                                   <span className="font-mono text-[11px] text-text-muted">&mdash;</span>
