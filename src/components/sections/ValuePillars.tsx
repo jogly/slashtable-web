@@ -44,7 +44,7 @@ export function ValuePillars() {
                       0{i + 1}
                     </span>
                   </a>
-                  <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
+                  <h3 className="mb-3 font-display text-xl text-text lg:text-2xl">{pillar.title}</h3>
                   <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
                   <a
                     href={href}

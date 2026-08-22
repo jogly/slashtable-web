@@ -273,12 +273,12 @@ export function DownloadSection({
             </h3>
             <p className="mx-auto mt-4 max-w-md text-text-secondary leading-relaxed">{DOWNLOAD.description}</p>
             <div className="mx-auto mt-6 flex max-w-md flex-col gap-2 text-left sm:text-center">
-              <h3 id="download-platform-macos" className="font-display text-base text-text">
+              <p id="download-platform-macos" className="font-display text-base text-text">
                 macOS downloads
-              </h3>
-              <h3 id="download-platform-linux" className="font-display text-base text-text">
+              </p>
+              <p id="download-platform-linux" className="font-display text-base text-text">
                 Linux downloads (alpha)
-              </h3>
+              </p>
             </div>
           </FadeIn>
         )}

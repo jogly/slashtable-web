@@ -24,11 +24,25 @@ const featureColors: string[] = [
   "var(--color-orange)",
 ];
 
-export function FeaturesGrid() {
+export function FeaturesGrid({
+  groupHeading,
+  groupHeadingId,
+}: {
+  groupHeading?: string;
+  groupHeadingId?: string;
+} = {}) {
   return (
-    <section className="relative py-16 lg:py-24">
+    <section className="relative py-16 lg:py-24" aria-labelledby={groupHeadingId}>
       <NoiseTexture variant="grain" opacity={0.35} />
       <div className="relative mx-auto max-w-content">
+        {groupHeading && groupHeadingId ? (
+          <h2
+            id={groupHeadingId}
+            className="mb-6 font-display text-xl text-text lg:text-2xl"
+          >
+            {groupHeading}
+          </h2>
+        ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#c94a00">
             <div className="mb-12 text-center">
@@ -56,7 +70,7 @@ export function FeaturesGrid() {
                         aria-hidden="true"
                       />
                       <div>
-                        <h3 className="font-display text-base text-text">{feature.title}</h3>
+                        <p className="font-display text-base text-text">{feature.title}</p>
                         <p className="mt-0.5 text-text-muted text-xs leading-relaxed">{feature.description}</p>
                       </div>
                     </div>

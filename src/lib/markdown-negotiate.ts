@@ -22,20 +22,6 @@ export const MARKDOWN_PATHS = new Set([
   "/about/",
   "/contact",
   "/contact/",
-  "/agent-readiness",
-  "/agent-readiness/",
-  "/agent-outline",
-  "/agent-outline/",
-  "/nest-outline",
-  "/nest-outline/",
-  "/outline-check",
-  "/outline-check/",
-  "/outline-probe",
-  "/outline-probe/",
-  "/workers-outline",
-  "/workers-outline/",
-  "/ora-nest-html",
-  "/ora-nest-html/",
 ]);
 
 export function normalizePath(pathname: string): string {
@@ -175,17 +161,12 @@ Scoped ER diagrams that match your mental model.
 
 Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults.
 
-### Docker auto-detect
-
-### Neon branch sync
-
-### Multi-database, one connection
-
-### First-class SSH tunneling
-
-### From the terminal you're in
-
-### Credentials where they already live
+- Docker auto-detect
+- Neon branch sync
+- Multi-database, one connection
+- First-class SSH tunneling
+- From the terminal you're in
+- Credentials where they already live
 
 ## Navigate schema and data
 
@@ -201,79 +182,64 @@ Generate interactive ER diagrams from a starting table. Pin roots, control depth
 
 ### Bring Your Own Code.
 
-Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`.
+Extend the app with a TypeScript plugin system under `~/.slashtable/plugins/`.
 
-### Cell renderers change how columns look
-
-### Record enrichers attach external data to rows
-
-### Custom views add new tab types
-
-### Query hooks intercept SQL
-
-### Toolbar actions wire into the active connection
+- Cell renderers change how columns look
+- Record enrichers attach external data to rows
+- Custom views add new tab types
+- Query hooks intercept SQL
+- Toolbar actions wire into the active connection
 
 ### Controlled access for AI agents.
 
 Local stdio MCP server ships inside the desktop app. Credentials never leave the machine.
 
-### Battle-tested guardrails
+#### Battle-tested guardrails
 
-### Schema introspection
+Keyword filters plus engine-level read-only transactions stop destructive SQL, including sneaky CTE writes.
 
-### Per-connection access
+#### Schema introspection
+
+Agents can describe tables, keys, and relationships before writing queries.
+
+#### Per-connection access
+
+Hidden, read, or write per connection so each agent only sees what policy allows.
+
+## More of the client
 
 ### Everything else.
 
 SQL editor, multi-statement timing, vault integrations, and the rest of the client surface area on every plan.
 
-### SQL editor
-
-### Filter from the keyboard
-
-### Saved favorites
-
-### Array & JSON cell editors
-
-### Safe data mutations
-
-### Schema-aware grid
-
-### Virtual scrolling
-
-### Schema graph, scoped
-
-### Prefix grouping
-
-### Customizable keybindings
-
-### Connection paint
-
-### Connection organization
-
-### Tab workspaces per connection
-
-### Command palette
-
-### Semantic column types
-
-### SQL execution logging
-
-### Regret-driven development
-
-### And more...
+- SQL editor
+- Filter from the keyboard
+- Saved favorites
+- Array & JSON cell editors
+- Safe data mutations
+- Schema-aware grid
+- Virtual scrolling
+- Schema graph, scoped
+- Prefix grouping
+- Customizable keybindings
+- Connection paint
+- Connection organization
+- Tab workspaces per connection
+- Command palette
+- Semantic column types
+- SQL execution logging
+- Regret-driven development
+- And more...
 
 ## Get the app
 
 ### /table.app
 
-### macOS downloads
+macOS downloads and Linux downloads (alpha).
 
-### Linux downloads (alpha)
-
-- One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
+- One-liner: `curl -fsSL https://slashtable.dev/install.sh | sh`
 - Direct downloads: https://www.slashtable.dev/download/
-- Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
+- Homebrew: `brew tap slashtable/cask` then `brew install --cask slashtable`
 
 ## Community
 
@@ -281,9 +247,8 @@ SQL editor, multi-statement timing, vault integrations, and the rest of the clie
 
 Come watch, or come help. Discord and X for bug reports, feature debates, and ORM hot takes.
 
-### Discord
-
-### Twitter / X
+- Discord
+- Twitter / X
 
 ## When to use
 
@@ -350,45 +315,6 @@ Per-connection policy: hidden, read, or write. Read uses a keyword filter plus a
 - Changelog: https://www.slashtable.dev/changelog/
 `;
 
-const PROBE_BODY = `This page exists so content extractors can score a never-seen URL with a nested heading outline. It is not marketing copy for the product. The body is long enough for crawlers that require hundreds of characters of server-rendered text alongside an H1 and nested section headings.
-
-## Connect and explore data
-
-Product engineers keep many environments open at once. Containers, branches, tunnels, and local files should appear as ordinary connections without ceremony.
-
-### Docker and branch sync
-
-Auto-detect running database containers and sync hosted branches so the sidebar matches the workspace you already have open.
-
-### SSH tunnels and vaults
-
-Production behind a bastion and credentials in Keychain or 1Password stay local to the machine.
-
-## Navigate schema relationships
-
-Click through foreign keys and reverse lookups with breadcrumbs instead of hand-written join SQL.
-
-### Bidirectional FK trails
-
-Drill into related rows and climb back through the trail.
-
-### Scoped ER diagrams
-
-Start from one table, pin roots, hide noise, and export a diagram that matches the mental model.
-
-## Extend and grant agent access
-
-TypeScript plugins live beside the data. Agents talk to a local MCP server over stdio with per-connection policy.
-
-### Bring your own code
-
-Cell renderers, enrichers, custom views, query hooks, toolbar actions, and themes drop into a local plugins directory.
-
-### Controlled MCP access
-
-Hidden, read, or write per connection. Credentials never leave the laptop.
-`;
-
 const PAGE_TITLES: Record<string, string> = {
   "/": "/table",
   "/download": "/table - Download",
@@ -399,13 +325,6 @@ const PAGE_TITLES: Record<string, string> = {
   "/developers": "/table - Developers",
   "/about": "/table - About",
   "/contact": "/table - Contact",
-  "/agent-readiness": "/table",
-  "/agent-outline": "/table",
-  "/nest-outline": "/table",
-  "/outline-check": "/table",
-  "/outline-probe": "/table - Outline probe",
-  "/workers-outline": "/table - Outline probe",
-  "/ora-nest-html": "/table - Outline probe",
 };
 
 export function markdownForPath(pathname: string): string | null {
@@ -413,17 +332,7 @@ export function markdownForPath(pathname: string): string | null {
   const title = PAGE_TITLES[key];
   if (!title) return null;
 
-  if (key === "/outline-probe" || key === "/workers-outline" || key === "/ora-nest-html") {
-    return `# ${title}\n\n${PROBE_BODY}`;
-  }
-
-  if (
-    key === "/" ||
-    key === "/agent-readiness" ||
-    key === "/agent-outline" ||
-    key === "/nest-outline" ||
-    key === "/outline-check"
-  ) {
+  if (key === "/") {
     return `# ${title}\n\n${HOMEPAGE_BODY}`;
   }
 
