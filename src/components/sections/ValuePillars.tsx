@@ -27,11 +27,12 @@ export function ValuePillars() {
             const { color, icon: Icon, href } = pillarMeta[i];
             return (
               <FadeIn key={pillar.title} delay={i * 0.06}>
-                <a
-                  href={href}
-                  className="group block h-full px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10"
-                >
-                  <div className="mb-4 flex items-center gap-3">
+                <div className="group h-full px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10">
+                  <a
+                    href={href}
+                    className="mb-4 flex items-center gap-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    aria-label={`${pillar.title}: learn more`}
+                  >
                     <span
                       className="flex h-8 w-8 shrink-0 items-center justify-center border border-dashed transition-colors"
                       style={{ borderColor: `${color}30`, backgroundColor: `${color}06` }}
@@ -42,16 +43,17 @@ export function ValuePillars() {
                     <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color, opacity: 0.6 }}>
                       0{i + 1}
                     </span>
-                  </div>
+                  </a>
                   <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
                   <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
-                  <span
-                    className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100"
+                  <a
+                    href={href}
+                    className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     style={{ color }}
                   >
                     Learn more &rsaquo;
-                  </span>
-                </a>
+                  </a>
+                </div>
               </FadeIn>
             );
           })}

@@ -58,18 +58,8 @@ export function CommunitySection({
             {COMMUNITY.links.map((link, i) => {
               const { icon: Icon, href, color, hoverBg } = linkMeta[i];
               return (
-                <a
+                <div
                   key={link.title}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    trackExternalLinkClicked({
-                      url: href,
-                      label: link.title,
-                      source: "community_section",
-                    })
-                  }
                   className="group relative flex flex-col overflow-hidden border border-border bg-surface/50 p-6 transition-all duration-200 hover:border-border-strong"
                   style={{ ["--card-hover-bg" as string]: hoverBg }}
                 >
@@ -80,23 +70,43 @@ export function CommunitySection({
                   />
                   <div className="relative">
                     <div className="mb-4 flex items-center gap-3">
-                      <div
-                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-2 transition-colors group-hover:border-border-strong"
-                        aria-hidden="true"
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() =>
+                          trackExternalLinkClicked({
+                            url: href,
+                            label: link.title,
+                            source: "community_section",
+                          })
+                        }
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-2 transition-colors group-hover:border-border-strong outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        aria-label={`${link.title}: ${link.cta}`}
                       >
                         <Icon className="h-5 w-5" style={{ color }} strokeWidth={1.5} />
-                      </div>
-                      <p className="font-display text-base text-text">{link.title}</p>
+                      </a>
+                      <h3 className="font-display text-base text-text">{link.title}</h3>
                     </div>
                     <p className="mb-5 flex-1 text-sm text-text-secondary leading-relaxed">{link.description}</p>
-                    <span
-                      className="font-mono text-[10px] uppercase tracking-widest transition-colors"
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        trackExternalLinkClicked({
+                          url: href,
+                          label: link.title,
+                          source: "community_section",
+                        })
+                      }
+                      className="font-mono text-[10px] uppercase tracking-widest transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                       style={{ color }}
                     >
                       <span className="group-hover:underline group-hover:underline-offset-2">{link.cta}</span> &rsaquo;
-                    </span>
+                    </a>
                   </div>
-                </a>
+                </div>
               );
             })}
           </div>

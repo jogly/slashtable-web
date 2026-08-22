@@ -56,7 +56,7 @@ export function FeaturesGrid() {
                         aria-hidden="true"
                       />
                       <div>
-                        <p className="font-display text-sm text-text">{feature.title}</p>
+                        <h3 className="font-display text-sm text-text">{feature.title}</h3>
                         <p className="mt-0.5 text-text-muted text-xs leading-relaxed">{feature.description}</p>
                       </div>
                     </div>
