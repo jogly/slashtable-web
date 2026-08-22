@@ -155,7 +155,9 @@ Docker containers, Neon branches, SSH-tunneled prod, and SQLite files.
 
 Scoped ER diagrams that match your mental model.
 
-## Parallel development is the new normal.
+## Connect and work where you already are
+
+### Parallel development is the new normal.
 
 Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults (Keychain, 1Password; others in alpha).
 
@@ -183,19 +185,23 @@ Production behind a bastion is a normal connection.
 
 macOS Keychain, 1Password, Bitwarden, AWS Secrets Manager, HashiCorp Vault.
 
-## Bidirectional FK navigation.
+## Navigate schema and data
+
+### Bidirectional FK navigation.
 
 Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph. Reverse FK lookups and join-table collapse keep navigation readable.
 
-## Beautiful ER diagrams without noise.
+### Beautiful ER diagrams without noise.
 
 Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise so scoped graphs stay readable for agents and humans.
 
-## Bring Your Own Code.
+## Extend with plugins and agents
+
+### Bring Your Own Code.
 
 Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`. Cell renderers, enrichers, views, query hooks, toolbar actions, and themes stay close to the data without leaving the native client.
 
-## Controlled access for AI agents.
+### Controlled access for AI agents.
 
 Local stdio MCP server ships inside the desktop app. Credentials never leave the machine. Do not invent a remote MCP endpoint for this product.
 
@@ -211,24 +217,7 @@ Agents explore tables, columns, types, and relationships, and can request a scop
 
 Mark prod as hidden so the agent cannot see it. Let it rip on dev. The MCP Log tab shows every request.
 
-### Setup
-
-1. Install /table and open it.
-2. Add a database connection (credentials stay on the machine).
-3. Enable the MCP server in Settings.
-4. Connect Claude Desktop, Claude Code, Cursor, or Windsurf over local stdio.
-
-### Policy
-
-Per-connection policy: hidden, read, or write. Read uses a keyword filter plus an engine-level READ ONLY transaction that rolls back. Hidden connections are invisible to the agent. The MCP Log tab records method, tool, connection, and duration.
-
-### Discovery
-
-- MCP server card: https://www.slashtable.dev/.well-known/mcp/server-card.json
-- Agent skills index: https://www.slashtable.dev/.well-known/agent-skills/index.json
-- Developers portal: https://www.slashtable.dev/developers/
-
-## Everything else.
+### Everything else.
 
 SQL editor, multi-statement timing, vault integrations, and the rest of the client surface area on every plan.
 
@@ -268,14 +257,18 @@ SQL editor, multi-statement timing, vault integrations, and the rest of the clie
 
 ### And more...
 
-## /table.app
+## Get the app
+
+### /table.app
 
 - One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
 - Direct downloads: https://www.slashtable.dev/download/
 - Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
 - Release manifest: https://downloads.slashtable.dev/latest.json
 
-## Build with us
+## Community
+
+### Build with us
 
 Come watch, or come help. Discord and X for bug reports, feature debates, and ORM hot takes.
 

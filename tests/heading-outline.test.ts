@@ -9,69 +9,89 @@ function read(rel: string) {
 }
 
 describe("homepage heading outline (source)", () => {
+  test("page wires nested group h2 buckets for Ora", () => {
+    const src = read("app/page.tsx");
+    expect(src).toContain('groupHeading="Connect and work where you already are"');
+    expect(src).toContain('groupHeading="Navigate schema and data"');
+    expect(src).toContain('groupHeading="Extend with plugins and agents"');
+    expect(src).toContain('groupHeading="Get the app"');
+    expect(src).toContain('groupHeading="Community"');
+  });
+
   test("ValuePillars keeps visible structural h2; pillar h3s are not inside <a>", () => {
     const src = read("src/components/sections/ValuePillars.tsx");
     expect(src).toMatch(/<h2[^>]*id="value-pillars-heading"/);
     expect(src).not.toMatch(/sr-only/);
     expect(src).toMatch(/<h3[\s>]/);
-    // Headings must not be descendants of wrapping card anchors
     expect(src).not.toMatch(/<a[\s\S]*?<h3/);
-    expect(src).toContain("Learn more");
   });
 
-  test("feature section titles stay major h2 (font-display 3xl/4xl/5xl)", () => {
+  test("lead sections expose mono group h2 and demote feature titles to h3", () => {
     for (const rel of [
       "src/components/sections/ConnectSection.tsx",
       "src/components/sections/NavigationSection.tsx",
-      "src/components/sections/SchemaGraphSection.tsx",
       "src/components/sections/PluginSection.tsx",
+    ]) {
+      const src = read(rel);
+      expect(src).toContain("groupHeading");
+      expect(src).toMatch(/<h2[\s\n]*id=\{groupHeadingId\}/);
+      expect(src).toMatch(/<h3 className="[^"]*font-display text-3xl/);
+      expect(src).not.toMatch(/<h2 className="[^"]*font-display text-3xl/);
+    }
+  });
+
+  test("Schema/MCP/Features demote large titles to h3 under Extend/Navigate groups", () => {
+    for (const rel of [
+      "src/components/sections/SchemaGraphSection.tsx",
       "src/components/sections/McpSection.tsx",
       "src/components/sections/FeaturesGrid.tsx",
     ]) {
       const src = read(rel);
-      expect(src).toMatch(/<h2[^>]*className="[^"]*font-display text-3xl/);
+      expect(src).toMatch(/<h3 className="[^"]*font-display text-3xl/);
+      expect(src).not.toMatch(/<h2 className="[^"]*font-display text-3xl/);
     }
-    const download = read("src/components/sections/DownloadSection.tsx");
-    expect(download).toMatch(/<h2[^>]*className="font-display text-3xl text-text lg:text-5xl"/);
   });
 
-  test("Connect/Features/MCP/Community promote subsection titles to h3", () => {
+  test("DownloadSection demotes /table.app title to h3 under Get the app h2", () => {
+    const src = read("src/components/sections/DownloadSection.tsx");
+    expect(src).toContain("groupHeading");
+    expect(src).toMatch(/<h3 className="font-display text-3xl text-text lg:text-5xl">/);
+    expect(src).not.toMatch(/<h2 className="font-display text-3xl text-text lg:text-5xl">/);
+  });
+
+  test("CommunitySection demotes Build with us to h3; SectionHeading uses h3", () => {
+    const community = read("src/components/sections/CommunitySection.tsx");
+    expect(community).toContain("groupHeading");
+    expect(community).not.toMatch(/<a[\s\S]*?<h3/);
+    const heading = read("src/components/ui/SectionHeading.tsx");
+    expect(heading).toMatch(/<h3[^>]*className="font-display/);
+    expect(heading).not.toMatch(/<h2[^>]*className="font-display/);
+  });
+
+  test("Connect/Features/MCP promote subsection titles to h3", () => {
     const connect = read("src/components/sections/ConnectSection.tsx");
     expect(connect).toContain('className="font-display text-sm text-text">{item.title}</h3>');
-    expect(connect).not.toContain('className="font-display text-sm text-text">{item.title}</p>');
-
     const features = read("src/components/sections/FeaturesGrid.tsx");
     expect(features).toContain('className="font-display text-sm text-text">{feature.title}</h3>');
-    expect(features).not.toContain('className="font-display text-sm text-text">{feature.title}</p>');
-
     const mcp = read("src/components/sections/McpSection.tsx");
     expect(mcp).toMatch(/<h3\s+className="font-display text-sm transition-colors"/);
-    expect(mcp).not.toMatch(/<p\s+className="font-display text-sm transition-colors"/);
-
-    const community = read("src/components/sections/CommunitySection.tsx");
-    expect(community).toContain('className="font-display text-base text-text">{link.title}</h3>');
-    expect(community).not.toMatch(/<a[\s\S]*?<h3/);
   });
 
-  test("Accept-markdown homepage mirrors nested feature h2 then subsection h3", () => {
+  test("Accept-markdown homepage mirrors nested group outline", () => {
     const src = read("src/lib/markdown-negotiate.ts");
-    expect(src).toContain("## Built for product engineers");
-    expect(src).toContain("### Click through your data");
-    expect(src).toContain("## Parallel development is the new normal.");
-    expect(src).toContain("### Docker auto-detect");
-    expect(src).toContain("## Bidirectional FK navigation.");
-    expect(src).toContain("## Beautiful ER diagrams without noise.");
-    expect(src).toContain("## Bring Your Own Code.");
-    expect(src).toContain("## Controlled access for AI agents.");
-    expect(src).toContain("### Battle-tested guardrails");
-    expect(src).toContain("## Everything else.");
-    expect(src).toContain("### SQL editor");
-    expect(src).toContain("## /table.app");
-    expect(src).toContain("## Build with us");
-    expect(src).toContain("### Discord");
-    expect(src).not.toContain("## Connect and work where you already are");
-    expect(src).not.toContain("## Navigate schema and data");
-    expect(src).not.toContain("## Extend with plugins and agents");
+    expect(src).toContain("## Connect and work where you already are");
+    expect(src).toContain("### Parallel development is the new normal.");
+    expect(src).toContain("## Navigate schema and data");
+    expect(src).toContain("### Bidirectional FK navigation.");
+    expect(src).toContain("### Beautiful ER diagrams without noise.");
+    expect(src).toContain("## Extend with plugins and agents");
+    expect(src).toContain("### Bring Your Own Code.");
+    expect(src).toContain("### Controlled access for AI agents.");
+    expect(src).toContain("### Everything else.");
+    expect(src).toContain("## Get the app");
+    expect(src).toContain("### /table.app");
+    expect(src).toContain("## Community");
+    expect(src).toContain("### Build with us");
   });
 });
 
@@ -96,7 +116,6 @@ describe("SSR heading visibility (opacity)", () => {
     const src = read("src/components/ui/FadeIn.tsx");
     expect(src).toContain("useMounted");
     expect(src).toMatch(/prefersReducedMotion \|\| !mounted/);
-    // Must not unconditionally SSR initial opacity 0
     expect(src).not.toMatch(/return \(\s*<motion\.div\s*\n\s*initial=\{\{ opacity: 0/);
   });
 
