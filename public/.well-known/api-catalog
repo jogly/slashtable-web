@@ -4,7 +4,7 @@
       "anchor": "https://www.slashtable.dev/",
       "service-doc": [
         {
-          "href": "https://www.slashtable.dev/llms-full.txt",
+          "href": "https://www.slashtable.dev/llms.txt",
           "type": "text/markdown"
         }
       ]
