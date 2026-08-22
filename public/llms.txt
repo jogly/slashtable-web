@@ -56,9 +56,12 @@ Agents can explore tables, columns, types, and relationships, and can request a 
 ## Product
 
 - Home: https://www.slashtable.dev/
+- Developers: https://www.slashtable.dev/developers/
 - Download: https://www.slashtable.dev/download/
 - Pricing: https://www.slashtable.dev/pricing/ (Free, Personal $49, Pro $99, buy once)
 - Changelog: https://www.slashtable.dev/changelog/
+- About: https://www.slashtable.dev/about/
+- Contact: https://www.slashtable.dev/contact/
 - OpenAPI: https://www.slashtable.dev/openapi.json
 - Product card API: https://www.slashtable.dev/api/v1/product
 - API catalog: https://www.slashtable.dev/.well-known/api-catalog

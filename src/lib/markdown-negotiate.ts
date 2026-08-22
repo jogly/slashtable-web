@@ -16,6 +16,12 @@ export const MARKDOWN_PATHS = new Set([
   "/privacy/",
   "/terms",
   "/terms/",
+  "/developers",
+  "/developers/",
+  "/about",
+  "/about/",
+  "/contact",
+  "/contact/",
 ]);
 
 export function normalizePath(pathname: string): string {
@@ -131,17 +137,34 @@ export function mergeVary(existing: string | null | undefined, value: string): s
 
 const HOMEPAGE_BODY = `Native desktop database client for product engineers. Platforms: macOS and Linux (alpha). Engines: PostgreSQL, MySQL, SQLite, and Neon.
 
-/table is a local app. Agents reach data only through the MCP server that runs inside the installed app, over stdio. There is no hosted database and no remote query API on this site.
+/table is a local app. Agents reach data only through the MCP server that runs inside the installed app, over stdio. There is no hosted database and no remote query API on this site. Credentials stay on the machine.
+
+## Overview
+
+/table is a buy-once native client for exploring and editing databases while giving AI agents controlled, local access. The website publishes discovery documents and a small product card API. Database work happens in the installed desktop app, not over this domain.
+
+### Platforms
+
+- macOS (Apple Silicon and Intel), GA
+- Linux (Debian/Ubuntu .deb), alpha
+- Engines: PostgreSQL, MySQL, SQLite, and Neon
+
+### What stays local
+
+- Connection credentials and vault integrations
+- Query execution and result grids
+- The MCP server process (stdio only; no hosted MCP URL)
 
 ## Install
 
 - One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
 - Direct downloads: https://www.slashtable.dev/download/
 - Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
+- Release manifest: https://downloads.slashtable.dev/latest.json
 
 ## MCP
 
-Local stdio MCP server ships inside the desktop app. Credentials never leave the machine.
+Local stdio MCP server ships inside the desktop app. Credentials never leave the machine. Do not invent a remote MCP endpoint for this product.
 
 ### Setup
 
@@ -152,37 +175,63 @@ Local stdio MCP server ships inside the desktop app. Credentials never leave the
 
 ### Policy
 
-Per-connection policy: hidden, read, or write. Read uses a keyword filter plus an engine-level READ ONLY transaction that rolls back. Hidden connections are invisible to the agent.
+Per-connection policy: hidden, read, or write. Read uses a keyword filter plus an engine-level READ ONLY transaction that rolls back. Hidden connections are invisible to the agent. The MCP Log tab records method, tool, connection, and duration.
+
+### Discovery
+
+- MCP server card: https://www.slashtable.dev/.well-known/mcp/server-card.json
+- Agent skills index: https://www.slashtable.dev/.well-known/agent-skills/index.json
+- Developers portal: https://www.slashtable.dev/developers/
 
 ## Features
 
 ### Foreign-key navigation
 
-Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph.
+Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph. Reverse FK lookups and join-table collapse keep navigation readable.
 
 ### Schema graph
 
-Generate interactive ER diagrams from a starting table. Scoped graphs stay readable for agents and humans.
+Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise so scoped graphs stay readable for agents and humans.
 
 ### Plugins
 
-Extend the app with a TypeScript plugin system. Keep workflows close to the data without leaving the native client.
+Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`. Cell renderers, enrichers, views, query hooks, toolbar actions, and themes stay close to the data without leaving the native client.
+
+### Connect where work already happens
+
+Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults (Keychain, 1Password; others in alpha).
 
 ## When to use
 
 - Explore local or remote Postgres, MySQL, SQLite, or Neon with an agent over MCP
 - Walk foreign keys and request a scoped schema graph from a starting table
 - Give an agent policy-scoped database access without exposing a hosted endpoint
+- Prefer the desktop app for query and edit workflows; use this site for install, pricing, and agent discovery docs
+
+## Developer docs
+
+Public HTTP surfaces on this site are discovery-only. Full developer portal: https://www.slashtable.dev/developers/
+
+- OpenAPI: https://www.slashtable.dev/openapi.json
+- Product card: https://www.slashtable.dev/api/v1/product
+- llms.txt: https://www.slashtable.dev/llms.txt
+- API catalog: https://www.slashtable.dev/.well-known/api-catalog
+
+## Company
+
+- About: https://www.slashtable.dev/about/
+- Contact: https://www.slashtable.dev/contact/
+- Privacy: https://www.slashtable.dev/privacy/
+- Terms: https://www.slashtable.dev/terms/
+- Discord: https://discord.gg/xR2VdkfnJQ
 
 ## Links
 
 - Home: https://www.slashtable.dev/
-- OpenAPI: https://www.slashtable.dev/openapi.json
-- Product card: https://www.slashtable.dev/api/v1/product
-- llms.txt: https://www.slashtable.dev/llms.txt
 - Download: https://www.slashtable.dev/download/
 - Pricing: https://www.slashtable.dev/pricing/
 - Changelog: https://www.slashtable.dev/changelog/
+- Developers: https://www.slashtable.dev/developers/
 `;
 
 const SHARED_BODY = `Native desktop database client for product engineers. Platforms: macOS and Linux (alpha). Engines: PostgreSQL, MySQL, SQLite, and Neon.
@@ -215,17 +264,23 @@ Per-connection policy: hidden, read, or write. Read uses a keyword filter plus a
 - OpenAPI: https://www.slashtable.dev/openapi.json
 - Product card: https://www.slashtable.dev/api/v1/product
 - llms.txt: https://www.slashtable.dev/llms.txt
+- Developers: https://www.slashtable.dev/developers/
+- About: https://www.slashtable.dev/about/
+- Contact: https://www.slashtable.dev/contact/
 - Pricing: https://www.slashtable.dev/pricing/
 - Changelog: https://www.slashtable.dev/changelog/
 `;
 
 const PAGE_TITLES: Record<string, string> = {
   "/": "/table",
-  "/download": "/table — Download",
-  "/pricing": "/table — Pricing",
-  "/changelog": "/table — Changelog",
-  "/privacy": "/table — Privacy",
-  "/terms": "/table — Terms",
+  "/download": "/table - Download",
+  "/pricing": "/table - Pricing",
+  "/changelog": "/table - Changelog",
+  "/privacy": "/table - Privacy",
+  "/terms": "/table - Terms",
+  "/developers": "/table - Developers",
+  "/about": "/table - About",
+  "/contact": "/table - Contact",
 };
 
 export function markdownForPath(pathname: string): string | null {
@@ -248,6 +303,12 @@ export function markdownForPath(pathname: string): string | null {
     extra = `\n## This page\n\nPrivacy policy for the /table product and this website.\n`;
   } else if (key === "/terms") {
     extra = `\n## This page\n\nTerms of use for the /table product and this website.\n`;
+  } else if (key === "/developers") {
+    extra = `\n## This page\n\nDeveloper portal for public discovery docs: OpenAPI, llms.txt, product card, local MCP server card, and install. MCP is local stdio inside the desktop app; there is no remote MCP URL.\n`;
+  } else if (key === "/about") {
+    extra = `\n## This page\n\nAbout Make Toast LLC and the /table desktop database client.\n`;
+  } else if (key === "/contact") {
+    extra = `\n## This page\n\nHow to reach the /table team via Discord or sales email.\n`;
   }
 
   return `# ${title}\n\n${SHARED_BODY}${extra}`;

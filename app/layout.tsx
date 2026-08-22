@@ -108,6 +108,18 @@ const organizationLd = {
   url: SITE_URL,
   logo: `${SITE_URL}/favicon.png`,
   sameAs: ["https://x.com/slashtable", "https://discord.gg/xR2VdkfnJQ"],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      url: `${SITE_URL}/contact/`,
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "community",
+      url: "https://discord.gg/xR2VdkfnJQ",
+    },
+  ],
 };
 
 const websiteLd = {

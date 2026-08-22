@@ -96,7 +96,17 @@ describe("markdown Accept negotiation", () => {
   });
 
   test("markdown bodies have H1 and 500+ chars", () => {
-    for (const path of ["/", "/download", "/pricing", "/changelog", "/privacy", "/terms"]) {
+    for (const path of [
+      "/",
+      "/download",
+      "/pricing",
+      "/changelog",
+      "/privacy",
+      "/terms",
+      "/developers",
+      "/about",
+      "/contact",
+    ]) {
       const md = markdownForPath(path);
       expect(md).toBeTruthy();
       expect(md!.startsWith("# ")).toBe(true);
@@ -109,17 +119,43 @@ describe("markdown Accept negotiation", () => {
 describe("homepage markdown structure", () => {
   test("has ## and ### headings for Ora content-no-js", () => {
     const md = markdownForPath("/")!;
-    expect(md.length).toBeGreaterThanOrEqual(500);
+    expect(md.length).toBeGreaterThanOrEqual(2000);
+    expect(md).toContain("## Overview");
+    expect(md).toContain("### Platforms");
+    expect(md).toContain("### What stays local");
     expect(md).toContain("## Install");
     expect(md).toContain("## MCP");
     expect(md).toContain("### Setup");
     expect(md).toContain("### Policy");
+    expect(md).toContain("### Discovery");
     expect(md).toContain("## Features");
     expect(md).toContain("### Foreign-key navigation");
     expect(md).toContain("### Schema graph");
     expect(md).toContain("### Plugins");
+    expect(md).toContain("### Connect where work already happens");
     expect(md).toContain("## When to use");
+    expect(md).toContain("## Developer docs");
+    expect(md).toContain("## Company");
     expect(md).toContain("## Links");
+    expect(md).toContain("https://www.slashtable.dev/developers/");
+    expect(md).toContain("local stdio");
+  });
+});
+
+describe("trust and developer markdown pages", () => {
+  test("developers/about/contact markdown mention discovery and contact channels", () => {
+    const developers = markdownForPath("/developers")!;
+    expect(developers).toContain("## This page");
+    expect(developers.toLowerCase()).toContain("stdio");
+    expect(developers).toContain("https://www.slashtable.dev/openapi.json");
+
+    const about = markdownForPath("/about")!;
+    expect(about).toContain("Make Toast LLC");
+    expect(about).toContain("## This page");
+
+    const contact = markdownForPath("/contact")!;
+    expect(contact).toContain("## This page");
+    expect(contact.toLowerCase()).toContain("discord");
   });
 });
 
@@ -151,5 +187,23 @@ describe("link headers helper", () => {
     expect(PAGE_LINK_HEADER).toBe(formatLinkHeader(PAGE_LINK_RELATIONS));
     expect(PAGE_LINK_HEADER).toContain('rel="service-desc"');
     expect(PAGE_LINK_HEADER).toContain('rel="status"');
+  });
+});
+
+
+describe("openapi typed schemas", () => {
+  test("product and discovery operations declare typed response schemas", async () => {
+    const doc = await Bun.file(new URL("../public/openapi.json", import.meta.url)).json();
+    expect(doc.openapi).toMatch(/^3\./);
+    const product = doc.paths["/api/v1/product"].get;
+    expect(product.responses["200"].content["application/json"].schema.$ref).toContain("ProductCard");
+    expect(product.responses["200"].headers["RateLimit-Limit"]).toBeTruthy();
+    expect(product.responses["200"].headers.RateLimit).toBeTruthy();
+    expect(doc.components.schemas.ProductCard.properties.mcp.$ref).toContain("McpInfo");
+    expect(doc.components.schemas.McpInfo.properties.transport.const).toBe("stdio");
+    expect(doc.components.schemas.Platform.properties.os.enum).toContain("macos");
+    expect(doc.paths["/developers"].get.operationId).toBe("getDevelopersPortal");
+    expect(doc.components.schemas.OpenApiDocument.required).toContain("paths");
+    expect(doc.components.schemas.ApiCatalog.required).toContain("linkset");
   });
 });

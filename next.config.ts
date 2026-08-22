@@ -16,6 +16,12 @@ const pageSources = [
   "/privacy/",
   "/terms",
   "/terms/",
+  "/developers",
+  "/developers/",
+  "/about",
+  "/about/",
+  "/contact",
+  "/contact/",
 ];
 
 const config: NextConfig = {
