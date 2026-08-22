@@ -30,6 +30,8 @@ export const MARKDOWN_PATHS = new Set([
   "/nest-outline/",
   "/outline-check",
   "/outline-check/",
+  "/outline-probe",
+  "/outline-probe/",
 ]);
 
 export function normalizePath(pathname: string): string {
@@ -344,6 +346,45 @@ Per-connection policy: hidden, read, or write. Read uses a keyword filter plus a
 - Changelog: https://www.slashtable.dev/changelog/
 `;
 
+const PROBE_BODY = `This page exists so content extractors can score a never-seen URL with a nested heading outline. It is not marketing copy for the product. The body is long enough for crawlers that require hundreds of characters of server-rendered text alongside an H1 and nested section headings.
+
+## Connect and explore data
+
+Product engineers keep many environments open at once. Containers, branches, tunnels, and local files should appear as ordinary connections without ceremony.
+
+### Docker and branch sync
+
+Auto-detect running database containers and sync hosted branches so the sidebar matches the workspace you already have open.
+
+### SSH tunnels and vaults
+
+Production behind a bastion and credentials in Keychain or 1Password stay local to the machine.
+
+## Navigate schema relationships
+
+Click through foreign keys and reverse lookups with breadcrumbs instead of hand-written join SQL.
+
+### Bidirectional FK trails
+
+Drill into related rows and climb back through the trail.
+
+### Scoped ER diagrams
+
+Start from one table, pin roots, hide noise, and export a diagram that matches the mental model.
+
+## Extend and grant agent access
+
+TypeScript plugins live beside the data. Agents talk to a local MCP server over stdio with per-connection policy.
+
+### Bring your own code
+
+Cell renderers, enrichers, custom views, query hooks, toolbar actions, and themes drop into a local plugins directory.
+
+### Controlled MCP access
+
+Hidden, read, or write per connection. Credentials never leave the laptop.
+`;
+
 const PAGE_TITLES: Record<string, string> = {
   "/": "/table",
   "/download": "/table - Download",
@@ -358,12 +399,17 @@ const PAGE_TITLES: Record<string, string> = {
   "/agent-outline": "/table",
   "/nest-outline": "/table",
   "/outline-check": "/table",
+  "/outline-probe": "/table - Outline probe",
 };
 
 export function markdownForPath(pathname: string): string | null {
   const key = normalizePath(pathname);
   const title = PAGE_TITLES[key];
   if (!title) return null;
+
+  if (key === "/outline-probe") {
+    return `# ${title}\n\n${PROBE_BODY}`;
+  }
 
   if (
     key === "/" ||
