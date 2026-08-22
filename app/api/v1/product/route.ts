@@ -21,6 +21,7 @@ const PRODUCT = {
     remoteUrl: null,
     setup:
       "Install /table, add a connection, enable MCP in Settings, then connect Claude Desktop, Claude Code, Cursor, or Windsurf over local stdio.",
+    discovery: "https://www.slashtable.dev/.well-known/mcp.json",
     serverCard: "https://www.slashtable.dev/.well-known/mcp/server-card.json",
     agentSkills: "https://www.slashtable.dev/.well-known/agent-skills/index.json",
   },
@@ -38,6 +39,7 @@ const PRODUCT = {
     openapi: "https://www.slashtable.dev/openapi.json",
     llms: "https://www.slashtable.dev/llms.txt",
     apiCatalog: "https://www.slashtable.dev/.well-known/api-catalog",
+    mcpDiscovery: "https://www.slashtable.dev/.well-known/mcp.json",
     mcpServerCard: "https://www.slashtable.dev/.well-known/mcp/server-card.json",
     about: "https://www.slashtable.dev/about/",
     contact: "https://www.slashtable.dev/contact/",
@@ -69,7 +71,17 @@ export function GET() {
 
 function disallow(request: Request) {
   const instance = new URL(request.url).pathname;
-  return methodNotAllowedProblem(instance, ["GET", "HEAD"]);
+  const res = methodNotAllowedProblem(instance, ["GET", "HEAD"]);
+  const headers = new Headers(res.headers);
+  for (const [k, v] of Object.entries(rateLimitHeaders())) {
+    headers.set(k, String(v));
+  }
+  return new Response(res.body, { status: res.status, headers });
+}
+
+export function HEAD() {
+  const res = GET();
+  return new Response(null, { status: res.status, headers: res.headers });
 }
 
 export function POST(request: Request) {

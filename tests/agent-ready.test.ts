@@ -202,6 +202,7 @@ describe("openapi typed schemas", () => {
     expect(doc.components.schemas.ProductCard.properties.mcp.$ref).toContain("McpInfo");
     expect(doc.components.schemas.McpInfo.properties.transport.const).toBe("stdio");
     expect(doc.components.schemas.Platform.properties.os.enum).toContain("macos");
+    expect(doc.paths["/.well-known/mcp.json"].get.operationId).toBe("getMcpDiscovery");
     expect(doc.paths["/developers"].get.operationId).toBe("getDevelopersPortal");
     expect(doc.components.schemas.OpenApiDocument.required).toContain("paths");
     expect(doc.components.schemas.ApiCatalog.required).toContain("linkset");

@@ -1,0 +1,15 @@
+{
+  "name": "slashtable",
+  "description": "/table — A native desktop database client with a built-in MCP server for AI agents. PostgreSQL, MySQL, SQLite, and Neon. Local stdio only — there is no remote MCP URL.",
+  "version": "1.0.0",
+  "transport": {
+    "type": "stdio",
+    "description": "The /table MCP server runs locally as part of the desktop application. Install /table from https://www.slashtable.dev/download and enable the MCP server in Settings."
+  },
+  "serverCard": "https://www.slashtable.dev/.well-known/mcp/server-card.json",
+  "homepage": "https://www.slashtable.dev",
+  "capabilities": {
+    "tools": true,
+    "resources": true
+  }
+}
