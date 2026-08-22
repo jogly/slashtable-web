@@ -8,6 +8,7 @@ interface LatestRelease {
     macos_arm64: string;
     macos_x64: string;
     linux_amd64?: string;
+    linux_aarch64?: string;
     linux_x86?: string;
   };
 }
@@ -37,6 +38,20 @@ export function detectIsLinux(): boolean {
   return /linux/i.test(navigator.userAgent) && !/android/i.test(navigator.userAgent);
 }
 
+export type LinuxArch = "amd64" | "aarch64";
+
+/** Returns a Linux arch only when the machine actually reports one. OS-only Linux is not enough. Never treat bare "x86" as amd64. */
+export function detectLinuxArch(): LinuxArch | null {
+  if (typeof navigator === "undefined") return null;
+  if (!detectIsLinux()) return null;
+  const arch = getUserAgentData()?.architecture;
+  if (arch === "arm") return "aarch64";
+  const ua = navigator.userAgent;
+  if (/aarch64|arm64/i.test(ua)) return "aarch64";
+  if (/x86_64|amd64/i.test(ua)) return "amd64";
+  return null;
+}
+
 export function useDownload() {
   const [release, setRelease] = useState<LatestRelease | null>(null);
   // Start false on server + first client paint to keep hydration stable, then
@@ -56,7 +71,7 @@ export function useDownload() {
     return () => window.clearTimeout(timerRef.current);
   }, []);
 
-  const linuxAvailable = Boolean(release?.downloads.linux_amd64 || release?.downloads.linux_x86);
+  const linuxAvailable = Boolean(release?.downloads.linux_amd64 || release?.downloads.linux_aarch64 || release?.downloads.linux_x86);
   // Never treat Linux as the primary download. x86 and amd64 are distinct and
   // OS detection cannot tell them apart, so the user has to pick on /download.
   const linuxChooser = isLinux && linuxAvailable;

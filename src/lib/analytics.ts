@@ -20,7 +20,7 @@ export type DownloadSource =
   | "download_page_alt_arch";
 
 interface DownloadStartedProps {
-  architecture: "silicon" | "intel" | "linux_amd64" | "linux_x86";
+  architecture: "silicon" | "intel" | "linux_amd64" | "linux_aarch64" | "linux_x86";
   version: string | undefined;
   source: DownloadSource;
 }
