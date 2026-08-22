@@ -25,7 +25,13 @@ describe("homepage heading outline (source)", () => {
   test("ValuePillars unwraps pillar h3s from anchors", () => {
     const src = read("src/components/sections/ValuePillars.tsx");
     expect(src).toMatch(/<h2[^>]*id="value-pillars-heading"/);
-    expect(src).not.toMatch(/<a[\s\S]*?<h3/);
+    expect(src).toContain('<h3 className="mb-3 font-display text-xl text-text lg:text-2xl">{pillar.title}</h3>');
+    // Icon link closes before the pillar h3; learn-more link follows it.
+    const h3At = src.indexOf('<h3 className="mb-3 font-display text-xl');
+    const firstAClose = src.indexOf("</a>");
+    const learnMore = src.indexOf("Learn more");
+    expect(h3At).toBeGreaterThan(firstAClose);
+    expect(learnMore).toBeGreaterThan(h3At);
   });
 
   test("Schema/MCP/Features/Download demote large titles to h3", () => {
@@ -89,7 +95,8 @@ describe("SSR heading visibility (opacity)", () => {
     const src = read("src/components/ui/FadeIn.tsx");
     expect(src).toContain("useMounted");
     expect(src).toMatch(/prefersReducedMotion \|\| !mounted/);
-    expect(src).not.toMatch(/return \(\s*<motion\.div\s*\n\s*initial=\{\{ opacity: 0/);
+    expect(src).toContain("if (prefersReducedMotion || !mounted)");
+    expect(src).toContain("return <div className={className}>{children}</div>");
   });
 
   test("Hero uses plain h1 and initial={false} so SSR omits opacity:0", () => {

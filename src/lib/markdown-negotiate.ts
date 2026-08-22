@@ -182,7 +182,7 @@ Generate interactive ER diagrams from a starting table. Pin roots, control depth
 
 ### Bring Your Own Code.
 
-Extend the app with a TypeScript plugin system under `~/.slashtable/plugins/`.
+Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`.
 
 - Cell renderers change how columns look
 - Record enrichers attach external data to rows
@@ -237,9 +237,9 @@ SQL editor, multi-statement timing, vault integrations, and the rest of the clie
 
 macOS downloads and Linux downloads (alpha).
 
-- One-liner: `curl -fsSL https://slashtable.dev/install.sh | sh`
+- One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
 - Direct downloads: https://www.slashtable.dev/download/
-- Homebrew: `brew tap slashtable/cask` then `brew install --cask slashtable`
+- Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
 
 ## Community
 
