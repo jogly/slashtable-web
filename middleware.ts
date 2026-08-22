@@ -55,8 +55,8 @@ export function middleware(request: NextRequest) {
 
   const res = NextResponse.next();
   if (isMarkdownPath(pathname)) {
+    // Link for HTML comes from next.config headers(); avoid duplicating here.
     res.headers.set("Vary", mergeVary(res.headers.get("Vary"), "Accept"));
-    withPageLinks(res);
   }
   return res;
 }
