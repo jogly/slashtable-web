@@ -1,0 +1,13 @@
+# Content Signals: https://contentsignals.org/
+# search=yes: indexing and link/excerpt search results are allowed.
+# ai-train=no: training or fine-tuning models is not allowed.
+# use=reference: index, excerpt, and link back; do not reproduce in full.
+
+User-agent: *
+Content-Signal: search=yes,ai-train=no,use=reference
+Allow: /
+Disallow: /checkout/
+Disallow: /upgrade/
+
+Host: https://www.slashtable.dev
+Sitemap: https://www.slashtable.dev/sitemap.xml
