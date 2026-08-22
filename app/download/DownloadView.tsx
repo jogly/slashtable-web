@@ -648,16 +648,44 @@ function LinuxPlatform({
   if (aarch64Url) options.push({ key: "aarch64", url: aarch64Url, event: "linux_aarch64" });
   if (amd64Url) options.push({ key: "amd64", url: amd64Url, event: "linux_amd64" });
 
-  const [picked, setPicked] = useState<LinuxArch | null>(null);
-  const selected =
-    picked ??
-    (detectedArch && options.some((o) => o.key === detectedArch) ? detectedArch : null) ??
-    (options.length === 1 ? options[0].key : null);
-  const current = options.find((o) => o.key === selected) ?? null;
-  const filename = current ? filenameFromUrl(current.url) : null;
-  const install = filename ? copy.install(filename) : null;
+  return (
+    <div className="mt-6 border border-dashed border-border/70 bg-surface-1/10 px-6 py-4 lg:px-8">
+      <div className="flex items-center gap-2">
+        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.eyebrow}</span>
+        <span className="border border-border bg-bg px-1.5 py-0.5 font-mono text-[9px] text-text-muted uppercase tracking-widest">
+          {copy.badge}
+        </span>
+      </div>
+      <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h3 className="font-display text-xl text-text">{copy.label}</h3>
+        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.body}</span>
+      </div>
+      <div className="mt-4 flex flex-col gap-3">
+        {options.map((o) => (
+          <LinuxArchRow
+            key={o.key}
+            option={o}
+            detected={detectedArch === o.key}
+            onDownload={() => onDownload(o.event)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LinuxArchRow({
+  option,
+  detected,
+  onDownload,
+}: {
+  option: { key: LinuxArch; url: string; event: "linux_aarch64" | "linux_amd64" };
+  detected: boolean;
+  onDownload: () => void;
+}) {
+  const filename = filenameFromUrl(option.url);
+  const install = filename ? DOWNLOAD_PAGE.linuxPlatform.install(filename) : null;
   const [copied, setCopied] = useState(false);
-  const archDetected = Boolean(detectedArch && options.some((o) => o.key === detectedArch));
 
   function handleCopy() {
     if (!install) return;
@@ -668,69 +696,36 @@ function LinuxPlatform({
   }
 
   return (
-    <div className="mt-6 flex flex-col gap-4 border border-dashed border-border/70 bg-surface-1/10 px-6 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.eyebrow}</span>
-          <span className="border border-border bg-bg px-1.5 py-0.5 font-mono text-[9px] text-text-muted uppercase tracking-widest">
-            {copy.badge}
-          </span>
-          {archDetected && (
+          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{option.key}</span>
+          {detected && (
             <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
               {DOWNLOAD_PAGE.recommendedBadgeLinux}
             </span>
           )}
         </div>
-        <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h3 className="font-display text-xl text-text">{copy.label}</h3>
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.body}</span>
-        </div>
-        {options.length > 1 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {options.map((o) => (
-              <button
-                key={o.key}
-                type="button"
-                onClick={() => setPicked(o.key)}
-                className={cn(
-                  "border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest transition-colors",
-                  selected === o.key
-                    ? "border-border bg-bg text-text"
-                    : "border-border/60 text-text-muted hover:border-border hover:text-text",
-                )}
-              >
-                {o.key}
-              </button>
-            ))}
-          </div>
-        )}
-        {filename && <p className="mt-2 truncate font-mono text-[11px] text-text-muted">{filename}</p>}
         {install && (
           <button
             type="button"
             onClick={handleCopy}
-            className="mt-1 flex max-w-full items-center gap-2 font-mono text-[11px] text-text-secondary transition-colors hover:text-text"
+            className="mt-1 flex max-w-full items-center gap-2 text-left font-mono text-[11px] text-text-secondary transition-colors hover:text-text"
           >
             <code className="truncate">{install}</code>
             {copied ? <CheckCircle className="h-3 w-3 shrink-0" /> : <Copy className="h-3 w-3 shrink-0" />}
           </button>
         )}
       </div>
-      {current ? (
-        <a
-          href={current.url}
-          download
-          onClick={() => onDownload(current.event)}
-          className="relative inline-flex shrink-0 items-center justify-center gap-2 rounded border border-border bg-transparent px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-text/40 hover:text-text"
-        >
-          <Download className="h-3.5 w-3.5" />
-          <span>{copy.cta}</span>
-        </a>
-      ) : (
-        <span className="relative inline-flex shrink-0 items-center justify-center gap-2 rounded border border-border/60 px-5 py-2.5 font-mono text-text-muted text-xs uppercase tracking-widest">
-          {copy.cta}
-        </span>
-      )}
+      <a
+        href={option.url}
+        download
+        onClick={onDownload}
+        className="relative inline-flex shrink-0 items-center justify-center gap-2 rounded border border-border bg-transparent px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-text/40 hover:text-text"
+      >
+        <Download className="h-3.5 w-3.5" />
+        <span>{DOWNLOAD_PAGE.linuxPlatform.cta}</span>
+      </a>
     </div>
   );
 }
