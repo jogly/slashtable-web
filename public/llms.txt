@@ -28,6 +28,7 @@
 
 Setup is two clicks in the app. There is no hosted MCP URL.
 
+- MCP discovery: https://www.slashtable.dev/.well-known/mcp.json
 - Server card: https://www.slashtable.dev/.well-known/mcp/server-card.json
 - Agent skills: https://www.slashtable.dev/.well-known/agent-skills/index.json
 - Transport: stdio, local, part of the desktop app

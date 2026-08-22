@@ -110,6 +110,29 @@
         }
       }
     },
+    "/.well-known/mcp.json": {
+      "get": {
+        "operationId": "getMcpDiscovery",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "MCP discovery (local stdio)",
+        "description": "Documents the local stdio MCP that ships inside the /table desktop app and points at the server card. There is no remote MCP URL.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "MCP discovery document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServerCard"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/.well-known/mcp/server-card.json": {
       "get": {
         "operationId": "getMcpServerCard",
