@@ -65,7 +65,7 @@ export function ConnectSection({
                         <Icon className="h-3.5 w-3.5" style={{ color }} strokeWidth={1.5} />
                       </span>
                       <div className="min-w-0">
-                        <p className="font-display text-sm text-text">{item.title}</p>
+                        <h3 className="font-display text-sm text-text">{item.title}</h3>
                         <p className="mt-1 text-sm text-text-secondary leading-relaxed">{item.body}</p>
                       </div>
                     </div>
