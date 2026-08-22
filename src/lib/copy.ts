@@ -279,7 +279,7 @@ export const DOWNLOAD = {
   downloadLabel: "Download for Mac",
   downloadLabelLinux: "Download for Linux (alpha)",
   linuxHint: "alpha · Debian/Ubuntu",
-  linuxInstall: (filename: string) => `sudo apt-get install ./${filename}`,
+  linuxInstall: "curl -fsSL https://slashtable.dev/install.sh | sh",
   altAvailableLabel: "Also available for",
   platformNotice: "macOS only \u00b7 Postgres \u00b7 MySQL \u00b7 SQLite \u00b7 Neon",
   moreVersionsLabel: "All versions & older builds",
@@ -331,7 +331,7 @@ export const DOWNLOAD_PAGE = {
     badge: "alpha",
     body: "Debian/Ubuntu.",
     cta: "Download .deb",
-    install: (filename: string) => `sudo apt-get install ./${filename}`,
+    install: "curl -fsSL https://slashtable.dev/install.sh | sh",
   },
   requirementsHeading: "System requirements",
   requirements: [
