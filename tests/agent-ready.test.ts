@@ -117,7 +117,7 @@ describe("markdown Accept negotiation", () => {
 });
 
 describe("homepage markdown structure", () => {
-  test("has nested ## / ### outline matching live heading buckets", () => {
+  test("has nested ## / ### / #### outline matching live heading buckets", () => {
     const md = markdownForPath("/")!;
     expect(md.length).toBeGreaterThanOrEqual(2000);
     expect(md).toContain("## Built for product engineers");
@@ -130,9 +130,10 @@ describe("homepage markdown structure", () => {
     expect(md).toContain("## Extend with plugins and agents");
     expect(md).toContain("### Bring Your Own Code.");
     expect(md).toContain("### Controlled access for AI agents.");
-    expect(md).toContain("#### Setup");
-    expect(md).toContain("#### Policy");
-    expect(md).toContain("#### Discovery");
+    expect(md).toContain("#### Battle-tested guardrails");
+    expect(md).toContain("#### Schema introspection");
+    expect(md).toContain("#### Per-connection access");
+    expect(md).toContain("## More of the client");
     expect(md).toContain("### Everything else.");
     expect(md).toContain("## Get the app");
     expect(md).toContain("### /table.app");
@@ -144,6 +145,7 @@ describe("homepage markdown structure", () => {
     expect(md).toContain("## Links");
     expect(md).toContain("https://www.slashtable.dev/developers/");
     expect(md).toContain("local stdio");
+    expect(markdownForPath("/outline-probe")).toBeNull();
   });
 });
 

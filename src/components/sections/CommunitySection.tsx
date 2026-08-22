@@ -89,7 +89,7 @@ export function CommunitySection({
                       >
                         <Icon className="h-5 w-5" style={{ color }} strokeWidth={1.5} />
                       </a>
-                      <h3 className="font-display text-base text-text">{link.title}</h3>
+                      <p className="font-display text-base text-text">{link.title}</p>
                     </div>
                     <p className="mb-5 flex-1 text-sm text-text-secondary leading-relaxed">{link.description}</p>
                     <a

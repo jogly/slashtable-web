@@ -42,22 +42,31 @@ describe("homepage heading outline (source)", () => {
     expect(download).toMatch(/<h3 className="font-display text-3xl text-text lg:text-5xl">/);
   });
 
-  test("subsection titles are h3 at text-base", () => {
+  test("item labels are non-heading text-base so outline stays nested not flat", () => {
     expect(read("src/components/sections/ConnectSection.tsx")).toContain(
-      'className="font-display text-base text-text">{item.title}</h3>',
+      'className="font-display text-base text-text">{item.title}</p>',
     );
     expect(read("src/components/sections/FeaturesGrid.tsx")).toContain(
-      'className="font-display text-base text-text">{feature.title}</h3>',
+      'className="font-display text-base text-text">{feature.title}</p>',
     );
   });
 
-  test("markdown paths include outline mirrors and nested group outline", () => {
+  test("MCP callouts nest as h4 under the feature h3", () => {
+    const src = read("src/components/sections/McpSection.tsx");
+    expect(src).toMatch(/<h4\s*\n\s*className="font-display text-xl transition-colors"/);
+    expect(src).not.toMatch(/<h3\s*\n\s*className="font-display text-base transition-colors"/);
+  });
+
+  test("markdown homepage has nested group outline with h4 depth", () => {
     const src = read("src/lib/markdown-negotiate.ts");
-    expect(src).toContain('"/outline-check"');
+    expect(src).not.toContain('"/outline-check"');
+    expect(src).not.toContain('"/outline-probe"');
     expect(src).toContain("## Connect and work where you already are");
     expect(src).toContain("### Parallel development is the new normal.");
     expect(src).toContain("## Navigate schema and data");
     expect(src).toContain("### Beautiful ER diagrams without noise.");
+    expect(src).toContain("#### Battle-tested guardrails");
+    expect(src).toContain("## More of the client");
   });
 });
 

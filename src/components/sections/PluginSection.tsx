@@ -56,12 +56,12 @@ export function PluginSection({
                   <ul className="mt-2 space-y-3">
                     {PLUGIN.capabilities.map((item) => (
                       <li key={item} className="relative pl-0">
-                        <h3 className="font-display text-base text-text">
+                        <p className="font-display text-base text-text">
                           <span className="mr-2 text-text" aria-hidden="true">
                             +
                           </span>
                           {item}
-                        </h3>
+                        </p>
                       </li>
                     ))}
                   </ul>

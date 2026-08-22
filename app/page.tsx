@@ -28,7 +28,10 @@ export default function HomePage() {
         groupHeadingId="group-extend-heading"
       />
       <McpSection />
-      <FeaturesGrid />
+      <FeaturesGrid
+        groupHeading="More of the client"
+        groupHeadingId="group-features-heading"
+      />
       <DownloadSection
         groupHeading="Get the app"
         groupHeadingId="group-download-heading"

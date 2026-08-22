@@ -253,15 +253,15 @@ export function McpSection() {
                             style={{ color: isActive ? color : "var(--color-text-muted)" }}
                             strokeWidth={1.5}
                           />
-                          <h3
-                            className="font-display text-base transition-colors"
+                          <h4
+                            className="font-display text-xl transition-colors"
                             style={{
                               color: isActive ? "var(--color-text)" : "var(--color-text-muted)",
                               fontWeight: isActive ? 600 : 400,
                             }}
                           >
                             {item.title}
-                          </h3>
+                          </h4>
                         </div>
                         {isActive && (
                           <p className="mt-2 text-[12px] text-text-secondary leading-relaxed">{item.description}</p>
