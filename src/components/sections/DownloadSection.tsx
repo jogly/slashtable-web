@@ -250,17 +250,14 @@ export function DownloadSection({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-glow-soft)_0%,transparent_60%)]" />
 
       <ContentContainer className="relative text-center">
-        {groupHeading && groupHeadingId ? (
-          <h2
-            id={groupHeadingId}
-            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
-          >
+        {groupHeading ? (
+          <p className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest">
             {groupHeading}
-          </h2>
+          </p>
         ) : null}
         {!hideHeader && (
           <FadeIn>
-            <h3 className="font-display text-3xl text-text lg:text-5xl">
+            <h2 id={groupHeadingId} className="font-display text-3xl text-text lg:text-5xl">
               {(() => {
                 const [before, after] = DOWNLOAD.heading;
                 return (
@@ -270,8 +267,16 @@ export function DownloadSection({
                   </>
                 );
               })()}
-            </h3>
+            </h2>
             <p className="mx-auto mt-4 max-w-md text-text-secondary leading-relaxed">{DOWNLOAD.description}</p>
+            <div className="mx-auto mt-6 flex max-w-md flex-col gap-2 text-left sm:text-center">
+              <h3 id="download-platform-macos" className="font-display text-sm text-text">
+                macOS downloads
+              </h3>
+              <h3 id="download-platform-linux" className="font-display text-sm text-text">
+                Linux downloads (alpha)
+              </h3>
+            </div>
           </FadeIn>
         )}
 
