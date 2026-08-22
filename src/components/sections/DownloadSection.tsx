@@ -179,7 +179,15 @@ function FlowIndicator() {
 
 /* ── Main section ───────────────────────────────────────────── */
 
-export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
+export function DownloadSection({
+  hideHeader = false,
+  groupHeading,
+  groupHeadingId,
+}: {
+  hideHeader?: boolean;
+  groupHeading?: string;
+  groupHeadingId?: string;
+} = {}) {
   const {
     release,
     isLinux,
@@ -237,14 +245,22 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
   }
 
   return (
-    <section id="download" className="relative overflow-hidden py-16 lg:py-24">
+    <section id="download" className="relative overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-24" aria-labelledby={groupHeadingId}>
       <NoiseTexture variant="grain" opacity={0.45} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-glow-soft)_0%,transparent_60%)]" />
 
       <ContentContainer className="relative text-center">
+        {groupHeading && groupHeadingId ? (
+          <h2
+            id={groupHeadingId}
+            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
+          >
+            {groupHeading}
+          </h2>
+        ) : null}
         {!hideHeader && (
           <FadeIn>
-            <h2 className="font-display text-3xl text-text lg:text-5xl">
+            <h3 className="font-display text-3xl text-text lg:text-5xl">
               {(() => {
                 const [before, after] = DOWNLOAD.heading;
                 return (
@@ -254,7 +270,7 @@ export function DownloadSection({ hideHeader = false }: { hideHeader?: boolean }
                   </>
                 );
               })()}
-            </h2>
+            </h3>
             <p className="mx-auto mt-4 max-w-md text-text-secondary leading-relaxed">{DOWNLOAD.description}</p>
           </FadeIn>
         )}

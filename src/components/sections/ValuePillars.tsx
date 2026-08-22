@@ -13,44 +13,49 @@ const pillarMeta = [
 export function ValuePillars() {
   return (
     <section className="relative bg-surface" aria-labelledby="value-pillars-heading">
-      <h2 id="value-pillars-heading" className="sr-only">
-        Built for product engineers
-      </h2>
       <NoiseTexture variant="crosshatch" opacity={0.6} />
       <SectionBorder position="top" />
-      <div className="relative mx-auto grid max-w-content divide-border border-border sm:grid-cols-3 sm:divide-x min-[68rem]:border-x">
-        {VALUE_PILLARS.pillars.map((pillar, i) => {
-          const { color, icon: Icon, href } = pillarMeta[i];
-          return (
-            <FadeIn key={pillar.title} delay={i * 0.06}>
-              <a
-                href={href}
-                className="group block h-full px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10"
-              >
-                <div className="mb-4 flex items-center gap-3">
-                  <span
-                    className="flex h-8 w-8 shrink-0 items-center justify-center border border-dashed transition-colors"
-                    style={{ borderColor: `${color}30`, backgroundColor: `${color}06` }}
-                    aria-hidden="true"
-                  >
-                    <Icon className="h-4 w-4" style={{ color }} strokeWidth={1.5} />
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color, opacity: 0.6 }}>
-                    0{i + 1}
-                  </span>
-                </div>
-                <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
-                <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
-                <span
-                  className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100"
-                  style={{ color }}
+      <div className="relative mx-auto max-w-content divide-border border-border min-[68rem]:border-x">
+        <h2
+          id="value-pillars-heading"
+          className="border-border border-b px-6 pt-10 pb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest lg:px-10 lg:pt-12"
+        >
+          Built for product engineers
+        </h2>
+        <div className="grid sm:grid-cols-3 sm:divide-x sm:divide-border">
+          {VALUE_PILLARS.pillars.map((pillar, i) => {
+            const { color, icon: Icon, href } = pillarMeta[i];
+            return (
+              <FadeIn key={pillar.title} delay={i * 0.06}>
+                <a
+                  href={href}
+                  className="group block h-full px-6 py-8 transition-colors hover:bg-surface-2/40 lg:px-10 lg:py-10"
                 >
-                  Learn more &rsaquo;
-                </span>
-              </a>
-            </FadeIn>
-          );
-        })}
+                  <div className="mb-4 flex items-center gap-3">
+                    <span
+                      className="flex h-8 w-8 shrink-0 items-center justify-center border border-dashed transition-colors"
+                      style={{ borderColor: `${color}30`, backgroundColor: `${color}06` }}
+                      aria-hidden="true"
+                    >
+                      <Icon className="h-4 w-4" style={{ color }} strokeWidth={1.5} />
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color, opacity: 0.6 }}>
+                      0{i + 1}
+                    </span>
+                  </div>
+                  <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
+                  <span
+                    className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100"
+                    style={{ color }}
+                  >
+                    Learn more &rsaquo;
+                  </span>
+                </a>
+              </FadeIn>
+            );
+          })}
+        </div>
       </div>
       <SectionBorder position="bottom" />
     </section>
