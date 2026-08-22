@@ -20,10 +20,13 @@ export function PluginSection({
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
-        {groupHeading ? (
-          <p className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest">
+        {groupHeading && groupHeadingId ? (
+          <h2
+            id={groupHeadingId}
+            className="mb-6 font-display text-xl text-text lg:text-2xl"
+          >
             {groupHeading}
-          </p>
+          </h2>
         ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#ffcc00">
@@ -43,7 +46,7 @@ export function PluginSection({
                     {PLUGIN.eyebrow}
                   </span>
                 </div>
-                <h2 id={groupHeadingId} className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h2>
+                <h3 className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h3>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
                   <p>
                     {before}
@@ -53,7 +56,7 @@ export function PluginSection({
                   <ul className="mt-2 space-y-3">
                     {PLUGIN.capabilities.map((item) => (
                       <li key={item} className="relative pl-0">
-                        <h3 className="font-display text-sm text-text">
+                        <h3 className="font-display text-base text-text">
                           <span className="mr-2 text-text" aria-hidden="true">
                             +
                           </span>

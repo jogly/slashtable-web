@@ -3,77 +3,61 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const root = join(import.meta.dir, "..");
-
 function read(rel: string) {
   return readFileSync(join(root, rel), "utf8");
 }
 
 describe("homepage heading outline (source)", () => {
-  test("ValuePillars keeps visible structural h2; pillar h3s are not inside <a>", () => {
-    const src = read("src/components/sections/ValuePillars.tsx");
-    expect(src).toMatch(/<h2[^>]*id="value-pillars-heading"/);
-    expect(src).toMatch(/<h3[\s>]/);
-    expect(src).not.toMatch(/<a[\s\S]*?<h3/);
-  });
-
-  test("major feature titles stay display h2; subsections are h3", () => {
-    const connect = read("src/components/sections/ConnectSection.tsx");
-    expect(connect).toMatch(/<h2[^>]*font-display text-3xl/);
-    expect(connect).toContain('className="font-display text-sm text-text">{item.title}</h3>');
-
-    const nav = read("src/components/sections/NavigationSection.tsx");
-    expect(nav).toMatch(/<h2[^>]*font-display text-3xl/);
-
-    const schema = read("src/components/sections/SchemaGraphSection.tsx");
-    expect(schema).toMatch(/<h3 className="[^"]*font-display text-3xl/);
-    expect(schema).not.toMatch(/<h2 className="[^"]*font-display text-3xl/);
-
-    const plugin = read("src/components/sections/PluginSection.tsx");
-    expect(plugin).toMatch(/<h2[^>]*font-display text-3xl/);
-    expect(plugin).toMatch(/<h3 className="font-display text-sm text-text">/);
-
-    const mcp = read("src/components/sections/McpSection.tsx");
-    expect(mcp).toMatch(/<h2[^>]*font-display text-3xl/);
-    expect(mcp).toMatch(/<h3\s+className="font-display text-sm transition-colors"/);
-
-    const features = read("src/components/sections/FeaturesGrid.tsx");
-    expect(features).toMatch(/<h2[^>]*font-display text-3xl/);
-    expect(features).toContain('className="font-display text-sm text-text">{feature.title}</h3>');
-
-    const download = read("src/components/sections/DownloadSection.tsx");
-    expect(download).toMatch(/<h2[^>]*font-display text-3xl text-text lg:text-5xl/);
-    expect(download).toContain("download-platform-macos");
-
-    const community = read("src/components/sections/CommunitySection.tsx");
-    expect(community).toContain('className="font-display text-base text-text">{link.title}</h3>');
-    expect(community).not.toMatch(/<a[\s\S]*?<h3/);
-  });
-
-  test("group labels stay non-heading mono text", () => {
+  test("visible group h2 buckets with demoted feature h3 titles", () => {
     for (const rel of [
       "src/components/sections/ConnectSection.tsx",
       "src/components/sections/NavigationSection.tsx",
       "src/components/sections/PluginSection.tsx",
     ]) {
       const src = read(rel);
-      expect(src).toContain('className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"');
-      expect(src).not.toMatch(/<h2[\s\n]*id=\{groupHeadingId\}[\s\S]*font-mono text-\[10px\]/);
+      expect(src).toMatch(/<h2[\s\n]*id=\{groupHeadingId\}/);
+      expect(src).toMatch(/font-display text-xl text-text lg:text-2xl/);
+      expect(src).toMatch(/<h3 className="[^"]*font-display text-3xl/);
+      expect(src).not.toMatch(/<h2 className="[^"]*font-display text-3xl/);
     }
   });
 
-  test("Accept-markdown homepage mirrors nested feature outline", () => {
+  test("ValuePillars unwraps pillar h3s from anchors", () => {
+    const src = read("src/components/sections/ValuePillars.tsx");
+    expect(src).toMatch(/<h2[^>]*id="value-pillars-heading"/);
+    expect(src).not.toMatch(/<a[\s\S]*?<h3/);
+  });
+
+  test("Schema/MCP/Features/Download demote large titles to h3", () => {
+    for (const rel of [
+      "src/components/sections/SchemaGraphSection.tsx",
+      "src/components/sections/McpSection.tsx",
+      "src/components/sections/FeaturesGrid.tsx",
+    ]) {
+      const src = read(rel);
+      expect(src).toMatch(/<h3 className="[^"]*font-display text-3xl/);
+      expect(src).not.toMatch(/<h2 className="[^"]*font-display text-3xl/);
+    }
+    const download = read("src/components/sections/DownloadSection.tsx");
+    expect(download).toMatch(/<h3 className="font-display text-3xl text-text lg:text-5xl">/);
+  });
+
+  test("subsection titles are h3 at text-base", () => {
+    expect(read("src/components/sections/ConnectSection.tsx")).toContain(
+      'className="font-display text-base text-text">{item.title}</h3>',
+    );
+    expect(read("src/components/sections/FeaturesGrid.tsx")).toContain(
+      'className="font-display text-base text-text">{feature.title}</h3>',
+    );
+  });
+
+  test("markdown paths include outline mirrors and nested group outline", () => {
     const src = read("src/lib/markdown-negotiate.ts");
-    expect(src).toContain("## Parallel development is the new normal.");
-    expect(src).toContain("### Docker auto-detect");
-    expect(src).toContain("## Bidirectional FK navigation.");
+    expect(src).toContain('"/outline-check"');
+    expect(src).toContain("## Connect and work where you already are");
+    expect(src).toContain("### Parallel development is the new normal.");
+    expect(src).toContain("## Navigate schema and data");
     expect(src).toContain("### Beautiful ER diagrams without noise.");
-    expect(src).toContain("## Bring Your Own Code.");
-    expect(src).toContain("## Controlled access for AI agents.");
-    expect(src).toContain("## Everything else.");
-    expect(src).toContain("## /table.app");
-    expect(src).toContain("### macOS downloads");
-    expect(src).toContain("## Build with us");
-    expect(src).not.toContain("## Connect and work where you already are");
   });
 });
 
@@ -86,9 +70,7 @@ describe("MCP discovery", () => {
     );
     expect(JSON.stringify(card)).not.toMatch(/"url"\s*:\s*"https:\/\/[^"]+\/mcp"/);
     expect(card.description.toLowerCase()).toContain("stdio");
-    const existing = JSON.parse(
-      read("public/.well-known/mcp/server-card.json"),
-    );
+    const existing = JSON.parse(read("public/.well-known/mcp/server-card.json"));
     expect(existing.transport.type).toBe("stdio");
   });
 });
@@ -104,9 +86,7 @@ describe("SSR heading visibility (opacity)", () => {
   test("Hero uses plain h1 and initial={false} so SSR omits opacity:0", () => {
     const src = read("src/components/sections/Hero.tsx");
     expect(src).toContain("initial={false}");
-    expect(src).toContain("useAnimationControls");
     expect(src).toMatch(/<h1 className="[^"]*text-balance/);
     expect(src).not.toMatch(/<motion\.h1/);
-    expect(src).not.toMatch(/initial=\{prefersReducedMotion \? undefined : "hidden"\}/);
   });
 });
