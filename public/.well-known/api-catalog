@@ -2,10 +2,26 @@
   "linkset": [
     {
       "anchor": "https://www.slashtable.dev/",
+      "service-desc": [
+        {
+          "href": "https://www.slashtable.dev/openapi.json",
+          "type": "application/openapi+json"
+        }
+      ],
       "service-doc": [
+        {
+          "href": "https://www.slashtable.dev/openapi.json",
+          "type": "application/openapi+json"
+        },
         {
           "href": "https://www.slashtable.dev/llms.txt",
           "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://www.slashtable.dev/api/v1/product",
+          "type": "application/json"
         }
       ]
     }
