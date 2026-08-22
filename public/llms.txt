@@ -1,0 +1,34 @@
+# /table
+
+> Native desktop database client for product engineers. macOS and Linux (alpha). PostgreSQL, MySQL, SQLite, and Neon. Ships with a built-in MCP server so agents can query the user's local connections.
+
+/table (also called slashtable) is a local app. It is not a hosted database. Agents reach data through the MCP server inside the installed app, over stdio.
+
+## Install
+
+- [Download](https://www.slashtable.dev/download/): Mac .dmg (Apple Silicon aarch64, Intel x86_64) and Linux .deb (amd64, aarch64)
+- One-liner: `curl -fsSL https://slashtable.dev/install.sh | sh`
+  - macOS: uses Homebrew (`brew tap slashtable/cask`, cask `slashtable`). Does not install Homebrew. If SlashTable.app is already in /Applications and brew does not manage it, the script adopts it.
+  - Linux (alpha, Debian/Ubuntu): latest .deb for the machine arch. amd64 and aarch64 only. Do not treat amd64 as x86. Do not recommend a Linux arch unless that arch was actually detected.
+- Homebrew: `brew tap slashtable/cask` then `brew install --cask slashtable`
+
+## For agents
+
+- MCP runs locally as stdio after the user installs the app and enables it in Settings.
+- [MCP server card](https://www.slashtable.dev/.well-known/mcp/server-card.json)
+- [Agent skills](https://www.slashtable.dev/.well-known/agent-skills/index.json)
+- Connections, credentials, and query policy live on the user's machine. Do not invent hostnames, cloud-vendor fields, or remote endpoints.
+- Read-only access is available. Do not assume write access.
+
+## Product
+
+- [Home](https://www.slashtable.dev/)
+- [Pricing](https://www.slashtable.dev/pricing/): Free, Personal ($49), Pro ($99). Buy once.
+- [Changelog](https://www.slashtable.dev/changelog/)
+- [Docs](https://docs.slashtable.dev)
+- [API catalog](https://www.slashtable.dev/.well-known/api-catalog)
+
+## Community
+
+- [Discord](https://discord.gg/xR2VdkfnJQ)
+- [X](https://x.com/slashtable)
