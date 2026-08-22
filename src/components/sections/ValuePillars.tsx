@@ -18,7 +18,7 @@ export function ValuePillars() {
       <div className="relative mx-auto max-w-content divide-border border-border min-[68rem]:border-x">
         <h2
           id="value-pillars-heading"
-          className="border-border border-b px-6 pt-10 pb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest lg:px-10 lg:pt-12"
+          className="border-border border-b px-6 pt-10 pb-4 font-display text-2xl text-text lg:px-10 lg:pt-12 lg:text-3xl"
         >
           Built for product engineers
         </h2>

@@ -19,13 +19,10 @@ export function NavigationSection({
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
-        {groupHeading && groupHeadingId ? (
-          <h2
-            id={groupHeadingId}
-            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
-          >
+        {groupHeading ? (
+          <p className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest">
             {groupHeading}
-          </h2>
+          </p>
         ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#44ff88">
@@ -44,7 +41,7 @@ export function NavigationSection({
                 <div className="mb-8 lg:hidden">
                   <BreadcrumbMockup className="w-full" />
                 </div>
-                <h3 className="font-display text-3xl text-text lg:text-4xl">{NAVIGATION.heading}</h3>
+                <h2 id={groupHeadingId} className="font-display text-3xl text-text lg:text-4xl">{NAVIGATION.heading}</h2>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
                   {NAVIGATION.body.map((p) => (
                     <p key={p}>{p}</p>

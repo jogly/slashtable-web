@@ -218,7 +218,7 @@ export function McpSection() {
                 />
                 <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{MCP.eyebrow}</span>
               </div>
-              <h3 className="mx-auto max-w-2xl font-display text-3xl text-text lg:text-4xl">{MCP.heading}</h3>
+              <h2 className="mx-auto max-w-2xl font-display text-3xl text-text lg:text-4xl">{MCP.heading}</h2>
               <p className="mx-auto mt-4 max-w-xl text-text-secondary leading-relaxed">{MCP.description}</p>
             </div>
 
