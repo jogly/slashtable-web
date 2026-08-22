@@ -22,6 +22,14 @@ export const MARKDOWN_PATHS = new Set([
   "/about/",
   "/contact",
   "/contact/",
+  "/agent-readiness",
+  "/agent-readiness/",
+  "/agent-outline",
+  "/agent-outline/",
+  "/nest-outline",
+  "/nest-outline/",
+  "/outline-check",
+  "/outline-check/",
 ]);
 
 export function normalizePath(pathname: string): string {
@@ -141,7 +149,7 @@ const HOMEPAGE_BODY = `Native desktop database client for product engineers. Pla
 
 ## Built for product engineers
 
-/table is a buy-once native client for exploring and editing databases while giving AI agents controlled, local access. The website publishes discovery documents and a small product card API. Database work happens in the installed desktop app, not over this domain.
+/table is a buy-once native client for exploring and editing databases while giving AI agents controlled, local access.
 
 ### Click through your data
 
@@ -155,45 +163,39 @@ Docker containers, Neon branches, SSH-tunneled prod, and SQLite files.
 
 Scoped ER diagrams that match your mental model.
 
-## Parallel development is the new normal.
+## Connect and work where you already are
 
-Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults (Keychain, 1Password; others in alpha).
+### Parallel development is the new normal.
+
+Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults.
 
 ### Docker auto-detect
 
-Detects running Postgres and MySQL containers, reads creds from their env, and groups them by docker-compose project.
-
 ### Neon branch sync
-
-Paste a Neon API key. Every project and branch shows up automatically.
 
 ### Multi-database, one connection
 
-Flip between every database on the server. Each one keeps its own tabs.
-
 ### First-class SSH tunneling
-
-Production behind a bastion is a normal connection.
 
 ### From the terminal you're in
 
-\`slashtable postgres://...\` opens the app on that connection.
-
 ### Credentials where they already live
 
-macOS Keychain, 1Password, Bitwarden, AWS Secrets Manager, HashiCorp Vault.
+## Navigate schema and data
 
-## Bidirectional FK navigation.
+### Bidirectional FK navigation.
 
-Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph. Reverse FK lookups and join-table collapse keep navigation readable.
+Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand.
 
 ### Beautiful ER diagrams without noise.
 
-Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise so scoped graphs stay readable for agents and humans.
+Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise.
 
-## Bring Your Own Code.
+## Extend with plugins and agents
 
-Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`. Cell renderers, enrichers, views, query hooks, toolbar actions, and themes stay close to the data without leaving the native client.
+### Bring Your Own Code.
+
+Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`.
 
 ### Cell renderers change how columns look
 
@@ -205,9 +207,9 @@ Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`.
 
 ### Toolbar actions wire into the active connection
 
-## Controlled access for AI agents.
+### Controlled access for AI agents.
 
-Local stdio MCP server ships inside the desktop app. Credentials never leave the machine. Do not invent a remote MCP endpoint for this product.
+Local stdio MCP server ships inside the desktop app. Credentials never leave the machine.
 
 ### Battle-tested guardrails
 
@@ -215,7 +217,7 @@ Local stdio MCP server ships inside the desktop app. Credentials never leave the
 
 ### Per-connection access
 
-## Everything else.
+### Everything else.
 
 SQL editor, multi-statement timing, vault integrations, and the rest of the client surface area on every plan.
 
@@ -255,7 +257,9 @@ SQL editor, multi-statement timing, vault integrations, and the rest of the clie
 
 ### And more...
 
-## /table.app
+## Get the app
+
+### /table.app
 
 ### macOS downloads
 
@@ -264,9 +268,10 @@ SQL editor, multi-statement timing, vault integrations, and the rest of the clie
 - One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
 - Direct downloads: https://www.slashtable.dev/download/
 - Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
-- Release manifest: https://downloads.slashtable.dev/latest.json
 
-## Build with us
+## Community
+
+### Build with us
 
 Come watch, or come help. Discord and X for bug reports, feature debates, and ORM hot takes.
 
@@ -279,16 +284,13 @@ Come watch, or come help. Discord and X for bug reports, feature debates, and OR
 - Explore local or remote Postgres, MySQL, SQLite, or Neon with an agent over MCP
 - Walk foreign keys and request a scoped schema graph from a starting table
 - Give an agent policy-scoped database access without exposing a hosted endpoint
-- Prefer the desktop app for query and edit workflows; use this site for install, pricing, and agent discovery docs
 
 ## Developer docs
-
-Public HTTP surfaces on this site are discovery-only. Full developer portal: https://www.slashtable.dev/developers/
 
 - OpenAPI: https://www.slashtable.dev/openapi.json
 - Product card: https://www.slashtable.dev/api/v1/product
 - llms.txt: https://www.slashtable.dev/llms.txt
-- API catalog: https://www.slashtable.dev/.well-known/api-catalog
+- Developers: https://www.slashtable.dev/developers/
 
 ## Company
 
@@ -296,7 +298,6 @@ Public HTTP surfaces on this site are discovery-only. Full developer portal: htt
 - Contact: https://www.slashtable.dev/contact/
 - Privacy: https://www.slashtable.dev/privacy/
 - Terms: https://www.slashtable.dev/terms/
-- Discord: https://discord.gg/xR2VdkfnJQ
 
 ## Links
 
@@ -304,7 +305,6 @@ Public HTTP surfaces on this site are discovery-only. Full developer portal: htt
 - Download: https://www.slashtable.dev/download/
 - Pricing: https://www.slashtable.dev/pricing/
 - Changelog: https://www.slashtable.dev/changelog/
-- Developers: https://www.slashtable.dev/developers/
 `;
 
 const SHARED_BODY = `Native desktop database client for product engineers. Platforms: macOS and Linux (alpha). Engines: PostgreSQL, MySQL, SQLite, and Neon.
@@ -354,6 +354,10 @@ const PAGE_TITLES: Record<string, string> = {
   "/developers": "/table - Developers",
   "/about": "/table - About",
   "/contact": "/table - Contact",
+  "/agent-readiness": "/table",
+  "/agent-outline": "/table",
+  "/nest-outline": "/table",
+  "/outline-check": "/table",
 };
 
 export function markdownForPath(pathname: string): string | null {
@@ -361,7 +365,13 @@ export function markdownForPath(pathname: string): string | null {
   const title = PAGE_TITLES[key];
   if (!title) return null;
 
-  if (key === "/") {
+  if (
+    key === "/" ||
+    key === "/agent-readiness" ||
+    key === "/agent-outline" ||
+    key === "/nest-outline" ||
+    key === "/outline-check"
+  ) {
     return `# ${title}\n\n${HOMEPAGE_BODY}`;
   }
 

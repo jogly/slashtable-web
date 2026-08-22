@@ -38,7 +38,7 @@ export function FeaturesGrid() {
                   {FEATURES_GRID.eyebrow}
                 </span>
               </div>
-              <h2 className="font-display text-3xl text-text lg:text-4xl">{FEATURES_GRID.heading}</h2>
+              <h3 className="font-display text-3xl text-text lg:text-4xl">{FEATURES_GRID.heading}</h3>
               <p className="mx-auto mt-3 max-w-lg text-sm text-text-secondary leading-relaxed">
                 {FEATURES_GRID.description}
               </p>
@@ -56,7 +56,7 @@ export function FeaturesGrid() {
                         aria-hidden="true"
                       />
                       <div>
-                        <h3 className="font-display text-sm text-text">{feature.title}</h3>
+                        <h3 className="font-display text-base text-text">{feature.title}</h3>
                         <p className="mt-0.5 text-text-muted text-xs leading-relaxed">{feature.description}</p>
                       </div>
                     </div>
