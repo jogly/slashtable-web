@@ -34,6 +34,8 @@ export const MARKDOWN_PATHS = new Set([
   "/outline-probe/",
   "/workers-outline",
   "/workers-outline/",
+  "/ora-nest-html",
+  "/ora-nest-html/",
 ]);
 
 export function normalizePath(pathname: string): string {
@@ -403,6 +405,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/outline-check": "/table",
   "/outline-probe": "/table - Outline probe",
   "/workers-outline": "/table - Outline probe",
+  "/ora-nest-html": "/table - Outline probe",
 };
 
 export function markdownForPath(pathname: string): string | null {
@@ -410,7 +413,7 @@ export function markdownForPath(pathname: string): string | null {
   const title = PAGE_TITLES[key];
   if (!title) return null;
 
-  if (key === "/outline-probe" || key === "/workers-outline") {
+  if (key === "/outline-probe" || key === "/workers-outline" || key === "/ora-nest-html") {
     return `# ${title}\n\n${PROBE_BODY}`;
   }
 
