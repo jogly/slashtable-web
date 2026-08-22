@@ -14,14 +14,29 @@ export default function HomePage() {
     <>
       <Hero />
       <ValuePillars />
-      <ConnectSection />
-      <NavigationSection />
+      <ConnectSection
+        groupHeading="Connect and work where you already are"
+        groupHeadingId="group-connect-heading"
+      />
+      <NavigationSection
+        groupHeading="Navigate schema and data"
+        groupHeadingId="group-navigate-heading"
+      />
       <SchemaGraphSection />
-      <PluginSection />
+      <PluginSection
+        groupHeading="Extend with plugins and agents"
+        groupHeadingId="group-extend-heading"
+      />
       <McpSection />
       <FeaturesGrid />
-      <DownloadSection />
-      <CommunitySection />
+      <DownloadSection
+        groupHeading="Get the app"
+        groupHeadingId="group-download-heading"
+      />
+      <CommunitySection
+        groupHeading="Community"
+        groupHeadingId="group-community-heading"
+      />
     </>
   );
 }

@@ -117,22 +117,27 @@ describe("markdown Accept negotiation", () => {
 });
 
 describe("homepage markdown structure", () => {
-  test("has ## and ### headings for Ora content-no-js", () => {
+  test("has nested ## / ### outline matching live heading buckets", () => {
     const md = markdownForPath("/")!;
     expect(md.length).toBeGreaterThanOrEqual(2000);
-    expect(md).toContain("## Overview");
-    expect(md).toContain("### Platforms");
-    expect(md).toContain("### What stays local");
-    expect(md).toContain("## Install");
-    expect(md).toContain("## MCP");
-    expect(md).toContain("### Setup");
-    expect(md).toContain("### Policy");
-    expect(md).toContain("### Discovery");
-    expect(md).toContain("## Features");
-    expect(md).toContain("### Foreign-key navigation");
-    expect(md).toContain("### Schema graph");
-    expect(md).toContain("### Plugins");
-    expect(md).toContain("### Connect where work already happens");
+    expect(md).toContain("## Built for product engineers");
+    expect(md).toContain("### Click through your data");
+    expect(md).toContain("## Connect and work where you already are");
+    expect(md).toContain("### Parallel development is the new normal.");
+    expect(md).toContain("## Navigate schema and data");
+    expect(md).toContain("### Bidirectional FK navigation.");
+    expect(md).toContain("### Beautiful ER diagrams without noise.");
+    expect(md).toContain("## Extend with plugins and agents");
+    expect(md).toContain("### Bring Your Own Code.");
+    expect(md).toContain("### Controlled access for AI agents.");
+    expect(md).toContain("#### Setup");
+    expect(md).toContain("#### Policy");
+    expect(md).toContain("#### Discovery");
+    expect(md).toContain("### Everything else.");
+    expect(md).toContain("## Get the app");
+    expect(md).toContain("### /table.app");
+    expect(md).toContain("## Community");
+    expect(md).toContain("### Build with us");
     expect(md).toContain("## When to use");
     expect(md).toContain("## Developer docs");
     expect(md).toContain("## Company");

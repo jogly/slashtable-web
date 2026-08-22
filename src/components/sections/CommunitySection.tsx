@@ -27,17 +27,31 @@ const linkMeta = [
   },
 ];
 
-export function CommunitySection() {
+export function CommunitySection({
+  groupHeading,
+  groupHeadingId,
+}: {
+  groupHeading?: string;
+  groupHeadingId?: string;
+} = {}) {
   return (
-    <section className="relative py-16 lg:py-24">
+    <section className="relative pt-12 pb-16 lg:pt-16 lg:pb-24" aria-labelledby={groupHeadingId}>
       <NoiseTexture
         variant="grain"
         opacity={0.35}
         className="[mask-image:linear-gradient(to_bottom,black_50%,transparent)]"
       />
       <ContentContainer className="relative">
+        {groupHeading && groupHeadingId ? (
+          <h2
+            id={groupHeadingId}
+            className="mb-8 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest"
+          >
+            {groupHeading}
+          </h2>
+        ) : null}
         <FadeIn>
-          <SectionHeading eyebrow={COMMUNITY.eyebrow} description={COMMUNITY.description}>
+          <SectionHeading description={COMMUNITY.description}>
             {COMMUNITY.heading}
           </SectionHeading>
         </FadeIn>

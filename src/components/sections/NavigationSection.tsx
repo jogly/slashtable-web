@@ -3,12 +3,30 @@ import { BreadcrumbMockup } from "../ui/BreadcrumbMockup";
 import { FadeIn } from "../ui/FadeIn";
 import { FeatureFrame } from "../ui/FeatureFrame";
 import { NoiseTexture } from "../ui/NoiseTexture";
-export function NavigationSection() {
+export function NavigationSection({
+  groupHeading,
+  groupHeadingId,
+}: {
+  groupHeading?: string;
+  groupHeadingId?: string;
+} = {}) {
   return (
-    <section className="relative py-16 lg:py-24" id="features">
+    <section
+      className="relative pt-12 pb-16 lg:pt-16 lg:pb-24"
+      id="features"
+      aria-labelledby={groupHeadingId}
+    >
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
+        {groupHeading && groupHeadingId ? (
+          <h2
+            id={groupHeadingId}
+            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
+          >
+            {groupHeading}
+          </h2>
+        ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#44ff88">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
@@ -26,7 +44,7 @@ export function NavigationSection() {
                 <div className="mb-8 lg:hidden">
                   <BreadcrumbMockup className="w-full" />
                 </div>
-                <h2 className="font-display text-3xl text-text lg:text-4xl">{NAVIGATION.heading}</h2>
+                <h3 className="font-display text-3xl text-text lg:text-4xl">{NAVIGATION.heading}</h3>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
                   {NAVIGATION.body.map((p) => (
                     <p key={p}>{p}</p>

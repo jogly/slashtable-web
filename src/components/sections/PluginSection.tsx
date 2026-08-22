@@ -3,13 +3,31 @@ import { CodeBlock } from "../ui/CodeBlock";
 import { FadeIn } from "../ui/FadeIn";
 import { FeatureFrame } from "../ui/FeatureFrame";
 import { NoiseTexture } from "../ui/NoiseTexture";
-export function PluginSection() {
+export function PluginSection({
+  groupHeading,
+  groupHeadingId,
+}: {
+  groupHeading?: string;
+  groupHeadingId?: string;
+} = {}) {
   const [before, after] = PLUGIN.intro.split(PLUGIN.pluginPath);
   return (
-    <section className="relative py-16 lg:py-24" id="plugins">
+    <section
+      className="relative pt-12 pb-16 lg:pt-16 lg:pb-24"
+      id="plugins"
+      aria-labelledby={groupHeadingId}
+    >
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
+        {groupHeading && groupHeadingId ? (
+          <h2
+            id={groupHeadingId}
+            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
+          >
+            {groupHeading}
+          </h2>
+        ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#ffcc00">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
@@ -28,7 +46,7 @@ export function PluginSection() {
                     {PLUGIN.eyebrow}
                   </span>
                 </div>
-                <h2 className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h2>
+                <h3 className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h3>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
                   <p>
                     {before}

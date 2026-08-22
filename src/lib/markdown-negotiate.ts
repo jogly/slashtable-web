@@ -139,67 +139,83 @@ const HOMEPAGE_BODY = `Native desktop database client for product engineers. Pla
 
 /table is a local app. Agents reach data only through the MCP server that runs inside the installed app, over stdio. There is no hosted database and no remote query API on this site. Credentials stay on the machine.
 
-## Overview
+## Built for product engineers
 
 /table is a buy-once native client for exploring and editing databases while giving AI agents controlled, local access. The website publishes discovery documents and a small product card API. Database work happens in the installed desktop app, not over this domain.
 
-### Platforms
+### Click through your data
 
-- macOS (Apple Silicon and Intel), GA
-- Linux (Debian/Ubuntu .deb), alpha
-- Engines: PostgreSQL, MySQL, SQLite, and Neon
+Graph navigation for foreign keys, reverse FKs, and join tables.
 
-### What stays local
+### Connects to where you work
 
-- Connection credentials and vault integrations
-- Query execution and result grids
-- The MCP server process (stdio only; no hosted MCP URL)
+Docker containers, Neon branches, SSH-tunneled prod, and SQLite files.
 
-## Install
+### Screenshot-worthy schema diagrams
 
-- One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
-- Direct downloads: https://www.slashtable.dev/download/
-- Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
-- Release manifest: https://downloads.slashtable.dev/latest.json
+Scoped ER diagrams that match your mental model.
 
-## MCP
+## Connect and work where you already are
+
+### Parallel development is the new normal.
+
+Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults (Keychain, 1Password; others in alpha).
+
+## Navigate schema and data
+
+### Bidirectional FK navigation.
+
+Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph. Reverse FK lookups and join-table collapse keep navigation readable.
+
+### Beautiful ER diagrams without noise.
+
+Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise so scoped graphs stay readable for agents and humans.
+
+## Extend with plugins and agents
+
+### Bring Your Own Code.
+
+Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`. Cell renderers, enrichers, views, query hooks, toolbar actions, and themes stay close to the data without leaving the native client.
+
+### Controlled access for AI agents.
 
 Local stdio MCP server ships inside the desktop app. Credentials never leave the machine. Do not invent a remote MCP endpoint for this product.
 
-### Setup
+#### Setup
 
 1. Install /table and open it.
 2. Add a database connection (credentials stay on the machine).
 3. Enable the MCP server in Settings.
 4. Connect Claude Desktop, Claude Code, Cursor, or Windsurf over local stdio.
 
-### Policy
+#### Policy
 
 Per-connection policy: hidden, read, or write. Read uses a keyword filter plus an engine-level READ ONLY transaction that rolls back. Hidden connections are invisible to the agent. The MCP Log tab records method, tool, connection, and duration.
 
-### Discovery
+#### Discovery
 
 - MCP server card: https://www.slashtable.dev/.well-known/mcp/server-card.json
 - Agent skills index: https://www.slashtable.dev/.well-known/agent-skills/index.json
 - Developers portal: https://www.slashtable.dev/developers/
 
-## Features
+### Everything else.
 
-### Foreign-key navigation
+SQL editor, multi-statement timing, vault integrations, and the rest of the client surface area on every plan.
 
-Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph. Reverse FK lookups and join-table collapse keep navigation readable.
+## Get the app
 
-### Schema graph
+### /table.app
 
-Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise so scoped graphs stay readable for agents and humans.
+- One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
+- Direct downloads: https://www.slashtable.dev/download/
+- Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
+- Release manifest: https://downloads.slashtable.dev/latest.json
 
-### Plugins
+## Community
 
-Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`. Cell renderers, enrichers, views, query hooks, toolbar actions, and themes stay close to the data without leaving the native client.
+### Build with us
 
-### Connect where work already happens
-
-Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults (Keychain, 1Password; others in alpha).
+Come watch, or come help. Discord and X for bug reports, feature debates, and ORM hot takes.
 
 ## When to use
 
