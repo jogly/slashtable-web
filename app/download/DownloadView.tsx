@@ -13,7 +13,7 @@ import { NoiseTexture } from "@/components/ui/NoiseTexture";
 import { Diamond } from "@/components/ui/SectionBorder";
 import { SkyParallax } from "@/components/ui/SkyParallax";
 import { ThankYouModal } from "@/components/ui/ThankYouModal";
-import { detectIsIntel, detectIsLinux, detectLinuxArch, type LinuxArch } from "@/hooks/useDownload";
+import { detectIsIntel, detectIsLinux } from "@/hooks/useDownload";
 import { trackDownloadStarted } from "@/lib/analytics";
 import { NAME } from "@/lib/constants";
 import { DOWNLOAD_PAGE } from "@/lib/copy";
@@ -109,7 +109,6 @@ type ArchKey = "silicon" | "intel" | "linux_amd64" | "linux_aarch64" | "linux_x8
 export function DownloadView({ release, versions, changelogEntry }: DownloadViewProps) {
   const [isIntel, setIsIntel] = useState(false);
   const [isLinux, setIsLinux] = useState(false);
-  const [linuxArch, setLinuxArch] = useState<LinuxArch | null>(null);
   const [showThankYou, setShowThankYou] = useState(false);
   const [versionPage, setVersionPage] = useState(0);
   const heroCardRef = useRef<HTMLDivElement>(null);
@@ -117,7 +116,6 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
   useEffect(() => {
     setIsIntel(detectIsIntel());
     setIsLinux(detectIsLinux());
-    setLinuxArch(detectLinuxArch());
   }, []);
 
   const openThankYou = useCallback(() => setShowThankYou(true), []);
@@ -269,14 +267,7 @@ export function DownloadView({ release, versions, changelogEntry }: DownloadView
                 onDownload={() => handleDownload("intel")}
               />
             </div>
-            {(linuxAmd64Url || linuxAarch64Url) && (
-              <LinuxPlatform
-                amd64Url={linuxAmd64Url}
-                aarch64Url={linuxAarch64Url}
-                detectedArch={linuxArch}
-                onDownload={handleDownload}
-              />
-            )}
+            {(linuxAmd64Url || linuxAarch64Url) && <LinuxPlatform />}
 
             <p className="mt-6 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest lg:text-left">
               {DOWNLOAD_PAGE.agreement}{" "}
@@ -632,36 +623,12 @@ function HomebrewSection({ commands, heading }: { commands: string[]; heading: s
   );
 }
 
-function LinuxPlatform({
-  amd64Url,
-  aarch64Url,
-  detectedArch,
-  onDownload,
-}: {
-  amd64Url?: string;
-  aarch64Url?: string;
-  detectedArch: LinuxArch | null;
-  onDownload: (arch: ArchKey) => void;
-}) {
+function LinuxPlatform() {
   const copy = DOWNLOAD_PAGE.linuxPlatform;
-  const options: { key: LinuxArch; url: string; event: "linux_aarch64" | "linux_amd64" }[] = [];
-  if (aarch64Url) options.push({ key: "aarch64", url: aarch64Url, event: "linux_aarch64" });
-  if (amd64Url) options.push({ key: "amd64", url: amd64Url, event: "linux_amd64" });
-
-  const [picked, setPicked] = useState<LinuxArch | null>(null);
-  const selected =
-    picked ??
-    (detectedArch && options.some((o) => o.key === detectedArch) ? detectedArch : null) ??
-    (options.length === 1 ? options[0].key : null);
-  const current = options.find((o) => o.key === selected) ?? null;
-  const filename = current ? filenameFromUrl(current.url) : null;
-  const install = filename ? copy.install(filename) : null;
   const [copied, setCopied] = useState(false);
-  const archDetected = Boolean(detectedArch && options.some((o) => o.key === detectedArch));
 
   function handleCopy() {
-    if (!install) return;
-    navigator.clipboard.writeText(install).then(() => {
+    navigator.clipboard.writeText(copy.install).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
@@ -675,62 +642,20 @@ function LinuxPlatform({
           <span className="border border-border bg-bg px-1.5 py-0.5 font-mono text-[9px] text-text-muted uppercase tracking-widest">
             {copy.badge}
           </span>
-          {archDetected && (
-            <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-              {DOWNLOAD_PAGE.recommendedBadgeLinux}
-            </span>
-          )}
         </div>
         <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h3 className="font-display text-xl text-text">{copy.label}</h3>
           <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{copy.body}</span>
         </div>
-        {options.length > 1 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {options.map((o) => (
-              <button
-                key={o.key}
-                type="button"
-                onClick={() => setPicked(o.key)}
-                className={cn(
-                  "border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest transition-colors",
-                  selected === o.key
-                    ? "border-border bg-bg text-text"
-                    : "border-border/60 text-text-muted hover:border-border hover:text-text",
-                )}
-              >
-                {o.key}
-              </button>
-            ))}
-          </div>
-        )}
-        {filename && <p className="mt-2 truncate font-mono text-[11px] text-text-muted">{filename}</p>}
-        {install && (
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="mt-1 flex max-w-full items-center gap-2 font-mono text-[11px] text-text-secondary transition-colors hover:text-text"
-          >
-            <code className="truncate">{install}</code>
-            {copied ? <CheckCircle className="h-3 w-3 shrink-0" /> : <Copy className="h-3 w-3 shrink-0" />}
-          </button>
-        )}
-      </div>
-      {current ? (
-        <a
-          href={current.url}
-          download
-          onClick={() => onDownload(current.event)}
-          className="relative inline-flex shrink-0 items-center justify-center gap-2 rounded border border-border bg-transparent px-5 py-2.5 font-mono text-text-secondary text-xs uppercase tracking-widest transition-colors hover:border-text/40 hover:text-text"
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="mt-3 flex max-w-full items-center gap-2 text-left font-mono text-[11px] text-text-secondary transition-colors hover:text-text"
         >
-          <Download className="h-3.5 w-3.5" />
-          <span>{copy.cta}</span>
-        </a>
-      ) : (
-        <span className="relative inline-flex shrink-0 items-center justify-center gap-2 rounded border border-border/60 px-5 py-2.5 font-mono text-text-muted text-xs uppercase tracking-widest">
-          {copy.cta}
-        </span>
-      )}
+          <code className="truncate">{copy.install}</code>
+          {copied ? <CheckCircle className="h-3 w-3 shrink-0" /> : <Copy className="h-3 w-3 shrink-0" />}
+        </button>
+      </div>
     </div>
   );
 }
