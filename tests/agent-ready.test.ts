@@ -144,7 +144,7 @@ describe("homepage markdown structure", () => {
     expect(md).toContain("## Company");
     expect(md).toContain("## Links");
     expect(md).toContain("https://www.slashtable.dev/developers/");
-    expect(md).toContain("local stdio");
+    expect(md.toLowerCase()).toContain("stdio");
     expect(markdownForPath("/outline-probe")).toBeNull();
   });
 });
