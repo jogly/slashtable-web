@@ -25,7 +25,7 @@
 - [Home](https://www.slashtable.dev/)
 - [Pricing](https://www.slashtable.dev/pricing/): Free, Personal ($49), Pro ($99). Buy once.
 - [Changelog](https://www.slashtable.dev/changelog/)
-- [Docs](https://docs.slashtable.dev)
+- [Agent guide](https://www.slashtable.dev/llms-full.txt)
 - [API catalog](https://www.slashtable.dev/.well-known/api-catalog)
 
 ## Community
