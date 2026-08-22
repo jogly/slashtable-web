@@ -4,8 +4,16 @@ import {
   preferredType,
   prefersMarkdown,
   markdownForPath,
+  markdownNotFound,
   parseAccept,
+  shouldSkipMarkdownNegotiation,
 } from "../src/lib/markdown-negotiate";
+import {
+  formatLinkHeader,
+  formatLinkRelation,
+  PAGE_LINK_HEADER,
+  PAGE_LINK_RELATIONS,
+} from "../src/lib/link-headers";
 import { problem, PROBLEM_BASE } from "../src/lib/problem";
 
 describe("problem()", () => {
@@ -95,5 +103,53 @@ describe("markdown Accept negotiation", () => {
       expect(md!.length).toBeGreaterThanOrEqual(500);
     }
     expect(markdownForPath("/nope")).toBeNull();
+  });
+});
+
+describe("homepage markdown structure", () => {
+  test("has ## and ### headings for Ora content-no-js", () => {
+    const md = markdownForPath("/")!;
+    expect(md.length).toBeGreaterThanOrEqual(500);
+    expect(md).toContain("## Install");
+    expect(md).toContain("## MCP");
+    expect(md).toContain("### Setup");
+    expect(md).toContain("### Policy");
+    expect(md).toContain("## Features");
+    expect(md).toContain("### Foreign-key navigation");
+    expect(md).toContain("### Schema graph");
+    expect(md).toContain("### Plugins");
+    expect(md).toContain("## When to use");
+    expect(md).toContain("## Links");
+  });
+});
+
+describe("markdown 404 helper", () => {
+  test("includes H1 Not found and discovery links", () => {
+    const md = markdownNotFound("/does-not-exist");
+    expect(md.startsWith("# Not found")).toBe(true);
+    expect(md).toContain("`/does-not-exist`");
+    expect(md).toContain("https://www.slashtable.dev/");
+    expect(md).toContain("https://www.slashtable.dev/llms.txt");
+    expect(md).toContain("https://www.slashtable.dev/openapi.json");
+    expect(md).toContain("https://www.slashtable.dev/api/v1/product");
+    expect(md).toContain("https://www.slashtable.dev/download/");
+  });
+
+  test("skips negotiation for static and api paths", () => {
+    expect(shouldSkipMarkdownNegotiation("/api/v1/product")).toBe(true);
+    expect(shouldSkipMarkdownNegotiation("/llms.txt")).toBe(true);
+    expect(shouldSkipMarkdownNegotiation("/.well-known/api-catalog")).toBe(true);
+    expect(shouldSkipMarkdownNegotiation("/favicon.png")).toBe(true);
+    expect(shouldSkipMarkdownNegotiation("/nope")).toBe(false);
+  });
+});
+
+describe("link headers helper", () => {
+  test("PAGE_LINK_HEADER lists api-catalog and service-doc", () => {
+    expect(PAGE_LINK_RELATIONS.length).toBeGreaterThanOrEqual(6);
+    expect(formatLinkRelation(PAGE_LINK_RELATIONS[0]!)).toContain('rel="api-catalog"');
+    expect(PAGE_LINK_HEADER).toBe(formatLinkHeader(PAGE_LINK_RELATIONS));
+    expect(PAGE_LINK_HEADER).toContain('rel="service-desc"');
+    expect(PAGE_LINK_HEADER).toContain('rel="status"');
   });
 });
