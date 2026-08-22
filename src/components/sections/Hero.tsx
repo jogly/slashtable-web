@@ -149,25 +149,27 @@ export function Hero() {
         initial={false}
         animate={prefersReducedMotion ? undefined : introControls}
       >
-        <motion.div variants={prefersReducedMotion ? undefined : fadeUp}>
+        <motion.div
+          variants={prefersReducedMotion ? undefined : fadeUp}
+          className="flex flex-wrap items-baseline justify-center gap-x-1"
+        >
           <h1 className="text-balance font-semibold text-5xl text-text leading-snug sm:text-6xl">
-            The database client
-            <button
-              ref={btnRef}
-              type="button"
-              aria-label="What makes this different"
-              onClick={() => {
-                computePosition();
-                setOpen((o) => !o);
-              }}
-              onMouseEnter={startOpen}
-              onMouseLeave={startClose}
-              className="inline-block border-0 bg-transparent align-baseline outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
-            >
-              <span className="ml-1 cursor-pointer font-display text-accent">*</span>
-            </button>{" "}
-            for <span className="font-display italic">product engineers.</span>
+            The database client for <span className="font-display italic">product engineers.</span>
           </h1>
+          <button
+            ref={btnRef}
+            type="button"
+            aria-label="What makes this different"
+            onClick={() => {
+              computePosition();
+              setOpen((o) => !o);
+            }}
+            onMouseEnter={startOpen}
+            onMouseLeave={startClose}
+            className="inline-block border-0 bg-transparent align-baseline outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+          >
+            <span className="cursor-pointer font-display text-4xl text-accent leading-none sm:text-5xl">*</span>
+          </button>
         </motion.div>
 
         <motion.p
