@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -16,7 +17,7 @@ const OG_DESCRIPTION =
 const TWITTER_DESCRIPTION =
   "Navigate foreign keys by clicking, generate schema diagrams, give AI agents safe read-only access via MCP, and extend everything with plugins. macOS app for PostgreSQL and MySQL.";
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_TITLE,
@@ -49,9 +50,6 @@ export const metadata: Metadata = {
     "/table",
     "slashtable",
   ],
-  alternates: {
-    canonical: SITE_URL,
-  },
   icons: { icon: "/favicon.png" },
   openGraph: {
     siteName: "/table",
@@ -93,6 +91,24 @@ export const metadata: Metadata = {
     "api-catalog": "/.well-known/api-catalog",
   },
 };
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host") || "";
+  const isWorkers = host.endsWith(".workers.dev");
+  const proto = h.get("x-forwarded-proto") || "https";
+  const origin = isWorkers ? `${proto}://${host}` : SITE_URL;
+  return {
+    ...baseMetadata,
+    metadataBase: new URL(origin),
+    alternates: { canonical: origin + "/" },
+    openGraph: {
+      ...((baseMetadata.openGraph as Record<string, unknown>) || {}),
+      url: origin + "/",
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
