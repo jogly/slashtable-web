@@ -2,8 +2,8 @@
 
 import heroDark from "@screenshots/hero-dark.png";
 import heroLight from "@screenshots/hero-light.png";
-import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { motion, useAnimationControls, useReducedMotion } from "motion/react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
 import { HERO } from "../../lib/copy";
 import { useTheme } from "../providers/ThemeProvider";
@@ -65,6 +65,7 @@ export function Hero() {
   const ctaLabel = isLinux && linuxAvailable ? HERO.ctaDownloadLinux : HERO.ctaDownload;
   const availability = linuxAvailable ? HERO.availabilityLinux : HERO.availability;
   const prefersReducedMotion = useReducedMotion();
+  const introControls = useAnimationControls();
   const [open, setOpen] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -102,6 +103,15 @@ export function Hero() {
     };
   }, []);
 
+  // Keep SSR markup fully opaque (initial={false}). After hydrate, snap to
+  // hidden in useLayoutEffect and play the entrance so real users still get
+  // the stagger without crawlers seeing opacity:0 on the h1.
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) return;
+    introControls.set("hidden");
+    void introControls.start("visible");
+  }, [introControls, prefersReducedMotion]);
+
   function computePosition() {
     if (!btnRef.current) return;
     const rect = btnRef.current.getBoundingClientRect();
@@ -136,30 +146,29 @@ export function Hero() {
       <motion.div
         className="relative z-10 mx-auto max-w-narrow px-6 text-center"
         variants={prefersReducedMotion ? undefined : stagger}
-        initial={prefersReducedMotion ? undefined : "hidden"}
-        animate={prefersReducedMotion ? undefined : "visible"}
+        initial={false}
+        animate={prefersReducedMotion ? undefined : introControls}
       >
-        <motion.h1
-          className="text-balance font-semibold text-5xl text-text leading-snug sm:text-6xl"
-          variants={prefersReducedMotion ? undefined : fadeUp}
-        >
-          The database client
-          <button
-            ref={btnRef}
-            type="button"
-            aria-label="What makes this different"
-            onClick={() => {
-              computePosition();
-              setOpen((o) => !o);
-            }}
-            onMouseEnter={startOpen}
-            onMouseLeave={startClose}
-            className="inline-block border-0 bg-transparent align-baseline outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
-          >
-            <span className="ml-1 cursor-pointer font-display text-accent">*</span>
-          </button>{" "}
-          for <span className="font-display italic">product engineers.</span>
-        </motion.h1>
+        <motion.div variants={prefersReducedMotion ? undefined : fadeUp}>
+          <h1 className="text-balance font-semibold text-5xl text-text leading-snug sm:text-6xl">
+            The database client
+            <button
+              ref={btnRef}
+              type="button"
+              aria-label="What makes this different"
+              onClick={() => {
+                computePosition();
+                setOpen((o) => !o);
+              }}
+              onMouseEnter={startOpen}
+              onMouseLeave={startClose}
+              className="inline-block border-0 bg-transparent align-baseline outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+            >
+              <span className="ml-1 cursor-pointer font-display text-accent">*</span>
+            </button>{" "}
+            for <span className="font-display italic">product engineers.</span>
+          </h1>
+        </motion.div>
 
         <motion.p
           className="mx-auto mt-6 max-w-sm text-balance font-display text-text text-xl leading-relaxed md:max-w-lg"

@@ -108,3 +108,22 @@ describe("MCP discovery", () => {
     expect(existing.transport.type).toBe("stdio");
   });
 });
+
+describe("SSR heading visibility (opacity)", () => {
+  test("FadeIn stays visible until client mount (no SSR opacity:0 wrapper)", () => {
+    const src = read("src/components/ui/FadeIn.tsx");
+    expect(src).toContain("useMounted");
+    expect(src).toMatch(/prefersReducedMotion \|\| !mounted/);
+    // Must not unconditionally SSR initial opacity 0
+    expect(src).not.toMatch(/return \(\s*<motion\.div\s*\n\s*initial=\{\{ opacity: 0/);
+  });
+
+  test("Hero uses plain h1 and initial={false} so SSR omits opacity:0", () => {
+    const src = read("src/components/sections/Hero.tsx");
+    expect(src).toContain("initial={false}");
+    expect(src).toContain("useAnimationControls");
+    expect(src).toMatch(/<h1 className="[^"]*text-balance/);
+    expect(src).not.toMatch(/<motion\.h1/);
+    expect(src).not.toMatch(/initial=\{prefersReducedMotion \? undefined : "hidden"\}/);
+  });
+});

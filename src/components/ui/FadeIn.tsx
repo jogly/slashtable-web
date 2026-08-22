@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+import { useMounted } from "../../hooks/useMounted";
 
 interface FadeInProps {
   children: ReactNode;
@@ -12,8 +13,12 @@ interface FadeInProps {
 
 export function FadeIn({ children, className, delay = 0, y = 20 }: FadeInProps) {
   const prefersReducedMotion = useReducedMotion();
+  const mounted = useMounted();
 
-  if (prefersReducedMotion) {
+  // SSR + first client paint stay fully visible so crawlers that skip
+  // opacity:0 nodes still see nested h2/h3. Entrance animation runs only
+  // after mount (when `mounted` flips and this becomes a motion node).
+  if (prefersReducedMotion || !mounted) {
     return <div className={className}>{children}</div>;
   }
 
