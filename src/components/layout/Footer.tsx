@@ -30,7 +30,7 @@ export function Footer() {
 
           {FOOTER.sections.map((section, _i) => (
             <div key={section.title} className="col-span-1 md:col-span-1">
-              <h2 className="mb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest">{section.title}</h2>
+              <p className="mb-4 font-mono text-[10px] text-text-muted uppercase tracking-widest">{section.title}</p>
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.label}>

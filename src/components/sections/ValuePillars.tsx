@@ -12,7 +12,10 @@ const pillarMeta = [
 
 export function ValuePillars() {
   return (
-    <section className="relative bg-surface">
+    <section className="relative bg-surface" aria-labelledby="value-pillars-heading">
+      <h2 id="value-pillars-heading" className="sr-only">
+        Built for product engineers
+      </h2>
       <NoiseTexture variant="crosshatch" opacity={0.6} />
       <SectionBorder position="top" />
       <div className="relative mx-auto grid max-w-content divide-border border-border sm:grid-cols-3 sm:divide-x min-[68rem]:border-x">
@@ -36,7 +39,7 @@ export function ValuePillars() {
                     0{i + 1}
                   </span>
                 </div>
-                <h2 className="mb-3 font-display text-base text-text">{pillar.title}</h2>
+                <h3 className="mb-3 font-display text-base text-text">{pillar.title}</h3>
                 <p className="text-sm text-text-secondary leading-relaxed">{pillar.body}</p>
                 <span
                   className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100"

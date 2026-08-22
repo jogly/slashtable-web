@@ -34,9 +34,13 @@ const PRODUCT = {
   },
   links: {
     home: "https://www.slashtable.dev/",
+    developers: "https://www.slashtable.dev/developers/",
     openapi: "https://www.slashtable.dev/openapi.json",
     llms: "https://www.slashtable.dev/llms.txt",
     apiCatalog: "https://www.slashtable.dev/.well-known/api-catalog",
+    mcpServerCard: "https://www.slashtable.dev/.well-known/mcp/server-card.json",
+    about: "https://www.slashtable.dev/about/",
+    contact: "https://www.slashtable.dev/contact/",
     pricing: "https://www.slashtable.dev/pricing/",
     changelog: "https://www.slashtable.dev/changelog/",
   },
@@ -48,6 +52,7 @@ function rateLimitHeaders(): HeadersInit {
     "RateLimit-Limit": "1000",
     "RateLimit-Remaining": "999",
     "RateLimit-Reset": String(reset),
+    RateLimit: `limit=1000, remaining=999, reset=${reset}`,
   };
 }
 

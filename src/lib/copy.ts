@@ -457,6 +457,16 @@ export const FOOTER = {
         { label: "Pricing", to: "/pricing" },
         { label: "Changelog", to: "/changelog" },
         { label: "Download", to: "/download" },
+        { label: "Developers", to: "/developers" },
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About", to: "/about" },
+        { label: "Contact", to: "/contact" },
+        { label: "Privacy", to: "/privacy" },
+        { label: "Terms", to: "/terms" },
       ],
     },
     {
@@ -464,13 +474,6 @@ export const FOOTER = {
       links: [
         { label: "Discord", href: "https://discord.gg/xR2VdkfnJQ" },
         { label: "Twitter / X", href: "https://x.com/slashtable" },
-      ],
-    },
-    {
-      title: "Legal",
-      links: [
-        { label: "Privacy", to: "/privacy" },
-        { label: "Terms", to: "/terms" },
       ],
     },
   ],

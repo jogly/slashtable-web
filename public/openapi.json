@@ -3,11 +3,12 @@
   "info": {
     "title": "/table",
     "summary": "Public HTTP surfaces for the /table website and agent discovery docs.",
-    "description": "/table is a local desktop database client (macOS + Linux alpha) with a built-in MCP server over stdio. This OpenAPI document describes the public HTTP resources on www.slashtable.dev only. It is not a remote database or hosted MCP API.",
-    "version": "1.0.0",
+    "description": "/table is a local desktop database client (macOS + Linux alpha) with a built-in MCP server over stdio. This OpenAPI document describes the public HTTP resources on www.slashtable.dev only. It is not a remote database or hosted MCP API. Developer portal: https://www.slashtable.dev/developers/",
+    "version": "1.1.0",
     "contact": {
       "name": "Make Toast LLC",
-      "url": "https://www.slashtable.dev"
+      "url": "https://www.slashtable.dev/contact/",
+      "email": "sales@slashtable.dev"
     }
   },
   "servers": [
@@ -31,6 +32,11 @@
       "name": "latest-download-manifest",
       "href": "https://downloads.slashtable.dev/latest.json",
       "description": "Informational JSON manifest of current desktop app download URLs (hosted on downloads.slashtable.dev)."
+    },
+    {
+      "name": "developers-portal",
+      "href": "https://www.slashtable.dev/developers/",
+      "description": "Human-readable developer portal linking OpenAPI, llms.txt, product card, and local MCP discovery."
     }
   ],
   "paths": {
@@ -41,15 +47,15 @@
           "discovery"
         ],
         "summary": "OpenAPI document",
-        "description": "This OpenAPI 3.1 document.",
+        "description": "This OpenAPI 3.1 document describing public website discovery surfaces.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OpenAPI document",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/OpenApiDocument"
                 }
               }
             }
@@ -65,13 +71,15 @@
         ],
         "summary": "Agent-oriented product brief",
         "description": "Markdown brief for AI agents: install, local MCP, when to use, rules.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Markdown brief",
             "content": {
               "text/markdown": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             }
@@ -87,6 +95,7 @@
         ],
         "summary": "API catalog (linkset)",
         "description": "RFC 9727-style linkset pointing at service docs including OpenAPI and llms.txt.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Linkset",
@@ -109,6 +118,7 @@
         ],
         "summary": "MCP server card",
         "description": "Describes the local stdio MCP server that ships inside the /table desktop app. There is no remote MCP URL.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Server card",
@@ -131,14 +141,58 @@
         ],
         "summary": "Agent skills index",
         "description": "Index of agent skills related to /table MCP.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Skills index",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/AgentSkillsIndex"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/developers": {
+      "get": {
+        "operationId": "getDevelopersPortal",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Developers portal (HTML)",
+        "description": "Human-readable developer portal. Links OpenAPI, llms.txt, product card, MCP server card, and install. MCP is local stdio only.",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "text/html",
+                "text/markdown"
+              ],
+              "default": "text/html"
+            },
+            "description": "Prefer text/markdown for an agent-oriented markdown representation."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Developers portal",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             }
@@ -153,27 +207,39 @@
           "product"
         ],
         "summary": "Product card",
-        "description": "Machine-readable product card for /table: platforms, local MCP, install one-liner, and links. Not a database query API.",
+        "description": "Machine-readable product card for /table: platforms, local MCP, install one-liner, and links. Not a database query API. Responses include IETF RateLimit-* headers.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Product card",
             "headers": {
               "RateLimit-Limit": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "example": "1000"
                 },
-                "description": "Request budget for this window"
+                "description": "IETF RateLimit-Limit: max requests allowed in the current window."
               },
               "RateLimit-Remaining": {
                 "schema": {
-                  "type": "string"
-                }
+                  "type": "string",
+                  "example": "999"
+                },
+                "description": "IETF RateLimit-Remaining: requests left in the current window."
               },
               "RateLimit-Reset": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "example": "1710000000"
                 },
-                "description": "Unix epoch seconds when the window resets"
+                "description": "IETF RateLimit-Reset: Unix epoch seconds when the window resets."
+              },
+              "RateLimit": {
+                "schema": {
+                  "type": "string",
+                  "example": "limit=1000, remaining=999, reset=1710000000"
+                },
+                "description": "IETF RateLimit combined header (limit, remaining, reset)."
               }
             },
             "content": {
@@ -186,6 +252,36 @@
           },
           "405": {
             "description": "Method not allowed",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "string",
+                  "example": "1000"
+                },
+                "description": "IETF RateLimit-Limit: max requests allowed in the current window."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "string",
+                  "example": "999"
+                },
+                "description": "IETF RateLimit-Remaining: requests left in the current window."
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "string",
+                  "example": "1710000000"
+                },
+                "description": "IETF RateLimit-Reset: Unix epoch seconds when the window resets."
+              },
+              "RateLimit": {
+                "schema": {
+                  "type": "string",
+                  "example": "limit=1000, remaining=999, reset=1710000000"
+                },
+                "description": "IETF RateLimit combined header (limit, remaining, reset)."
+              }
+            },
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -208,6 +304,7 @@
           "status",
           "detail"
         ],
+        "additionalProperties": false,
         "properties": {
           "type": {
             "type": "string",
@@ -217,7 +314,9 @@
             "type": "string"
           },
           "status": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
           },
           "detail": {
             "type": "string"
@@ -231,6 +330,104 @@
           "resolution": {
             "type": "string"
           }
+        }
+      },
+      "OpenApiDocument": {
+        "type": "object",
+        "required": [
+          "openapi",
+          "info",
+          "paths"
+        ],
+        "properties": {
+          "openapi": {
+            "type": "string",
+            "pattern": "^3\\."
+          },
+          "info": {
+            "type": "object",
+            "required": [
+              "title",
+              "version"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "contact": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": true
+          },
+          "paths": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "components": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "servers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
         },
         "additionalProperties": true
       },
@@ -239,11 +436,52 @@
         "required": [
           "linkset"
         ],
+        "additionalProperties": false,
         "properties": {
           "linkset": {
             "type": "array",
             "items": {
               "type": "object",
+              "required": [
+                "anchor"
+              ],
+              "properties": {
+                "anchor": {
+                  "type": "string"
+                },
+                "service-desc": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "href": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "service-doc": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "href": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
               "additionalProperties": true
             }
           }
@@ -251,18 +489,198 @@
       },
       "McpServerCard": {
         "type": "object",
+        "required": [
+          "serverInfo",
+          "transport"
+        ],
+        "additionalProperties": false,
         "properties": {
           "serverInfo": {
             "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
             "additionalProperties": true
           },
           "transport": {
             "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "stdio"
+              },
+              "remoteUrl": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            },
             "additionalProperties": true
           },
           "capabilities": {
             "type": "object",
             "additionalProperties": true
+          }
+        }
+      },
+      "AgentSkillsIndex": {
+        "type": "object",
+        "required": [
+          "skills"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "Platform": {
+        "type": "object",
+        "required": [
+          "os",
+          "arches",
+          "status"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "os": {
+            "type": "string",
+            "enum": [
+              "macos",
+              "linux"
+            ]
+          },
+          "arches": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "aarch64",
+                "x86_64",
+                "amd64"
+              ]
+            },
+            "minItems": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ga",
+              "alpha"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
+      "McpInfo": {
+        "type": "object",
+        "required": [
+          "transport",
+          "location",
+          "remoteUrl"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "transport": {
+            "type": "string",
+            "const": "stdio"
+          },
+          "location": {
+            "type": "string"
+          },
+          "remoteUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Always null; MCP is local stdio only."
+          },
+          "setup": {
+            "type": "string"
+          },
+          "serverCard": {
+            "type": "string",
+            "format": "uri"
+          },
+          "agentSkills": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "InstallInfo": {
+        "type": "object",
+        "required": [
+          "oneLiner",
+          "downloadPage"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "oneLiner": {
+            "type": "string"
+          },
+          "downloadPage": {
+            "type": "string",
+            "format": "uri"
+          },
+          "homebrew": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manifests": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "latest": {
+                "type": "string",
+                "format": "uri",
+                "description": "External download manifest on downloads.slashtable.dev"
+              }
+            }
           }
         }
       },
@@ -276,6 +694,7 @@
           "install",
           "links"
         ],
+        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string",
@@ -294,25 +713,9 @@
           "platforms": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "os": {
-                  "type": "string"
-                },
-                "arches": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "status": {
-                  "type": "string"
-                },
-                "note": {
-                  "type": "string"
-                }
-              }
-            }
+              "$ref": "#/components/schemas/Platform"
+            },
+            "minItems": 1
           },
           "engines": {
             "type": "array",
@@ -321,67 +724,58 @@
             }
           },
           "mcp": {
-            "type": "object",
-            "properties": {
-              "transport": {
-                "type": "string",
-                "const": "stdio"
-              },
-              "location": {
-                "type": "string"
-              },
-              "remoteUrl": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "setup": {
-                "type": "string"
-              },
-              "serverCard": {
-                "type": "string",
-                "format": "uri"
-              },
-              "agentSkills": {
-                "type": "string",
-                "format": "uri"
-              }
-            }
+            "$ref": "#/components/schemas/McpInfo"
           },
           "install": {
-            "type": "object",
-            "properties": {
-              "oneLiner": {
-                "type": "string"
-              },
-              "downloadPage": {
-                "type": "string",
-                "format": "uri"
-              },
-              "homebrew": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "manifests": {
-                "type": "object",
-                "properties": {
-                  "latest": {
-                    "type": "string",
-                    "format": "uri",
-                    "description": "External download manifest on downloads.slashtable.dev"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/schemas/InstallInfo"
           },
           "links": {
             "type": "object",
             "additionalProperties": {
               "type": "string",
               "format": "uri"
+            },
+            "properties": {
+              "home": {
+                "type": "string",
+                "format": "uri"
+              },
+              "developers": {
+                "type": "string",
+                "format": "uri"
+              },
+              "openapi": {
+                "type": "string",
+                "format": "uri"
+              },
+              "llms": {
+                "type": "string",
+                "format": "uri"
+              },
+              "apiCatalog": {
+                "type": "string",
+                "format": "uri"
+              },
+              "mcpServerCard": {
+                "type": "string",
+                "format": "uri"
+              },
+              "about": {
+                "type": "string",
+                "format": "uri"
+              },
+              "contact": {
+                "type": "string",
+                "format": "uri"
+              },
+              "pricing": {
+                "type": "string",
+                "format": "uri"
+              },
+              "changelog": {
+                "type": "string",
+                "format": "uri"
+              }
             }
           }
         }
@@ -389,7 +783,7 @@
     }
   },
   "externalDocs": {
-    "description": "Agent brief (llms.txt)",
-    "url": "https://www.slashtable.dev/llms.txt"
+    "description": "Developer portal and agent brief",
+    "url": "https://www.slashtable.dev/developers/"
   }
 }
