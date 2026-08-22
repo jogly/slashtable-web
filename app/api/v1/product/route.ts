@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { PRODUCT_LINK_HEADER } from "@/lib/link-headers";
 import { methodNotAllowedProblem } from "@/lib/problem";
 
 
@@ -55,6 +56,7 @@ export function GET() {
     status: 200,
     headers: {
       "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+      Link: PRODUCT_LINK_HEADER,
       ...rateLimitHeaders(),
     },
   });
