@@ -1,6 +1,7 @@
+export const dynamic = "force-dynamic";
+
 import { methodNotAllowedProblem } from "@/lib/problem";
 
-export const runtime = "edge";
 
 const PRODUCT = {
   name: "/table",

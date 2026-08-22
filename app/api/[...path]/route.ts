@@ -1,6 +1,7 @@
+export const dynamic = "force-dynamic";
+
 import { methodNotAllowedProblem, notFoundProblem } from "@/lib/problem";
 
-export const runtime = "edge";
 
 type Ctx = { params: Promise<{ path: string[] }> };
 
