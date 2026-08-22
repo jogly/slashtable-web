@@ -29,13 +29,10 @@ export function ConnectSection({
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
-        {groupHeading && groupHeadingId ? (
-          <h2
-            id={groupHeadingId}
-            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
-          >
+        {groupHeading ? (
+          <p className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest">
             {groupHeading}
-          </h2>
+          </p>
         ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#00d4ff">
@@ -50,7 +47,7 @@ export function ConnectSection({
                   {CONNECT.eyebrow}
                 </span>
               </div>
-              <h3 className="font-display text-3xl text-text lg:text-4xl">{CONNECT.heading}</h3>
+              <h2 id={groupHeadingId} className="font-display text-3xl text-text lg:text-4xl">{CONNECT.heading}</h2>
               <p className="mt-4 text-text-secondary leading-relaxed">{CONNECT.description}</p>
             </div>
 

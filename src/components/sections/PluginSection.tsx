@@ -20,13 +20,10 @@ export function PluginSection({
       <NoiseTexture variant="grain" opacity={0.35} />
 
       <div className="relative mx-auto max-w-content">
-        {groupHeading && groupHeadingId ? (
-          <h2
-            id={groupHeadingId}
-            className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest"
-          >
+        {groupHeading ? (
+          <p className="mb-8 font-mono text-[10px] text-text-muted uppercase tracking-widest">
             {groupHeading}
-          </h2>
+          </p>
         ) : null}
         <FadeIn>
           <FeatureFrame accentColor="#ffcc00">
@@ -46,20 +43,22 @@ export function PluginSection({
                     {PLUGIN.eyebrow}
                   </span>
                 </div>
-                <h3 className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h3>
+                <h2 id={groupHeadingId} className="font-display text-3xl text-text lg:text-4xl">{PLUGIN.heading}</h2>
                 <div className="mt-6 space-y-4 text-text-secondary leading-relaxed">
                   <p>
                     {before}
                     <code className="font-mono text-sm text-text">{PLUGIN.pluginPath}</code>
                     {after}
                   </p>
-                  <ul>
+                  <ul className="mt-2 space-y-3">
                     {PLUGIN.capabilities.map((item) => (
-                      <li key={item} className="relative mt-2">
-                        <span className="absolute -ml-6 text-text" aria-hidden="true">
-                          +
-                        </span>
-                        <span>{item}</span>
+                      <li key={item} className="relative pl-0">
+                        <h3 className="font-display text-sm text-text">
+                          <span className="mr-2 text-text" aria-hidden="true">
+                            +
+                          </span>
+                          {item}
+                        </h3>
                       </li>
                     ))}
                   </ul>

@@ -155,9 +155,7 @@ Docker containers, Neon branches, SSH-tunneled prod, and SQLite files.
 
 Scoped ER diagrams that match your mental model.
 
-## Connect and work where you already are
-
-### Parallel development is the new normal.
+## Parallel development is the new normal.
 
 Docker compose auto-detect, Neon branch sync, first-class SSH tunneling, multi-database tabs on one connection, and credential vaults (Keychain, 1Password; others in alpha).
 
@@ -185,9 +183,7 @@ Production behind a bastion is a normal connection.
 
 macOS Keychain, 1Password, Bitwarden, AWS Secrets Manager, HashiCorp Vault.
 
-## Navigate schema and data
-
-### Bidirectional FK navigation.
+## Bidirectional FK navigation.
 
 Click through PostgreSQL and MySQL relationships instead of writing join SQL by hand. Breadcrumb trails keep context as you walk the graph. Reverse FK lookups and join-table collapse keep navigation readable.
 
@@ -195,29 +191,31 @@ Click through PostgreSQL and MySQL relationships instead of writing join SQL by 
 
 Generate interactive ER diagrams from a starting table. Pin roots, control depth, and hide noise so scoped graphs stay readable for agents and humans.
 
-## Extend with plugins and agents
-
-### Bring Your Own Code.
+## Bring Your Own Code.
 
 Extend the app with a TypeScript plugin system under \`~/.slashtable/plugins/\`. Cell renderers, enrichers, views, query hooks, toolbar actions, and themes stay close to the data without leaving the native client.
 
-### Controlled access for AI agents.
+### Cell renderers change how columns look
+
+### Record enrichers attach external data to rows
+
+### Custom views add new tab types
+
+### Query hooks intercept SQL
+
+### Toolbar actions wire into the active connection
+
+## Controlled access for AI agents.
 
 Local stdio MCP server ships inside the desktop app. Credentials never leave the machine. Do not invent a remote MCP endpoint for this product.
 
 ### Battle-tested guardrails
 
-Statement-level keyword filter plus an engine-level READ ONLY transaction that always rolls back.
-
 ### Schema introspection
-
-Agents explore tables, columns, types, and relationships, and can request a scoped schema graph from a starting table.
 
 ### Per-connection access
 
-Mark prod as hidden so the agent cannot see it. Let it rip on dev. The MCP Log tab shows every request.
-
-### Everything else.
+## Everything else.
 
 SQL editor, multi-statement timing, vault integrations, and the rest of the client surface area on every plan.
 
@@ -257,18 +255,18 @@ SQL editor, multi-statement timing, vault integrations, and the rest of the clie
 
 ### And more...
 
-## Get the app
+## /table.app
 
-### /table.app
+### macOS downloads
+
+### Linux downloads (alpha)
 
 - One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
 - Direct downloads: https://www.slashtable.dev/download/
 - Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
 - Release manifest: https://downloads.slashtable.dev/latest.json
 
-## Community
-
-### Build with us
+## Build with us
 
 Come watch, or come help. Discord and X for bug reports, feature debates, and ORM hot takes.
 

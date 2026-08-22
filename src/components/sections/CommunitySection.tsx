@@ -42,16 +42,13 @@ export function CommunitySection({
         className="[mask-image:linear-gradient(to_bottom,black_50%,transparent)]"
       />
       <ContentContainer className="relative">
-        {groupHeading && groupHeadingId ? (
-          <h2
-            id={groupHeadingId}
-            className="mb-8 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest"
-          >
+        {groupHeading ? (
+          <p className="mb-8 text-center font-mono text-[10px] text-text-muted uppercase tracking-widest">
             {groupHeading}
-          </h2>
+          </p>
         ) : null}
         <FadeIn>
-          <SectionHeading description={COMMUNITY.description}>
+          <SectionHeading id={groupHeadingId} description={COMMUNITY.description}>
             {COMMUNITY.heading}
           </SectionHeading>
         </FadeIn>
