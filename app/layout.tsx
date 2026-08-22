@@ -186,7 +186,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://downloads.slashtable.dev" />
         <link rel="preconnect" href="https://tr.slashtable.dev" />
-        <link rel="service-doc" href="https://www.slashtable.dev/llms.txt" />
+        <link
+          rel="service-doc"
+          type="application/openapi+json"
+          href="https://www.slashtable.dev/openapi.json"
+        />
+        <link rel="service-doc" type="text/markdown" href="https://www.slashtable.dev/llms.txt" />
+        <link rel="alternate" type="text/markdown" href="https://www.slashtable.dev/" />
         <JsonLd data={organizationLd} />
         <JsonLd data={websiteLd} />
         <JsonLd data={softwareApplicationLd} />

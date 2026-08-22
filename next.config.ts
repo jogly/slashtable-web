@@ -18,6 +18,13 @@ const config: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=300" },
         ],
       },
+      {
+        source: "/openapi.json",
+        headers: [
+          { key: "Content-Type", value: "application/json; charset=utf-8" },
+          { key: "Cache-Control", value: "public, max-age=300" },
+        ],
+      },
     ];
   },
 };

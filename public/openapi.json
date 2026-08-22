@@ -1,0 +1,395 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "/table",
+    "summary": "Public HTTP surfaces for the /table website and agent discovery docs.",
+    "description": "/table is a local desktop database client (macOS + Linux alpha) with a built-in MCP server over stdio. This OpenAPI document describes the public HTTP resources on www.slashtable.dev only. It is not a remote database or hosted MCP API.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Make Toast LLC",
+      "url": "https://www.slashtable.dev"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://www.slashtable.dev",
+      "description": "Production website"
+    }
+  ],
+  "tags": [
+    {
+      "name": "discovery",
+      "description": "Agent and human discovery documents"
+    },
+    {
+      "name": "product",
+      "description": "Small public product card API"
+    }
+  ],
+  "x-external-links": [
+    {
+      "name": "latest-download-manifest",
+      "href": "https://downloads.slashtable.dev/latest.json",
+      "description": "Informational JSON manifest of current desktop app download URLs (hosted on downloads.slashtable.dev)."
+    }
+  ],
+  "paths": {
+    "/openapi.json": {
+      "get": {
+        "operationId": "getOpenApi",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "OpenAPI document",
+        "description": "This OpenAPI 3.1 document.",
+        "responses": {
+          "200": {
+            "description": "OpenAPI document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms.txt": {
+      "get": {
+        "operationId": "getLlmsTxt",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Agent-oriented product brief",
+        "description": "Markdown brief for AI agents: install, local MCP, when to use, rules.",
+        "responses": {
+          "200": {
+            "description": "Markdown brief",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/api-catalog": {
+      "get": {
+        "operationId": "getApiCatalog",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "API catalog (linkset)",
+        "description": "RFC 9727-style linkset pointing at service docs including OpenAPI and llms.txt.",
+        "responses": {
+          "200": {
+            "description": "Linkset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/mcp/server-card.json": {
+      "get": {
+        "operationId": "getMcpServerCard",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "MCP server card",
+        "description": "Describes the local stdio MCP server that ships inside the /table desktop app. There is no remote MCP URL.",
+        "responses": {
+          "200": {
+            "description": "Server card",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServerCard"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/agent-skills/index.json": {
+      "get": {
+        "operationId": "getAgentSkillsIndex",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Agent skills index",
+        "description": "Index of agent skills related to /table MCP.",
+        "responses": {
+          "200": {
+            "description": "Skills index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product": {
+      "get": {
+        "operationId": "getProductCard",
+        "tags": [
+          "product"
+        ],
+        "summary": "Product card",
+        "description": "Machine-readable product card for /table: platforms, local MCP, install one-liner, and links. Not a database query API.",
+        "responses": {
+          "200": {
+            "description": "Product card",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request budget for this window"
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Unix epoch seconds when the window resets"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductCard"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Problem": {
+        "type": "object",
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "ApiCatalog": {
+        "type": "object",
+        "required": [
+          "linkset"
+        ],
+        "properties": {
+          "linkset": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "McpServerCard": {
+        "type": "object",
+        "properties": {
+          "serverInfo": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "transport": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "ProductCard": {
+        "type": "object",
+        "required": [
+          "name",
+          "kind",
+          "platforms",
+          "mcp",
+          "install",
+          "links"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "const": "/table"
+          },
+          "alternateName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "local_desktop_app"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "os": {
+                  "type": "string"
+                },
+                "arches": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "engines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mcp": {
+            "type": "object",
+            "properties": {
+              "transport": {
+                "type": "string",
+                "const": "stdio"
+              },
+              "location": {
+                "type": "string"
+              },
+              "remoteUrl": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "setup": {
+                "type": "string"
+              },
+              "serverCard": {
+                "type": "string",
+                "format": "uri"
+              },
+              "agentSkills": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "install": {
+            "type": "object",
+            "properties": {
+              "oneLiner": {
+                "type": "string"
+              },
+              "downloadPage": {
+                "type": "string",
+                "format": "uri"
+              },
+              "homebrew": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "manifests": {
+                "type": "object",
+                "properties": {
+                  "latest": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "External download manifest on downloads.slashtable.dev"
+                  }
+                }
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Agent brief (llms.txt)",
+    "url": "https://www.slashtable.dev/llms.txt"
+  }
+}
