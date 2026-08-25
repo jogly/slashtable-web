@@ -3,7 +3,7 @@ title: Click through foreign keys and keep ER diagrams scoped
 description: Walk PostgreSQL and MySQL relationships from the grid, then open a schema graph from one table so the diagram matches the feature a product engineer is shipping.
 publishedAt: 2026-08-25
 updatedAt: 2026-08-25
-published: true
+published: false
 tags:
   - foreign-keys
   - schema-graph

@@ -26,8 +26,9 @@ import {
 } from "../src/lib/markdown-negotiate";
 import { articleMetadata, canonical } from "../src/lib/seo";
 
-const PUBLISHED_SLUGS = ["click-through-foreign-keys"] as const;
+const PUBLISHED_SLUGS: readonly string[] = [];
 const DRAFT_SLUGS = [
+  "click-through-foreign-keys",
   "local-mcp-access-to-postgres-mysql-sqlite",
   "ssh-tunnel-notes",
 ] as const;
@@ -115,8 +116,8 @@ describe("blog loader", () => {
       expect(existsSync(join(publicRoot, post.image))).toBe(true);
     }
 
-    expect(getPublishedPost("click-through-foreign-keys")?.imageAlt).toContain("Tree roots");
-    expect(getPublishedPost("click-through-foreign-keys")?.imageAlt).not.toMatch(/Manhattan|sunset/i);
+    expect(getPostBySlug("click-through-foreign-keys")?.imageAlt).toContain("Tree roots");
+    expect(getPostBySlug("click-through-foreign-keys")?.imageAlt).not.toMatch(/Manhattan|sunset/i);
     expect(getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).toContain("laptop");
     expect(getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).not.toMatch(/server rack/i);
   });
@@ -142,7 +143,6 @@ describe("blog sitemap and llms.txt", () => {
   test("drafts are excluded from the sitemap", () => {
     const urls = sitemap().map((entry) => entry.url);
     expect(urls).toContain(canonical("/blog/"));
-    expect(urls).toContain(canonical("/blog/click-through-foreign-keys"));
     for (const slug of DRAFT_SLUGS) {
       expect(urls.some((url) => url.includes(slug))).toBe(false);
     }
@@ -152,7 +152,6 @@ describe("blog sitemap and llms.txt", () => {
   test("drafts are excluded from llms.txt", () => {
     const llms = buildLlmsTxt();
     expect(llms).toContain("https://www.slashtable.dev/blog/");
-    expect(llms).toContain("click-through-foreign-keys");
     for (const slug of DRAFT_SLUGS) {
       expect(llms).not.toContain(slug);
     }
@@ -162,7 +161,7 @@ describe("blog sitemap and llms.txt", () => {
   test("index markdown lists published posts only", () => {
     const md = formatBlogIndexMarkdown();
     expect(md.startsWith("# /table - Blog")).toBe(true);
-    expect(md).toContain(PUBLISHED_SLUGS[0]);
+    expect(md).toContain("No published posts yet.");
     for (const slug of DRAFT_SLUGS) {
       expect(md).not.toContain(slug);
     }
@@ -230,7 +229,7 @@ describe("blog body contrast", () => {
     expect(src).toContain("text-base text-text leading-7");
     expect(src).not.toContain("text-text-secondary");
     expect(src).not.toContain("text-text-muted");
-    const post = getPublishedPosts()[0]!;
+    const post = getAllPosts()[0]!;
     const html = renderToStaticMarkup(createElement(BlogPostArticle, { post }));
     expect(html).toContain("text-base text-text leading-7");
   });
@@ -285,17 +284,13 @@ describe("published post depth", () => {
     expect(mcp?.body).toContain("Do not treat the 0.5.x Settings HTTP snippets");
   });
 
-  test("foreign-key post has nested setup, FAQ, and no frozen 0.5.x HTTP URL", () => {
-    const post = getPublishedPost("click-through-foreign-keys");
+  test("foreign-key post is unpublished and was not rewritten", () => {
+    const post = getPostBySlug("click-through-foreign-keys");
     expect(post).toBeTruthy();
-    expect(post?.tldr).toContain("get_schema_graph");
+    expect(post?.published).toBe(false);
+    expect(getPublishedPost("click-through-foreign-keys")).toBeNull();
     expect(post?.body).toContain("## FAQ");
-    expect(post?.body).toMatch(/^### /m);
     expect(post?.body).toContain("⌘Shift+G");
-    expect(post?.body).toContain("Setup lives in Settings in the current app");
-    expect(post?.body).not.toContain("27420");
-    expect(post?.body).not.toContain("127.0.0.1");
-    expect(post?.body).not.toMatch(/mcpServers/);
   });
 });
 
