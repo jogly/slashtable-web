@@ -3,7 +3,7 @@ title: How do I find all rows that reference this Postgres address
 description: Address id 1 (100 Main St) is already on screen, maybe after a failed DELETE. Open the address table in /table 0.5.16, refresh if you only see id and street, read tag (2), person (2), and school (1), then open a depth 1 schema graph from address.
 publishedAt: 2026-08-25
 updatedAt: 2026-08-25
-published: false
+published: true
 tags:
   - foreign-keys
   - postgres

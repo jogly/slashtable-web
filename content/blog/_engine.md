@@ -8,7 +8,7 @@ Customer-facing posts still follow the site voice rules: no em dashes, no first-
 
 1. **Audit.** List search queries, agent questions, gaps in `llms.txt`, competing pages, and posts already on `/blog`. Note which engines (Postgres, MySQL, SQLite, Neon) and which workflows (local MCP, FK navigation, scoped graphs, install) lack a concrete setup article. Record current index, sitemap, and citation coverage.
 2. **Generate drafts.** Add `content/blog/<kebab-slug>.md` with required frontmatter and `published: false`. Open a PR for the draft if review is needed. Never set `published: true` in the generation step. Never invent a remote MCP URL, hosted database, or query API.
-3. **Human approve.** A human reads the draft, checks voice and facts against the installed app, then opens or updates a PR that flips `published: true`. That flag is the only public gate. Until it is true, the slug 404s and stays out of the index, sitemap, and llms.txt.
+3. **Human approve.** A human reads the draft, checks voice and facts against the installed app, then opens or updates a PR that flips `published: true`. That flag is the only public gate. Until it is true, the slug 404s and stays out of the index, sitemap, and llms.txt. `published` currently gates routes everywhere including preview, which is why review 404s; treat the PR as the review surface.
 4. **Measure at 28 and 56 days.** After publish, check impressions, queries, agent citations, and `/blog` referrals at day 28 and day 56. Feed misses and new questions back into the audit list and start the next draft.
 
 ## Draft workflow

@@ -26,10 +26,9 @@ import {
 } from "../src/lib/markdown-negotiate";
 import { articleMetadata, canonical } from "../src/lib/seo";
 
-const PUBLISHED_SLUGS: readonly string[] = [];
+const PUBLISHED_SLUGS = ["find-rows-that-reference-this-postgres-row"] as const;
 const DRAFT_SLUGS = [
   "click-through-foreign-keys",
-  "find-rows-that-reference-this-postgres-row",
   "local-mcp-access-to-postgres-mysql-sqlite",
   "ssh-tunnel-notes",
 ] as const;
@@ -148,6 +147,7 @@ describe("blog sitemap and llms.txt", () => {
   test("drafts are excluded from the sitemap", () => {
     const urls = sitemap().map((entry) => entry.url);
     expect(urls).toContain(canonical("/blog/"));
+    expect(urls).toContain(canonical("/blog/find-rows-that-reference-this-postgres-row"));
     for (const slug of DRAFT_SLUGS) {
       expect(urls.some((url) => url.includes(slug))).toBe(false);
     }
@@ -157,6 +157,7 @@ describe("blog sitemap and llms.txt", () => {
   test("drafts are excluded from llms.txt", () => {
     const llms = buildLlmsTxt();
     expect(llms).toContain("https://www.slashtable.dev/blog/");
+    expect(llms).toContain("find-rows-that-reference-this-postgres-row");
     for (const slug of DRAFT_SLUGS) {
       expect(llms).not.toContain(slug);
     }
@@ -166,7 +167,8 @@ describe("blog sitemap and llms.txt", () => {
   test("index markdown lists published posts only", () => {
     const md = formatBlogIndexMarkdown();
     expect(md.startsWith("# /table - Blog")).toBe(true);
-    expect(md).toContain("No published posts yet.");
+    expect(md).toContain(PUBLISHED_SLUGS[0]);
+    expect(md).not.toContain("No published posts yet.");
     for (const slug of DRAFT_SLUGS) {
       expect(md).not.toContain(slug);
     }
@@ -298,15 +300,16 @@ describe("published post depth", () => {
     expect(post?.body).toContain("⌘Shift+G");
   });
 
-  test("critic-PASSED reverse-FK draft is unpublished", () => {
-    const post = getPostBySlug("find-rows-that-reference-this-postgres-row");
+  test("critic-PASSED reverse-FK walk is the preview review surface", () => {
+    const post = getPublishedPost("find-rows-that-reference-this-postgres-row");
     expect(post).toBeTruthy();
-    expect(post?.published).toBe(false);
-    expect(getPublishedPost("find-rows-that-reference-this-postgres-row")).toBeNull();
+    expect(post?.published).toBe(true);
     expect(post?.title).toBe("How do I find all rows that reference this Postgres address");
     expect(post?.body).toContain("Open the address table in /table 0.5.16");
     expect(post?.body).toContain("## FAQ");
     expect(post?.publishedAt).toBe("2026-08-25");
+    expect(getPublishedPost("click-through-foreign-keys")).toBeNull();
+    expect(getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite")).toBeNull();
   });
 });
 
