@@ -16,7 +16,9 @@ import {
   isSkippedBlogFile,
   parseBlogMarkdown,
   postPath,
+  readingTimeLabel,
 } from "../src/lib/blog";
+import { formatJournalDate } from "../src/lib/dates";
 import { buildLlmsTxt } from "../src/lib/llms";
 import {
   blogMarkdownRewritePath,
@@ -199,6 +201,13 @@ describe("posts render H1", () => {
       expect(html).toContain("on Unsplash");
       expect(html).toContain(post.tldr);
       expect(html).not.toContain(post.description);
+      expect(html).toContain(formatJournalDate(post.publishedAt));
+      expect(html).toContain(readingTimeLabel(post));
+      expect(html).toContain("font-display");
+      if (post.body.includes("| Job |")) {
+        expect(html).toContain("<table");
+        expect(html).toContain("Catalog SQL");
+      }
       const md = formatPostMarkdown(post);
       expect(md.startsWith(`# ${post.title}`)).toBe(true);
       expect(md).toContain("## TL;DR");
@@ -213,59 +222,89 @@ describe("posts render H1", () => {
     const html = renderToStaticMarkup(createElement(BlogPostArticle, { post }));
     expect(html).toContain("Fixture post");
     expect(html).toContain("TL;DR");
-    expect(html).toContain("text-base text-text leading-7");
+    expect(html).toContain("text-[1.125rem] leading-[1.7] text-text");
+    expect(html).toContain(formatJournalDate(post.publishedAt));
+    expect(html).toContain(readingTimeLabel(post));
     expect(html).not.toContain("A parse fixture with required image fields.");
     expect(formatPostMarkdown(post)).not.toContain("A parse fixture with required image fields.");
   });
 });
 
-describe("blog index magazine layout", () => {
+describe("blog index as a journal", () => {
   test("renders an h2 per post on the branch, or the empty copy", () => {
     const posts = getAllPosts();
     const html = renderToStaticMarkup(createElement(BlogIndex, { posts }));
     const h2s = html.match(/<h2\b[^>]*>[\s\S]*?<\/h2>/g) ?? [];
     expect(h2s).toHaveLength(posts.length);
     expect(html).not.toContain("<h1");
+    expect(html).not.toContain("→");
+    expect(html).not.toContain("grid-cols-2");
     if (posts.length === 0) {
       expect(html).toContain("No posts yet.");
     }
     for (const slug of REMOVED_SLUGS) {
       expect(html).not.toContain(slug);
     }
+    if (posts[0]) {
+      expect(html).toContain(posts[0].image);
+      expect(html).toContain(posts[0].imageCreditUrl);
+    }
     for (const post of posts) {
-      expect(html).toContain(post.image);
       expect(html).toContain(post.title);
       expect(html).toContain(post.description);
-      expect(html).toContain(post.imageCreditUrl);
+      expect(html).toContain(formatJournalDate(post.publishedAt));
     }
   });
 
-  test("index page source uses the wide content measure", () => {
+  test("index page is a type-led journal column, not marketing chrome", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
-    expect(src).toContain("max-w-content");
-    expect(src).not.toContain("max-w-narrow");
+    const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
+    expect(src).toContain("max-w-[42rem]");
+    expect(src).toContain("font-display");
+    expect(src).not.toContain("max-w-content");
+    expect(src).not.toContain("tracking-widest");
+    expect(src).not.toContain("h-2 w-2");
+    expect(src).not.toContain("BLOG.eyebrow");
+    expect(index).toContain("font-display");
+    expect(index).toContain("aspect-[3/2]");
+    expect(index).not.toContain("grid-cols-2");
+    expect(index).not.toContain("→");
   });
 
-  test("post pages use one narrow column", () => {
+  test("post pages use one reading measure and drop the eyebrow", () => {
     const page = readFileSync(join(import.meta.dir, "../app/blog/[slug]/page.tsx"), "utf8");
     const article = readFileSync(join(import.meta.dir, "../src/components/blog/BlogPostArticle.tsx"), "utf8");
-    expect(page).toContain("max-w-narrow");
+    expect(page).toContain("max-w-[65ch]");
     expect(page).not.toContain("max-w-content");
+    expect(article).toContain("font-display");
     expect(article).not.toContain("max-w-content");
     expect(article).not.toContain("max-w-3xl");
-    expect(article).not.toContain("max-w-narrow");
     expect(article).not.toContain("tldrEyebrow");
     expect(article).not.toContain("border-dashed");
     expect(article).not.toContain("post.description");
+    expect(article).not.toContain("tracking-widest");
+    expect(article).not.toContain("h-2 w-2");
+    expect(article).not.toContain("BLOG.eyebrow");
   });
 });
 
-describe("blog body contrast", () => {
-  test("markdown body uses 16px full-contrast text", () => {
+describe("blog body as long-form type", () => {
+  test("markdown body uses 18px full-contrast text, display H2s, and designed tables", () => {
     const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogMarkdown.tsx"), "utf8");
-    expect(src).toContain("text-base text-text leading-7");
+    expect(src).toContain("text-[1.125rem] leading-[1.7] text-text");
+    expect(src).toContain("font-display");
+    expect(src).toContain("remarkGfm");
+    expect(src).toContain("<table");
+    expect(src).toContain("font-display text-[1.2rem] text-text italic");
     expect(src).not.toContain("text-text-secondary");
-    expect(src).not.toContain("text-text-muted");
+    expect(src).not.toContain("font-mono text-sm");
+  });
+
+  test("covers are flush editorial frames, not rounded chips", () => {
+    const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogCover.tsx"), "utf8");
+    expect(src).toContain("aspect-[3/2]");
+    expect(src).not.toContain("rounded-[5px]");
+    expect(src).not.toContain("font-mono");
   });
 });
 

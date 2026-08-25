@@ -1,33 +1,47 @@
 import Link from "next/link";
 import { BLOG } from "@/lib/copy";
 import type { BlogPost } from "@/lib/blog";
-import { formatEntryDate } from "@/lib/dates";
 import { BlogCoverCredit, BlogCoverImage } from "./BlogCover";
+import { BlogMeta } from "./BlogMeta";
 
-function StoryCard({ post, priority = false }: { post: BlogPost; priority?: boolean }) {
+function FeaturedStory({ post }: { post: BlogPost }) {
   return (
-    <article className="group relative border-border py-12 md:px-10 md:py-14 first:md:pl-0 last:md:pr-0 [&+&]:border-t md:[&+&]:border-t-0 md:[&+&]:border-l">
-      <BlogCoverImage
-        post={post}
-        priority={priority}
-        aspectClassName="aspect-[16/9]"
-        sizes="(min-width: 68rem) 32rem, 100vw"
-      />
-      <BlogCoverCredit post={post} />
-      <h2 className="mt-6 font-display text-[22px] text-text leading-snug md:text-2xl">
-        <Link href={post.path} className="after:absolute after:inset-0 after:z-[1]">
+    <article>
+      <h2 className="font-display text-[2.35rem] text-text leading-[1.08] tracking-[-0.02em] md:text-[2.85rem]">
+        <Link href={post.path} className="transition-colors hover:text-text">
           {post.title}
-          <span className="ml-1 inline-block text-text-muted opacity-0 transition-opacity group-hover:opacity-100">
-            →
-          </span>
         </Link>
       </h2>
-      <p className="mt-3 line-clamp-3 text-base text-text-secondary leading-relaxed">{post.description}</p>
-      <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-text-muted">
-        <time dateTime={post.publishedAt}>{formatEntryDate(post.publishedAt)}</time>
-        {post.tags.map((tag) => (
-          <span key={tag}>{tag}</span>
-        ))}
+      <p className="mt-5 font-display text-[1.25rem] text-text italic leading-[1.35]">{post.description}</p>
+      <div className="mt-5">
+        <BlogMeta post={post} />
+      </div>
+      <figure className="mt-10">
+        <Link href={post.path} className="block">
+          <BlogCoverImage
+            post={post}
+            priority
+            aspectClassName="aspect-[3/2]"
+            sizes="(min-width: 42rem) 42rem, 100vw"
+          />
+        </Link>
+        <figcaption>
+          <BlogCoverCredit post={post} />
+        </figcaption>
+      </figure>
+    </article>
+  );
+}
+
+function StoryListItem({ post }: { post: BlogPost }) {
+  return (
+    <article className="border-border border-t py-9 first:border-t-0 first:pt-0">
+      <h2 className="font-display text-[1.65rem] text-text leading-[1.15] tracking-[-0.015em] md:text-[1.85rem]">
+        <Link href={post.path}>{post.title}</Link>
+      </h2>
+      <p className="mt-3 text-[1.0625rem] text-text leading-[1.55]">{post.description}</p>
+      <div className="mt-3">
+        <BlogMeta post={post} />
       </div>
     </article>
   );
@@ -35,14 +49,21 @@ function StoryCard({ post, priority = false }: { post: BlogPost; priority?: bool
 
 export function BlogIndex({ posts }: { posts: BlogPost[] }) {
   if (posts.length === 0) {
-    return <p className="py-16 font-mono text-[13px] text-text-muted">{BLOG.empty}</p>;
+    return <p className="py-16 text-[14px] text-text-muted">{BLOG.empty}</p>;
   }
 
+  const [featured, ...rest] = posts;
+
   return (
-    <div className="mt-16 border-border border-t md:grid md:grid-cols-2">
-      {posts.map((post, index) => (
-        <StoryCard key={post.slug} post={post} priority={index === 0} />
-      ))}
+    <div className="mt-14">
+      <FeaturedStory post={featured} />
+      {rest.length > 0 ? (
+        <div className="mt-16 border-border border-t pt-2">
+          {rest.map((post) => (
+            <StoryListItem key={post.slug} post={post} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

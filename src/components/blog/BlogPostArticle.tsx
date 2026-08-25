@@ -1,50 +1,34 @@
 import { BLOG } from "@/lib/copy";
 import type { BlogPost } from "@/lib/blog";
-import { formatEntryDate } from "@/lib/dates";
 import { BlogCover } from "./BlogCover";
 import { BlogMarkdown } from "./BlogMarkdown";
+import { BlogMeta } from "./BlogMeta";
 
 export function BlogPostArticle({ post }: { post: BlogPost }) {
   return (
     <article>
-      <div className="mb-4 flex items-center gap-2">
-        <span className="h-2 w-2 flex-shrink-0 bg-accent" />
-        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{BLOG.eyebrow}</span>
-      </div>
-      <h1 className="font-display text-4xl text-text md:text-5xl">{post.title}</h1>
-      <div className="mt-5 flex flex-wrap items-baseline gap-3">
-        <time className="font-mono text-[10px] text-text-muted uppercase tracking-widest" dateTime={post.publishedAt}>
-          {formatEntryDate(post.publishedAt)}
-        </time>
-        {post.updatedAt && post.updatedAt !== post.publishedAt ? (
-          <time className="font-mono text-[10px] text-text-muted uppercase tracking-widest" dateTime={post.updatedAt}>
-            {BLOG.updatedLabel} {formatEntryDate(post.updatedAt)}
-          </time>
-        ) : null}
-        {post.tags.map((tag) => (
-          <span key={tag} className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-            {tag}
-          </span>
-        ))}
+      <h1 className="font-display text-[2.6rem] text-text leading-[1.06] tracking-[-0.025em] md:text-5xl md:leading-[1.05]">
+        {post.title}
+      </h1>
+      <div className="mt-6">
+        <BlogMeta post={post} showTags />
       </div>
 
-      <div className="group mt-10">
+      <div className="mt-10">
         <BlogCover
           post={post}
           priority
-          aspectClassName="aspect-[16/9]"
-          sizes="(min-width: 44rem) 44rem, 100vw"
+          aspectClassName="aspect-[3/2]"
+          sizes="(min-width: 40rem) 40rem, 100vw"
         />
       </div>
 
-      <section className="mt-10" aria-labelledby="tldr-heading">
-        <h2 id="tldr-heading" className="font-display text-text text-xl">
-          {BLOG.tldrLabel}
-        </h2>
-        <p className="mt-3 text-base text-text leading-7">{post.tldr}</p>
-      </section>
+      <aside className="mt-12 mb-2 border-border border-l pl-5" aria-label={BLOG.tldrLabel}>
+        <p className="font-display text-[1.05rem] text-text italic">{BLOG.tldrLabel}</p>
+        <p className="mt-3 text-[1.125rem] leading-[1.7] text-text">{post.tldr}</p>
+      </aside>
 
-      <div className="mt-10 border-border border-t pt-2">
+      <div className="mt-10">
         <BlogMarkdown content={post.body} />
       </div>
     </article>

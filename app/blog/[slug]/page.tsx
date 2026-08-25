@@ -39,7 +39,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) notFound();
 
   return (
-    <div className="mx-auto max-w-narrow px-6 pt-32 pb-20">
+    <div className="mx-auto max-w-[65ch] px-6 pt-32 pb-28">
       <JsonLd
         data={breadcrumb([
           { name: "Home", path: "/" },

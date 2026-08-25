@@ -5,15 +5,15 @@ export function BlogCoverImage({
   post,
   sizes,
   priority = false,
-  aspectClassName,
+  aspectClassName = "aspect-[3/2]",
 }: {
   post: BlogPost;
   sizes: string;
   priority?: boolean;
-  aspectClassName: string;
+  aspectClassName?: string;
 }) {
   return (
-    <div className={`overflow-hidden rounded-[5px] bg-surface-2 ${aspectClassName}`}>
+    <div className={`overflow-hidden bg-surface-2 ${aspectClassName}`}>
       <Image
         src={post.image}
         alt={post.imageAlt}
@@ -30,12 +30,12 @@ export function BlogCoverImage({
 
 export function BlogCoverCredit({ post }: { post: BlogPost }) {
   return (
-    <p className="relative z-10 mt-2">
+    <p className="mt-2.5 text-[13px] leading-5 text-text-muted">
       <a
         href={post.imageCreditUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="font-mono text-[10px] text-text-muted tracking-wide transition-colors hover:text-text"
+        className="underline decoration-transparent underline-offset-2 transition-colors hover:text-text hover:decoration-border-strong"
       >
         {post.imageCredit}
       </a>
@@ -47,15 +47,15 @@ export function BlogCover({
   post,
   sizes,
   priority = false,
-  aspectClassName,
+  aspectClassName = "aspect-[3/2]",
 }: {
   post: BlogPost;
   sizes: string;
   priority?: boolean;
-  aspectClassName: string;
+  aspectClassName?: string;
 }) {
   return (
-    <figure>
+    <figure className="m-0">
       <BlogCoverImage post={post} sizes={sizes} priority={priority} aspectClassName={aspectClassName} />
       <figcaption>
         <BlogCoverCredit post={post} />

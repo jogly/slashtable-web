@@ -154,6 +154,15 @@ export function getPostBySlug(slug: string): BlogPost | null {
   return loadAllPosts().find((post) => post.slug === slug) ?? null;
 }
 
+export function readingMinutes(post: Pick<BlogPost, "tldr" | "body">): number {
+  const words = `${post.tldr} ${post.body}`.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+}
+
+export function readingTimeLabel(post: Pick<BlogPost, "tldr" | "body">): string {
+  return `${readingMinutes(post)} min`;
+}
+
 export function getPublishedPost(slug: string): BlogPost | null {
   const post = getPostBySlug(slug);
   if (!post || !post.published) return null;
