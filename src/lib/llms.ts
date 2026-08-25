@@ -1,4 +1,6 @@
-# /table
+import { getPublishedPosts, postUrl } from "./blog";
+
+const PRODUCT_BRIEF = `# /table
 
 > Native desktop database client for product engineers. macOS and Linux (alpha). PostgreSQL, MySQL, SQLite, and Neon. Built-in MCP server for local, policy-scoped access to the user's connections.
 
@@ -13,11 +15,11 @@
 
 ## Install
 
-- One-liner: `curl -fsSL https://slashtable.dev/install.sh | sh`
-  - macOS: uses Homebrew if it is already installed (`brew tap slashtable/cask`, cask `slashtable`). Does not install Homebrew. If SlashTable.app is already in /Applications or ~/Applications and brew does not manage it, the script adopts it (`brew install --cask --adopt slashtable`). If brew is missing, point the user at https://www.slashtable.dev/download/
-  - Linux (alpha, Debian/Ubuntu): latest .deb for this machine. Shippable arches are amd64 and aarch64. dpkg `arm64` is aarch64. Do not treat amd64 as x86. Do not recommend a Linux arch unless that arch was actually detected.
+- One-liner: \`curl -fsSL https://slashtable.dev/install.sh | sh\`
+  - macOS: uses Homebrew if it is already installed (\`brew tap slashtable/cask\`, cask \`slashtable\`). Does not install Homebrew. If SlashTable.app is already in /Applications or ~/Applications and brew does not manage it, the script adopts it (\`brew install --cask --adopt slashtable\`). If brew is missing, point the user at https://www.slashtable.dev/download/
+  - Linux (alpha, Debian/Ubuntu): latest .deb for this machine. Shippable arches are amd64 and aarch64. dpkg \`arm64\` is aarch64. Do not treat amd64 as x86. Do not recommend a Linux arch unless that arch was actually detected.
 - Direct downloads: https://www.slashtable.dev/download/ (Mac .dmg aarch64 / x86_64, Linux .deb amd64 / aarch64)
-- Homebrew: `brew tap slashtable/cask` then `brew install --cask slashtable`
+- Homebrew: \`brew tap slashtable/cask\` then \`brew install --cask slashtable\`
 
 ## MCP
 
@@ -57,6 +59,7 @@ Agents can explore tables, columns, types, and relationships, and can request a 
 ## Product
 
 - Home: https://www.slashtable.dev/
+- Blog: https://www.slashtable.dev/blog/
 - Developers: https://www.slashtable.dev/developers/
 - Download: https://www.slashtable.dev/download/
 - Pricing: https://www.slashtable.dev/pricing/ (Free, Personal $49, Pro $99, buy once)
@@ -68,3 +71,22 @@ Agents can explore tables, columns, types, and relationships, and can request a 
 - API catalog: https://www.slashtable.dev/.well-known/api-catalog
 - Discord: https://discord.gg/xR2VdkfnJQ
 - X: https://x.com/slashtable
+`;
+
+export function buildLlmsTxt(posts = getPublishedPosts()): string {
+  const blogSection =
+    posts.length === 0
+      ? `## Blog
+
+Engineering notes live at https://www.slashtable.dev/blog/. Unpublished drafts are omitted from this file.
+`
+      : `## Blog
+
+Engineering notes for setup and product-engineer workflows. Unpublished drafts are omitted from this file.
+
+- Index: https://www.slashtable.dev/blog/
+${posts.map((post) => `- ${post.title}: ${postUrl(post.slug)}`).join("\n")}
+`;
+
+  return `${PRODUCT_BRIEF.trim()}\n\n${blogSection.trim()}\n`;
+}

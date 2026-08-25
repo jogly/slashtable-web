@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { PAGE_LINK_HEADER } from "@/lib/link-headers";
 import {
+  blogMarkdownRewritePath,
+  isBlogPath,
   isMarkdownPath,
   markdownForPath,
   markdownNotFound,
@@ -24,6 +26,15 @@ export function middleware(request: NextRequest) {
   }
 
   if (prefersMarkdown(accept)) {
+    if (isBlogPath(pathname)) {
+      const rewriteTo = blogMarkdownRewritePath(pathname);
+      if (rewriteTo) {
+        const url = request.nextUrl.clone();
+        url.pathname = rewriteTo;
+        return withPageLinks(NextResponse.rewrite(url));
+      }
+    }
+
     if (isMarkdownPath(pathname)) {
       const body = markdownForPath(pathname);
       if (body) {
@@ -54,7 +65,7 @@ export function middleware(request: NextRequest) {
   }
 
   const res = NextResponse.next();
-  if (isMarkdownPath(pathname)) {
+  if (isMarkdownPath(pathname) || isBlogPath(pathname)) {
     // Link for HTML comes from next.config headers(); avoid duplicating here.
     res.headers.set("Vary", mergeVary(res.headers.get("Vary"), "Accept"));
   }

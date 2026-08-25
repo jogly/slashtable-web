@@ -30,6 +30,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource-variable/playfair-display": "^5.2.8",
     "@tailwindcss/postcss": "^4.2.4",
+    "@types/bun": "^1.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "lefthook": "^2.1.5",

@@ -1,8 +1,13 @@
 import Link from "next/link";
+import { getPublishedPosts } from "@/lib/blog";
+
+export const dynamic = "force-static";
 
 const DISCORD = "https://discord.gg/xR2VdkfnJQ";
 
 export default function DevelopersPage() {
+  const posts = getPublishedPosts();
+
   return (
     <div className="mx-auto max-w-narrow px-6 pt-32 pb-20">
       <div className="mb-4 flex items-center gap-2">
@@ -120,6 +125,37 @@ export default function DevelopersPage() {
             <li>Enable the MCP server in Settings.</li>
             <li>Connect the IDE or agent client over local stdio.</li>
           </ol>
+        </section>
+
+        <section>
+          <h2 className="mb-3 font-display text-text text-xl">Blog</h2>
+          <p className="mb-4 text-sm text-text-secondary leading-relaxed">
+            Engineering notes for local MCP setup, foreign-key navigation, and scoped schema graphs.
+            The index lists published posts only. Drafts stay off the public URL until a human sets
+            published to true.
+          </p>
+          <ul className="mb-4 space-y-2">
+            <li className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
+              <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-text-muted" />
+              <span>
+                Index:{" "}
+                <Link href="/blog" className="text-accent underline underline-offset-2 transition-colors hover:text-text">
+                  /blog
+                </Link>
+              </span>
+            </li>
+            {posts.map((post) => (
+              <li key={post.slug} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
+                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-text-muted" />
+                <span>
+                  {post.title}:{" "}
+                  <Link href={post.path} className="text-accent underline underline-offset-2 transition-colors hover:text-text">
+                    {post.path}
+                  </Link>
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section>

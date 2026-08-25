@@ -77,8 +77,8 @@ export function HomeProductArticle() {
       <p className="mt-3 text-sm text-text-secondary leading-relaxed">
         Download for macOS or Linux (alpha), run
         curl -fsSL https://slashtable.dev/install.sh | sh, or install with
-        Homebrew. Pricing, changelog, OpenAPI, developers docs, and llms.txt
-        live on this site for humans and agents alike.
+        Homebrew. Pricing, changelog, blog, OpenAPI, developers docs, and
+        llms.txt live on this site for humans and agents alike.
       </p>
     </article>
   );

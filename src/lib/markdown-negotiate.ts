@@ -36,6 +36,22 @@ export function isMarkdownPath(pathname: string): boolean {
   return MARKDOWN_PATHS.has(pathname) || MARKDOWN_PATHS.has(normalizePath(pathname));
 }
 
+/** /blog and /blog/:slug (one segment). Drafts still match; handlers 404 them. */
+export function isBlogPath(pathname: string): boolean {
+  const key = normalizePath(pathname);
+  if (key === "/blog") return true;
+  if (!key.startsWith("/blog/")) return false;
+  const slug = key.slice("/blog/".length);
+  return slug.length > 0 && !slug.includes("/");
+}
+
+export function blogMarkdownRewritePath(pathname: string): string | null {
+  const key = normalizePath(pathname);
+  if (key === "/blog") return "/api/md/blog";
+  if (!isBlogPath(key)) return null;
+  return `/api/md/blog/${key.slice("/blog/".length)}`;
+}
+
 /** Paths that should not be Accept-negotiated (static/API/assets). */
 export function shouldSkipMarkdownNegotiation(pathname: string): boolean {
   if (
@@ -262,6 +278,7 @@ Come watch, or come help. Discord and X for bug reports, feature debates, and OR
 - Product card: https://www.slashtable.dev/api/v1/product
 - llms.txt: https://www.slashtable.dev/llms.txt
 - Developers: https://www.slashtable.dev/developers/
+- Blog: https://www.slashtable.dev/blog/
 
 ## Company
 
@@ -276,6 +293,7 @@ Come watch, or come help. Discord and X for bug reports, feature debates, and OR
 - Download: https://www.slashtable.dev/download/
 - Pricing: https://www.slashtable.dev/pricing/
 - Changelog: https://www.slashtable.dev/changelog/
+- Blog: https://www.slashtable.dev/blog/
 `;
 
 const SHARED_BODY = `Native desktop database client for product engineers. Platforms: macOS and Linux (alpha). Engines: PostgreSQL, MySQL, SQLite, and Neon.
@@ -309,6 +327,7 @@ Per-connection policy: hidden, read, or write. Read uses a keyword filter plus a
 - Product card: https://www.slashtable.dev/api/v1/product
 - llms.txt: https://www.slashtable.dev/llms.txt
 - Developers: https://www.slashtable.dev/developers/
+- Blog: https://www.slashtable.dev/blog/
 - About: https://www.slashtable.dev/about/
 - Contact: https://www.slashtable.dev/contact/
 - Pricing: https://www.slashtable.dev/pricing/
@@ -348,7 +367,7 @@ export function markdownForPath(pathname: string): string | null {
   } else if (key === "/terms") {
     extra = `\n## This page\n\nTerms of use for the /table product and this website.\n`;
   } else if (key === "/developers") {
-    extra = `\n## This page\n\nDeveloper portal for public discovery docs: OpenAPI, llms.txt, product card, local MCP server card, and install. MCP is local stdio inside the desktop app; there is no remote MCP URL.\n`;
+    extra = `\n## This page\n\nDeveloper portal for public discovery docs: OpenAPI, llms.txt, product card, local MCP server card, install, and the /blog index. MCP is local stdio inside the desktop app; there is no remote MCP URL.\n`;
   } else if (key === "/about") {
     extra = `\n## This page\n\nAbout Make Toast LLC and the /table desktop database client.\n`;
   } else if (key === "/contact") {

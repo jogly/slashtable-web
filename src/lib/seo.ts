@@ -27,6 +27,39 @@ export function pageMetadata({
   };
 }
 
+export function articleMetadata({
+  title,
+  description,
+  path,
+  publishedAt,
+  updatedAt,
+  tags,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  publishedAt: string;
+  updatedAt?: string;
+  tags?: string[];
+}): Metadata {
+  const url = canonical(path);
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      publishedTime: publishedAt,
+      modifiedTime: updatedAt ?? publishedAt,
+      tags,
+    },
+    twitter: { title, description },
+  };
+}
+
 export function breadcrumb(items: { name: string; path: string }[]) {
   return {
     "@context": "https://schema.org",

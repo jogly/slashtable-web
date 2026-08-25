@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { blogSitemapEntries } from "@/lib/blog";
 import { canonical } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -12,11 +13,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: canonical("/openapi.json"), lastModified, changeFrequency: "weekly", priority: 0.6 },
     { url: canonical("/pricing/"), lastModified, changeFrequency: "monthly", priority: 0.8 },
     { url: canonical("/changelog/"), lastModified, changeFrequency: "daily", priority: 0.7 },
+    { url: canonical("/blog/"), lastModified, changeFrequency: "weekly", priority: 0.7 },
     { url: canonical("/upgrade/"), lastModified, changeFrequency: "monthly", priority: 0.4 },
     { url: canonical("/developers/"), lastModified, changeFrequency: "monthly", priority: 0.7 },
     { url: canonical("/about/"), lastModified, changeFrequency: "yearly", priority: 0.4 },
     { url: canonical("/contact/"), lastModified, changeFrequency: "yearly", priority: 0.4 },
     { url: canonical("/privacy/"), lastModified, changeFrequency: "yearly", priority: 0.3 },
     { url: canonical("/terms/"), lastModified, changeFrequency: "yearly", priority: 0.3 },
+    ...blogSitemapEntries(),
   ];
 }

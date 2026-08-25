@@ -436,6 +436,7 @@ export const NAV = {
   ],
   pricing: "Pricing",
   changelog: "Changelog",
+  blog: "Blog",
   download: "Download",
   mobileLinks: [
     { label: "Features", to: "/" as const, hash: "features", color: "var(--color-green)" },
@@ -443,6 +444,7 @@ export const NAV = {
     { label: "Schema Graph", to: "/" as const, hash: "schema", color: "var(--color-magenta)" },
     { label: "Pricing", to: "/pricing" as const, color: "var(--color-yellow)" },
     { label: "Changelog", to: "/changelog" as const, color: "var(--color-orange)" },
+    { label: "Blog", to: "/blog" as const, color: "var(--color-cyan)" },
   ],
 };
 
@@ -456,6 +458,7 @@ export const FOOTER = {
       links: [
         { label: "Pricing", to: "/pricing" },
         { label: "Changelog", to: "/changelog" },
+        { label: "Blog", to: "/blog" },
         { label: "Download", to: "/download" },
         { label: "Developers", to: "/developers" },
       ],
@@ -620,4 +623,16 @@ export const CHANGELOG = {
   eyebrow: "Changelog",
   heading: "What\u2019s new in /table",
   description: "What shipped, what broke, what\u2019s next.",
+};
+
+export const BLOG = {
+  eyebrow: "Blog",
+  heading: "Engineering notes",
+  description:
+    "Setup and workflow notes for the local /table desktop client. Postgres, MySQL, SQLite, Neon, and the MCP server that ships in the app.",
+  empty: "No published posts yet.",
+  tldrLabel: "TL;DR",
+  tldrEyebrow: "Summary",
+  updatedLabel: "Updated",
+  readPost: "Read",
 };
