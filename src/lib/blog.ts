@@ -1,10 +1,7 @@
-import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { BLOG_SOURCES } from "./blog-data.generated";
 import { SITE_URL } from "./constants";
 import { parseFrontmatter } from "./frontmatter";
 import { canonical } from "./seo";
-
-export const BLOG_DIR = join(process.cwd(), "content/blog");
 
 export type BlogPost = {
   slug: string;
@@ -106,16 +103,7 @@ export function parseBlogMarkdown(slug: string, raw: string): BlogPost {
 export function loadAllPosts(): BlogPost[] {
   if (cachedPosts) return cachedPosts;
 
-  const files = readdirSync(BLOG_DIR);
-  const posts: BlogPost[] = [];
-
-  for (const filename of files) {
-    if (isSkippedBlogFile(filename)) continue;
-    const slug = filename.slice(0, -3);
-    const raw = readFileSync(join(BLOG_DIR, filename), "utf8");
-    posts.push(parseBlogMarkdown(slug, raw));
-  }
-
+  const posts = BLOG_SOURCES.map((source) => parseBlogMarkdown(source.slug, source.raw));
   posts.sort((a, b) => {
     if (a.publishedAt === b.publishedAt) return a.slug.localeCompare(b.slug);
     return a.publishedAt < b.publishedAt ? 1 : -1;

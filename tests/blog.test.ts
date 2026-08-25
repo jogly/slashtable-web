@@ -1,8 +1,11 @@
 import { describe, expect, test } from "bun:test";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createElement } from "react";
 import sitemap from "../app/sitemap";
 import { BlogPostArticle } from "../src/components/blog/BlogPostArticle";
+import { BLOG_SOURCES } from "../src/lib/blog-data.generated";
 import {
   formatBlogIndexMarkdown,
   formatPostMarkdown,
@@ -27,6 +30,25 @@ const PUBLISHED_SLUGS = [
 const DRAFT_SLUG = "ssh-tunnel-notes";
 
 describe("blog loader", () => {
+  test("blog.ts does not read the filesystem", () => {
+    const src = readFileSync(join(import.meta.dir, "../src/lib/blog.ts"), "utf8");
+    expect(src).not.toContain("node:fs");
+    expect(src).not.toContain("readdirSync");
+    expect(src).not.toContain("readFileSync");
+  });
+
+  test("embedded sources match content/blog markdown", () => {
+    const dir = join(import.meta.dir, "../content/blog");
+    const disk = readdirSync(dir)
+      .filter((filename) => !isSkippedBlogFile(filename))
+      .sort((a, b) => a.localeCompare(b))
+      .map((filename) => ({
+        slug: filename.slice(0, -3),
+        raw: readFileSync(join(dir, filename), "utf8"),
+      }));
+    expect(BLOG_SOURCES).toEqual(disk);
+  });
+
   test("skips underscore files and README", () => {
     expect(isSkippedBlogFile("_engine.md")).toBe(true);
     expect(isSkippedBlogFile("README.md")).toBe(true);

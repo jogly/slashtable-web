@@ -5,5 +5,5 @@ import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 // re-invoke that same script and recurse; this keeps the Next step as `next build`.
 export default {
   ...defineCloudflareConfig(),
-  buildCommand: "next build",
+  buildCommand: "bun scripts/embed-blog.ts && next build",
 };

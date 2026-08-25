@@ -33,6 +33,8 @@ Rules:
 
 ## Surfaces that must stay in sync
 
+Run `bun scripts/embed-blog.ts` after changing markdown so `src/lib/blog-data.generated.ts` matches this folder. The Worker imports that module. It does not read files from disk at request time.
+
 When a post flips to published, these read the loader and pick it up on the next build:
 
 - `/blog` index
