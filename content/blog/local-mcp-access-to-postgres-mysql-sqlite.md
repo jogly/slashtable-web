@@ -11,9 +11,9 @@ tags:
   - sqlite
 tldr: Install /table, add a connection, enable the MCP server in Settings, then point Claude Desktop, Claude Code, Cursor, or Windsurf at that local stdio server. Pick hidden, read, or write per connection. Credentials never leave the machine. This website is not a query endpoint.
 image: /blog/local-mcp-access-to-postgres-mysql-sqlite.jpg
-imageAlt: Server racks with glowing orange and cyan network cables.
-imageCredit: Photo by Taylor Vick on Unsplash
-imageCreditUrl: https://unsplash.com/photos/M5tzZtFCOfs
+imageAlt: A closed laptop on a wooden desk under a lamp in a dark room.
+imageCredit: Photo on Unsplash
+imageCreditUrl: https://unsplash.com/photos/bZD2E08iKCc
 ---
 
 ## Install the desktop app

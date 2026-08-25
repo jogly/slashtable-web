@@ -51,8 +51,8 @@ export function postImageUrl(image: string): string {
 }
 
 const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {
-  "/blog/click-through-foreign-keys.jpg": { width: 2400, height: 1600 },
-  "/blog/local-mcp-access-to-postgres-mysql-sqlite.jpg": { width: 2400, height: 1347 },
+  "/blog/click-through-foreign-keys.jpg": { width: 2400, height: 1800 },
+  "/blog/local-mcp-access-to-postgres-mysql-sqlite.jpg": { width: 2400, height: 3600 },
   "/blog/ssh-tunnel-notes.jpg": { width: 2400, height: 1351 },
 };
 

@@ -4,16 +4,16 @@ JPEGs in this folder were downloaded from Unsplash and are used under the [Unspl
 
 ## click-through-foreign-keys.jpg
 
-- Photographer: ben o'bro
-- Profile: https://unsplash.com/@benobro
-- Photo: https://unsplash.com/photos/wpU4veNGnHg
+- Photographer: not listed here (Unsplash photo page required authorization)
+- Credit line: Photo on Unsplash
+- Photo: https://unsplash.com/photos/HeAxrQdaxLQ
 - License: Unsplash License
 
 ## local-mcp-access-to-postgres-mysql-sqlite.jpg
 
-- Photographer: Taylor Vick
-- Profile: https://unsplash.com/@tvick
-- Photo: https://unsplash.com/photos/M5tzZtFCOfs
+- Photographer: not listed here (Unsplash photo page required authorization)
+- Credit line: Photo on Unsplash
+- Photo: https://unsplash.com/photos/bZD2E08iKCc
 - License: Unsplash License
 
 ## ssh-tunnel-notes.jpg

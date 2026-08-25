@@ -108,10 +108,15 @@ describe("blog loader", () => {
     for (const post of posts) {
       expect(post.image).toBe(`/blog/${post.slug}.jpg`);
       expect(post.imageAlt.length).toBeGreaterThan(0);
-      expect(post.imageCredit).toMatch(/^Photo by .+ on Unsplash$/);
+      expect(post.imageCredit).toMatch(/^Photo( by .+)? on Unsplash$/);
       expect(post.imageCreditUrl.startsWith("https://unsplash.com/photos/")).toBe(true);
       expect(existsSync(join(publicRoot, post.image))).toBe(true);
     }
+
+    expect(getPublishedPost("click-through-foreign-keys")?.imageAlt).toContain("Tree roots");
+    expect(getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).toContain("laptop");
+    expect(getPublishedPost("click-through-foreign-keys")?.imageAlt).not.toMatch(/Manhattan|sunset/i);
+    expect(getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).not.toMatch(/server rack/i);
   });
 
   test("missing image frontmatter fails parse", () => {
@@ -194,6 +199,28 @@ describe("blog index magazine layout", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     expect(src).toContain("max-w-content");
     expect(src).not.toContain("max-w-narrow");
+  });
+
+  test("post pages use one narrow column", () => {
+    const page = readFileSync(join(import.meta.dir, "../app/blog/[slug]/page.tsx"), "utf8");
+    const article = readFileSync(join(import.meta.dir, "../src/components/blog/BlogPostArticle.tsx"), "utf8");
+    expect(page).toContain("max-w-narrow");
+    expect(page).not.toContain("max-w-content");
+    expect(article).not.toContain("max-w-content");
+    expect(article).not.toContain("max-w-3xl");
+    expect(article).not.toContain("max-w-narrow");
+  });
+});
+
+describe("blog body contrast", () => {
+  test("markdown body uses 16px full-contrast text", () => {
+    const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogMarkdown.tsx"), "utf8");
+    expect(src).toContain("text-base text-text leading-7");
+    expect(src).not.toContain("text-text-secondary");
+    expect(src).not.toContain("text-text-muted");
+    const post = getPublishedPosts()[0]!;
+    const html = renderToStaticMarkup(createElement(BlogPostArticle, { post }));
+    expect(html).toContain("text-base text-text leading-7");
   });
 });
 

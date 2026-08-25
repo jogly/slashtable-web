@@ -54,26 +54,28 @@ const markdownComponents: Components = {
       {children}
     </h3>
   ),
-  p: ({ children }) => <p className="mb-4 text-sm text-text-secondary leading-relaxed">{children}</p>,
+  p: ({ children }) => <p className="mb-4 text-base text-text leading-7">{children}</p>,
   strong: ({ children }) => <strong className="font-semibold text-text">{children}</strong>,
   ul: ({ children }) => (
-    <ul className="mb-4 list-disc space-y-2 pl-5 text-sm text-text-secondary leading-relaxed">{children}</ul>
+    <ul className="mb-4 list-disc space-y-2 pl-5 text-base text-text leading-7">{children}</ul>
   ),
   ol: ({ children }) => (
-    <ol className="mb-4 list-decimal space-y-2 pl-5 text-sm text-text-secondary leading-relaxed">{children}</ol>
+    <ol className="mb-4 list-decimal space-y-2 pl-5 text-base text-text leading-7">{children}</ol>
   ),
-  li: ({ children }) => <li className="text-sm text-text-secondary leading-relaxed">{children}</li>,
+  li: ({ children }) => <li className="text-base text-text leading-7">{children}</li>,
   code: ({ children, className }) => {
     if (className) {
-      return <code className="font-mono text-[11px] text-text-secondary leading-relaxed sm:text-sm">{children}</code>;
+      return <code className="font-mono text-[11px] text-text leading-7 sm:text-sm">{children}</code>;
     }
     return <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-text text-xs">{children}</code>;
   },
   pre: ({ children }) => (
-    <pre className="mb-4 overflow-x-auto rounded-sm border border-border bg-bg/60 p-4 backdrop-blur-md">{children}</pre>
+    <pre className="mb-4 overflow-x-auto rounded-sm border border-border bg-bg/60 p-4 text-text backdrop-blur-md">
+      {children}
+    </pre>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="mb-4 border-accent border-l-2 pl-4 text-sm text-text-secondary">{children}</blockquote>
+    <blockquote className="mb-4 border-accent border-l-2 pl-4 text-base text-text leading-7">{children}</blockquote>
   ),
 };
 
