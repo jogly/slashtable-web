@@ -6,23 +6,21 @@ import { BlogMeta } from "./BlogMeta";
 
 function FeaturedStory({ post }: { post: BlogPost }) {
   return (
-    <article>
-      <h2 className="font-display text-[2.35rem] text-text leading-[1.08] tracking-[-0.02em] md:text-[2.85rem]">
-        <Link href={post.path} className="transition-colors hover:text-text">
-          {post.title}
-        </Link>
-      </h2>
-      <p className="mt-5 font-display text-[1.25rem] text-text italic leading-[1.35]">{post.description}</p>
-      <div className="mt-5">
+    <article className="md:grid md:grid-cols-12 md:items-start md:gap-x-14 lg:gap-x-16">
+      <div className="md:col-span-6 lg:col-span-6">
         <BlogMeta post={post} />
+        <h2 className="mt-4 font-display text-[2.35rem] text-text leading-[1.05] tracking-[-0.03em] md:text-[2.85rem] lg:text-[3.25rem]">
+          <Link href={post.path}>{post.title}</Link>
+        </h2>
+        <p className="mt-5 max-w-[34rem] text-[1.125rem] text-text leading-[1.6]">{post.description}</p>
       </div>
-      <figure className="mt-10">
+      <figure className="mt-8 md:col-span-6 md:mt-0">
         <Link href={post.path} className="block">
           <BlogCoverImage
             post={post}
             priority
-            aspectClassName="aspect-[3/2]"
-            sizes="(min-width: 42rem) 42rem, 100vw"
+            aspectClassName="aspect-[4/5]"
+            sizes="(min-width: 72rem) 34rem, (min-width: 48rem) 50vw, 100vw"
           />
         </Link>
         <figcaption>
@@ -35,14 +33,12 @@ function FeaturedStory({ post }: { post: BlogPost }) {
 
 function StoryListItem({ post }: { post: BlogPost }) {
   return (
-    <article className="border-border border-t py-9 first:border-t-0 first:pt-0">
-      <h2 className="font-display text-[1.65rem] text-text leading-[1.15] tracking-[-0.015em] md:text-[1.85rem]">
+    <article className="border-border border-t py-8">
+      <BlogMeta post={post} />
+      <h2 className="mt-3 font-display text-[1.65rem] text-text leading-[1.12] tracking-[-0.02em] md:text-[1.95rem]">
         <Link href={post.path}>{post.title}</Link>
       </h2>
-      <p className="mt-3 text-[1.0625rem] text-text leading-[1.55]">{post.description}</p>
-      <div className="mt-3">
-        <BlogMeta post={post} />
-      </div>
+      <p className="mt-3 max-w-[40rem] text-[1.0625rem] text-text leading-[1.55]">{post.description}</p>
     </article>
   );
 }
@@ -55,10 +51,10 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
   const [featured, ...rest] = posts;
 
   return (
-    <div className="mt-14">
+    <div className="mt-14 md:mt-16">
       <FeaturedStory post={featured} />
       {rest.length > 0 ? (
-        <div className="mt-16 border-border border-t pt-2">
+        <div className="mt-20 max-w-[42rem]">
           {rest.map((post) => (
             <StoryListItem key={post.slug} post={post} />
           ))}

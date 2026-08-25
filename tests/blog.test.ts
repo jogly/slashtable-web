@@ -259,14 +259,15 @@ describe("blog index as a journal", () => {
   test("index page is a type-led journal column, not marketing chrome", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
-    expect(src).toContain("max-w-[42rem]");
+    expect(src).toContain("max-w-[72rem]");
     expect(src).toContain("font-display");
     expect(src).not.toContain("max-w-content");
     expect(src).not.toContain("tracking-widest");
     expect(src).not.toContain("h-2 w-2");
     expect(src).not.toContain("BLOG.eyebrow");
     expect(index).toContain("font-display");
-    expect(index).toContain("aspect-[3/2]");
+    expect(index).toContain("aspect-[4/5]");
+    expect(index).toContain("md:grid-cols-12");
     expect(index).not.toContain("grid-cols-2");
     expect(index).not.toContain("→");
   });

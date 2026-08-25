@@ -7,12 +7,10 @@ import { BlogMeta } from "./BlogMeta";
 export function BlogPostArticle({ post }: { post: BlogPost }) {
   return (
     <article>
-      <h1 className="font-display text-[2.6rem] text-text leading-[1.06] tracking-[-0.025em] md:text-5xl md:leading-[1.05]">
+      <BlogMeta post={post} showTags />
+      <h1 className="mt-4 font-display text-[2.75rem] text-text leading-[1.04] tracking-[-0.03em] md:text-6xl md:leading-[1.02]">
         {post.title}
       </h1>
-      <div className="mt-6">
-        <BlogMeta post={post} showTags />
-      </div>
 
       <div className="mt-10">
         <BlogCover
