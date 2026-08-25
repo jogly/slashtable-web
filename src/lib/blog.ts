@@ -33,7 +33,7 @@ export function isSkippedBlogFile(filename: string): boolean {
 }
 
 export function postPath(slug: string): string {
-  return `/blog/${slug}/`;
+  return `/blog/${slug}`;
 }
 
 export function postUrl(slug: string): string {

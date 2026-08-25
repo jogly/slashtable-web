@@ -61,4 +61,4 @@ What remains should match the story in the RFC: the tables a reader needs to und
 
 Export or screenshot the scoped graph once the pins and depth look right. Pair it with the breadcrumb path from a real row (`order 7834` → `customer 4821` → latest `shipments`) so the RFC shows both shape and an example record.
 
-Agents on the local MCP server can request a scoped schema graph from a starting table as well. Give them the same starting table used in the UI, and keep prod hidden if the diagram should come from a branch or local compose stack. Setup for that path lives in [local MCP access to Postgres, MySQL, and SQLite](/blog/local-mcp-access-to-postgres-mysql-sqlite/).
+Agents on the local MCP server can request a scoped schema graph from a starting table as well. Give them the same starting table used in the UI, and keep prod hidden if the diagram should come from a branch or local compose stack. Setup for that path lives in [local MCP access to Postgres, MySQL, and SQLite](/blog/local-mcp-access-to-postgres-mysql-sqlite).

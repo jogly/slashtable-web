@@ -37,6 +37,19 @@ describe("blog loader", () => {
     expect(src).not.toContain("readFileSync");
   });
 
+  test("slug pages render on a Worker incremental-cache miss", () => {
+    const src = readFileSync(join(import.meta.dir, "../app/blog/[slug]/page.tsx"), "utf8");
+    expect(src).toContain("dynamicParams = true");
+    expect(src).not.toContain("dynamicParams = false");
+  });
+
+  test("post paths omit the trailing slash Next 308s away", () => {
+    expect(postPath("click-through-foreign-keys")).toBe("/blog/click-through-foreign-keys");
+    expect(postPath("local-mcp-access-to-postgres-mysql-sqlite")).toBe(
+      "/blog/local-mcp-access-to-postgres-mysql-sqlite",
+    );
+  });
+
   test("embedded sources match content/blog markdown", () => {
     const dir = join(import.meta.dir, "../content/blog");
     const disk = readdirSync(dir)
@@ -88,8 +101,8 @@ describe("blog sitemap and llms.txt", () => {
   test("drafts are excluded from the sitemap", () => {
     const urls = sitemap().map((entry) => entry.url);
     expect(urls).toContain(canonical("/blog/"));
-    expect(urls).toContain(canonical("/blog/local-mcp-access-to-postgres-mysql-sqlite/"));
-    expect(urls).toContain(canonical("/blog/click-through-foreign-keys/"));
+    expect(urls).toContain(canonical("/blog/local-mcp-access-to-postgres-mysql-sqlite"));
+    expect(urls).toContain(canonical("/blog/click-through-foreign-keys"));
     expect(urls.some((url) => url.includes(DRAFT_SLUG))).toBe(false);
     expect(urls.some((url) => url.includes("_engine"))).toBe(false);
   });

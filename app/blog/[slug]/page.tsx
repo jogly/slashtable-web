@@ -5,7 +5,10 @@ import { blogPostingLd, getPublishedPost, getPublishedPosts } from "@/lib/blog";
 import { articleMetadata, breadcrumb } from "@/lib/seo";
 
 export const dynamic = "force-static";
-export const dynamicParams = false;
+// Workers preview has no incremental cache binding. OpenNext prerenders these
+// slugs as SSG, then a cache miss 404s if dynamicParams is false. Allow the
+// page to render from the embedded BLOG_SOURCES on miss. Drafts still 404.
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return getPublishedPosts().map((post) => ({ slug: post.slug }));
