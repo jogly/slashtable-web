@@ -50,7 +50,9 @@ export function postImageUrl(image: string): string {
   return canonical(image);
 }
 
-const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {};
+const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {
+  "/blog/find-rows-that-reference-this-postgres-row.jpg": { width: 1600, height: 2133 },
+};
 
 export function postImageSize(image: string): { width: number; height: number } {
   return KNOWN_IMAGE_SIZES[image] ?? { width: 2400, height: 1350 };

@@ -26,7 +26,6 @@ import { articleMetadata, canonical } from "../src/lib/seo";
 
 const REMOVED_SLUGS = [
   "click-through-foreign-keys",
-  "find-rows-that-reference-this-postgres-row",
   "local-mcp-access-to-postgres-mysql-sqlite",
   "ssh-tunnel-notes",
 ] as const;
