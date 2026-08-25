@@ -3,7 +3,6 @@ import { ConnectSection } from "@/components/sections/ConnectSection";
 import { DownloadSection } from "@/components/sections/DownloadSection";
 import { FeaturesGrid } from "@/components/sections/FeaturesGrid";
 import { Hero } from "@/components/sections/Hero";
-import { HomeProductArticle } from "@/components/sections/HomeProductArticle";
 import { McpSection } from "@/components/sections/McpSection";
 import { NavigationSection } from "@/components/sections/NavigationSection";
 import { PluginSection } from "@/components/sections/PluginSection";
@@ -14,7 +13,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <HomeProductArticle />
       <ValuePillars />
       <ConnectSection
         groupHeading="Connect and work where you already are"
