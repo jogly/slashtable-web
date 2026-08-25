@@ -77,7 +77,7 @@ Search by name in the add-root overlay when the remaining graph is still wider t
 
 ## How does an agent walk the same path?
 
-Agents on the [local MCP server](/blog/local-mcp-access-to-postgres-mysql-sqlite) can request the same scoped neighborhood. Give them the starting table used in the UI. Keep production Hidden if the diagram should come from a branch or local compose stack.
+Agents on the local MCP server can request the same scoped neighborhood. Enable that server in Settings in the current app, then give the agent the starting table used in the UI. Keep production Hidden if the diagram should come from a branch or local compose stack. A longer setup draft is [Local MCP access to Postgres, MySQL, and SQLite](/blog/local-mcp-access-to-postgres-mysql-sqlite).
 
 `describe_table` returns columns, foreign keys, and relationship names. `get_related_records` follows one of those names from a real primary key:
 
@@ -123,7 +123,7 @@ The agent can follow the same named relationships and request the same scoped gr
 
 ### Where does MCP setup live?
 
-[Local MCP access to Postgres, MySQL, and SQLite](/blog/local-mcp-access-to-postgres-mysql-sqlite). Settings copies HTTP snippets for `http://127.0.0.1:27420/mcp`. This website is not a query endpoint.
+Setup lives in Settings in the current app. A longer draft is [Local MCP access to Postgres, MySQL, and SQLite](/blog/local-mcp-access-to-postgres-mysql-sqlite); that slug stays unpublished until setup is rewritten against v0.6.0. This website is not a query endpoint.
 
 ## Sources
 

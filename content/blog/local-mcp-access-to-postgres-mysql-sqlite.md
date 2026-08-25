@@ -3,7 +3,7 @@ title: Local MCP access to Postgres, MySQL, and SQLite
 description: Enable the /table desktop MCP server so Claude Desktop, Claude Code, Cursor, or Windsurf can reach Postgres, MySQL, SQLite, or Neon over local HTTP. Credentials stay in the app.
 publishedAt: 2026-08-25
 updatedAt: 2026-08-25
-published: true
+published: false
 tags:
   - mcp
   - postgres
@@ -15,6 +15,10 @@ imageAlt: A closed laptop on a wooden desk under a lamp in a dark room.
 imageCredit: Photo on Unsplash
 imageCreditUrl: https://unsplash.com/photos/bZD2E08iKCc
 ---
+
+## Draft
+
+Setup will be rewritten against v0.6.0. Do not treat the 0.5.x Settings HTTP snippets or `127.0.0.1:27420` URLs below as the published path. Latest GitHub release is still v0.5.15. This file stays unpublished until a human rewrites it.
 
 ## Why do most Claude Desktop Postgres MCP posts put a connection string in the client config?
 

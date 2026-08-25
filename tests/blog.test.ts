@@ -26,11 +26,11 @@ import {
 } from "../src/lib/markdown-negotiate";
 import { articleMetadata, canonical } from "../src/lib/seo";
 
-const PUBLISHED_SLUGS = [
+const PUBLISHED_SLUGS = ["click-through-foreign-keys"] as const;
+const DRAFT_SLUGS = [
   "local-mcp-access-to-postgres-mysql-sqlite",
-  "click-through-foreign-keys",
+  "ssh-tunnel-notes",
 ] as const;
-const DRAFT_SLUG = "ssh-tunnel-notes";
 
 describe("blog loader", () => {
   test("blog.ts does not read the filesystem", () => {
@@ -77,14 +77,14 @@ describe("blog loader", () => {
 
     expect(published.every((post) => post.published)).toBe(true);
     expect(new Set(slugs)).toEqual(new Set(PUBLISHED_SLUGS));
-    expect(slugs).toContain(PUBLISHED_SLUGS[0]);
-    expect(slugs).toContain(PUBLISHED_SLUGS[1]);
-    expect(slugs).not.toContain(DRAFT_SLUG);
-    expect(getPublishedPost(DRAFT_SLUG)).toBeNull();
-
-    const draft = getPostBySlug(DRAFT_SLUG);
-    expect(draft).toBeTruthy();
-    expect(draft?.published).toBe(false);
+    expect(slugs).toEqual([...PUBLISHED_SLUGS]);
+    for (const slug of DRAFT_SLUGS) {
+      expect(slugs).not.toContain(slug);
+      expect(getPublishedPost(slug)).toBeNull();
+      const draft = getPostBySlug(slug);
+      expect(draft).toBeTruthy();
+      expect(draft?.published).toBe(false);
+    }
 
     expect(getAllPosts().some((post) => post.slug === "_engine")).toBe(false);
   });
@@ -103,7 +103,9 @@ describe("blog loader", () => {
     const publicRoot = join(import.meta.dir, "../public");
     const posts = getAllPosts();
     expect(posts.length).toBeGreaterThan(0);
-    expect(posts.some((post) => post.slug === DRAFT_SLUG)).toBe(true);
+    for (const slug of DRAFT_SLUGS) {
+      expect(posts.some((post) => post.slug === slug)).toBe(true);
+    }
 
     for (const post of posts) {
       expect(post.image).toBe(`/blog/${post.slug}.jpg`);
@@ -114,9 +116,9 @@ describe("blog loader", () => {
     }
 
     expect(getPublishedPost("click-through-foreign-keys")?.imageAlt).toContain("Tree roots");
-    expect(getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).toContain("laptop");
     expect(getPublishedPost("click-through-foreign-keys")?.imageAlt).not.toMatch(/Manhattan|sunset/i);
-    expect(getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).not.toMatch(/server rack/i);
+    expect(getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).toContain("laptop");
+    expect(getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).not.toMatch(/server rack/i);
   });
 
   test("missing image frontmatter fails parse", () => {
@@ -140,18 +142,20 @@ describe("blog sitemap and llms.txt", () => {
   test("drafts are excluded from the sitemap", () => {
     const urls = sitemap().map((entry) => entry.url);
     expect(urls).toContain(canonical("/blog/"));
-    expect(urls).toContain(canonical("/blog/local-mcp-access-to-postgres-mysql-sqlite"));
     expect(urls).toContain(canonical("/blog/click-through-foreign-keys"));
-    expect(urls.some((url) => url.includes(DRAFT_SLUG))).toBe(false);
+    for (const slug of DRAFT_SLUGS) {
+      expect(urls.some((url) => url.includes(slug))).toBe(false);
+    }
     expect(urls.some((url) => url.includes("_engine"))).toBe(false);
   });
 
   test("drafts are excluded from llms.txt", () => {
     const llms = buildLlmsTxt();
     expect(llms).toContain("https://www.slashtable.dev/blog/");
-    expect(llms).toContain("local-mcp-access-to-postgres-mysql-sqlite");
     expect(llms).toContain("click-through-foreign-keys");
-    expect(llms).not.toContain(DRAFT_SLUG);
+    for (const slug of DRAFT_SLUGS) {
+      expect(llms).not.toContain(slug);
+    }
     expect(llms).not.toContain("_engine");
   });
 
@@ -159,8 +163,9 @@ describe("blog sitemap and llms.txt", () => {
     const md = formatBlogIndexMarkdown();
     expect(md.startsWith("# /table - Blog")).toBe(true);
     expect(md).toContain(PUBLISHED_SLUGS[0]);
-    expect(md).toContain(PUBLISHED_SLUGS[1]);
-    expect(md).not.toContain(DRAFT_SLUG);
+    for (const slug of DRAFT_SLUGS) {
+      expect(md).not.toContain(slug);
+    }
   });
 });
 
@@ -190,7 +195,9 @@ describe("blog index magazine layout", () => {
     const h2s = html.match(/<h2\b[^>]*>[\s\S]*?<\/h2>/g) ?? [];
     expect(h2s).toHaveLength(posts.length);
     expect(html).not.toContain("<h1");
-    expect(html).not.toContain(DRAFT_SLUG);
+    for (const slug of DRAFT_SLUGS) {
+      expect(html).not.toContain(slug);
+    }
     for (const post of posts) {
       expect(html).toContain(post.image);
       expect(html).toContain(post.title);
@@ -268,26 +275,27 @@ describe("blog markdown negotiation paths", () => {
 });
 
 describe("published post depth", () => {
-  test("MCP post documents local HTTP on 27420, not a stdio command block", () => {
-    const post = getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite");
-    expect(post).toBeTruthy();
-    expect(post?.description).toContain("local HTTP");
-    expect(post?.tldr).toContain("http://127.0.0.1:27420/mcp");
-    expect(post?.body).toContain('"type": "http"');
-    expect(post?.body).toContain("claude mcp add slashtable --transport http");
-    expect(post?.body).toContain("## FAQ");
-    expect(post?.body).toMatch(/^### /m);
-    expect(post?.body).toContain("Do not change `type` to `stdio` or add a `command` field.");
+  test("MCP setup post is held as a draft like ssh-tunnel-notes", () => {
+    for (const slug of DRAFT_SLUGS) {
+      expect(getPublishedPost(slug)).toBeNull();
+      expect(getPostBySlug(slug)?.published).toBe(false);
+    }
+    const mcp = getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite");
+    expect(mcp?.body).toContain("Setup will be rewritten against v0.6.0");
+    expect(mcp?.body).toContain("Do not treat the 0.5.x Settings HTTP snippets");
   });
 
-  test("foreign-key post has nested setup, FAQ, and the scoped graph tool", () => {
+  test("foreign-key post has nested setup, FAQ, and no frozen 0.5.x HTTP URL", () => {
     const post = getPublishedPost("click-through-foreign-keys");
     expect(post).toBeTruthy();
     expect(post?.tldr).toContain("get_schema_graph");
     expect(post?.body).toContain("## FAQ");
     expect(post?.body).toMatch(/^### /m);
     expect(post?.body).toContain("⌘Shift+G");
-    expect(post?.body).toContain("http://127.0.0.1:27420/mcp");
+    expect(post?.body).toContain("Setup lives in Settings in the current app");
+    expect(post?.body).not.toContain("27420");
+    expect(post?.body).not.toContain("127.0.0.1");
+    expect(post?.body).not.toMatch(/mcpServers/);
   });
 });
 
