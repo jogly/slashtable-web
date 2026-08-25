@@ -13,7 +13,7 @@ export function BlogCoverImage({
   aspectClassName: string;
 }) {
   return (
-    <div className={`overflow-hidden bg-surface-2 ${aspectClassName}`}>
+    <div className={`overflow-hidden rounded-[5px] bg-surface-2 ${aspectClassName}`}>
       <Image
         src={post.image}
         alt={post.imageAlt}
@@ -22,7 +22,7 @@ export function BlogCoverImage({
         sizes={sizes}
         priority={priority}
         unoptimized
-        className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.02] group-hover:brightness-110"
+        className="h-full w-full object-cover"
       />
     </div>
   );

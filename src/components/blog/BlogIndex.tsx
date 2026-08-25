@@ -4,88 +4,44 @@ import type { BlogPost } from "@/lib/blog";
 import { formatEntryDate } from "@/lib/dates";
 import { BlogCoverCredit, BlogCoverImage } from "./BlogCover";
 
-function PostMeta({ post }: { post: BlogPost }) {
+function StoryCard({ post, priority = false }: { post: BlogPost; priority?: boolean }) {
   return (
-    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-      <time className="font-mono text-[10px] text-text-muted uppercase tracking-widest" dateTime={post.publishedAt}>
-        {formatEntryDate(post.publishedAt)}
-      </time>
-      {post.tags.map((tag) => (
-        <span key={tag} className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-          {tag}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function FeaturedStory({ post }: { post: BlogPost }) {
-  return (
-    <article className="group relative border-border border-t pt-12">
+    <article className="group relative border-border py-12 md:px-10 md:py-14 first:md:pl-0 last:md:pr-0 [&+&]:border-t md:[&+&]:border-t-0 md:[&+&]:border-l">
       <BlogCoverImage
         post={post}
-        priority
-        aspectClassName="aspect-[2/1]"
-        sizes="(min-width: 68rem) 68rem, 100vw"
+        priority={priority}
+        aspectClassName="aspect-[16/9]"
+        sizes="(min-width: 68rem) 32rem, 100vw"
       />
       <BlogCoverCredit post={post} />
-      <div className="mt-8 max-w-3xl">
-        <PostMeta post={post} />
-        <h2 className="mt-4 font-display text-4xl text-text leading-tight transition-colors group-hover:text-accent md:text-5xl lg:text-6xl">
-          <Link href={post.path} className="after:absolute after:inset-0 after:z-[1]">
-            {post.title}
-          </Link>
-        </h2>
-        <p className="mt-5 text-base text-text-secondary leading-relaxed md:text-lg">{post.description}</p>
-        <p className="mt-6 font-mono text-[11px] text-accent uppercase tracking-widest transition-colors group-hover:text-text">
-          {BLOG.readPost} &rsaquo;
-        </p>
-      </div>
-    </article>
-  );
-}
-
-function EditorialRow({ post }: { post: BlogPost }) {
-  return (
-    <article className="group relative border-border border-t py-16">
-      <div className="grid items-center gap-10 md:grid-cols-[minmax(0,0.48fr)_minmax(0,1fr)] md:gap-14">
-        <div>
-          <BlogCoverImage
-            post={post}
-            aspectClassName="aspect-[16/9] md:aspect-[4/3]"
-            sizes="(min-width: 68rem) 32rem, 100vw"
-          />
-          <BlogCoverCredit post={post} />
-        </div>
-        <div>
-          <PostMeta post={post} />
-          <h2 className="mt-4 font-display text-3xl text-text leading-tight transition-colors group-hover:text-accent md:text-4xl">
-            <Link href={post.path} className="after:absolute after:inset-0 after:z-[1]">
-              {post.title}
-            </Link>
-          </h2>
-          <p className="mt-4 text-sm text-text-secondary leading-relaxed md:text-base">{post.description}</p>
-          <p className="mt-6 font-mono text-[11px] text-accent uppercase tracking-widest transition-colors group-hover:text-text">
-            {BLOG.readPost} &rsaquo;
-          </p>
-        </div>
+      <h2 className="mt-6 font-display text-[22px] text-text leading-snug md:text-2xl">
+        <Link href={post.path} className="after:absolute after:inset-0 after:z-[1]">
+          {post.title}
+          <span className="ml-1 inline-block text-text-muted opacity-0 transition-opacity group-hover:opacity-100">
+            →
+          </span>
+        </Link>
+      </h2>
+      <p className="mt-3 line-clamp-3 text-base text-text-secondary leading-relaxed">{post.description}</p>
+      <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-text-muted">
+        <time dateTime={post.publishedAt}>{formatEntryDate(post.publishedAt)}</time>
+        {post.tags.map((tag) => (
+          <span key={tag}>{tag}</span>
+        ))}
       </div>
     </article>
   );
 }
 
 export function BlogIndex({ posts }: { posts: BlogPost[] }) {
-  const [featured, ...rest] = posts;
-
-  if (!featured) {
-    return <p className="py-16 font-mono text-[11px] text-text-muted uppercase tracking-widest">{BLOG.empty}</p>;
+  if (posts.length === 0) {
+    return <p className="py-16 font-mono text-[13px] text-text-muted">{BLOG.empty}</p>;
   }
 
   return (
-    <div className="mt-16">
-      <FeaturedStory post={featured} />
-      {rest.map((post) => (
-        <EditorialRow key={post.slug} post={post} />
+    <div className="mt-16 border-border border-t md:grid md:grid-cols-2">
+      {posts.map((post, index) => (
+        <StoryCard key={post.slug} post={post} priority={index === 0} />
       ))}
     </div>
   );
