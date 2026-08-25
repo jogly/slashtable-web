@@ -1,3 +1,9 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 
-export default defineCloudflareConfig();
+// package.json "build" is `opennextjs-cloudflare build` so Workers Builds
+// (`bun run build`) emits `.open-next/worker.js`. OpenNext would otherwise
+// re-invoke that same script and recurse; this keeps the Next step as `next build`.
+export default {
+  ...defineCloudflareConfig(),
+  buildCommand: "next build",
+};
