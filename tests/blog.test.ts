@@ -29,6 +29,7 @@ import { articleMetadata, canonical } from "../src/lib/seo";
 const PUBLISHED_SLUGS: readonly string[] = [];
 const DRAFT_SLUGS = [
   "click-through-foreign-keys",
+  "find-rows-that-reference-this-postgres-row",
   "local-mcp-access-to-postgres-mysql-sqlite",
   "ssh-tunnel-notes",
 ] as const;
@@ -118,6 +119,10 @@ describe("blog loader", () => {
 
     expect(getPostBySlug("click-through-foreign-keys")?.imageAlt).toContain("Tree roots");
     expect(getPostBySlug("click-through-foreign-keys")?.imageAlt).not.toMatch(/Manhattan|sunset/i);
+    expect(getPostBySlug("find-rows-that-reference-this-postgres-row")?.imageAlt).toContain("address numbers");
+    expect(getPostBySlug("find-rows-that-reference-this-postgres-row")?.imageCredit).toBe(
+      "Photo by Haberdoedas on Unsplash",
+    );
     expect(getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).toContain("laptop");
     expect(getPostBySlug("local-mcp-access-to-postgres-mysql-sqlite")?.imageAlt).not.toMatch(/server rack/i);
   });
@@ -291,6 +296,17 @@ describe("published post depth", () => {
     expect(getPublishedPost("click-through-foreign-keys")).toBeNull();
     expect(post?.body).toContain("## FAQ");
     expect(post?.body).toContain("⌘Shift+G");
+  });
+
+  test("critic-PASSED reverse-FK draft is unpublished", () => {
+    const post = getPostBySlug("find-rows-that-reference-this-postgres-row");
+    expect(post).toBeTruthy();
+    expect(post?.published).toBe(false);
+    expect(getPublishedPost("find-rows-that-reference-this-postgres-row")).toBeNull();
+    expect(post?.title).toBe("How do I find all rows that reference this Postgres address");
+    expect(post?.body).toContain("Open the address table in /table 0.5.16");
+    expect(post?.body).toContain("## FAQ");
+    expect(post?.publishedAt).toBe("2026-08-25");
   });
 });
 
