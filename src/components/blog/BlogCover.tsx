@@ -13,16 +13,15 @@ export function BlogCoverImage({
   aspectClassName?: string;
 }) {
   return (
-    <div className={`overflow-hidden bg-surface-2 ${aspectClassName}`}>
+    <div className={`relative w-full overflow-hidden bg-surface-2 ${aspectClassName}`}>
       <Image
         src={post.image}
         alt={post.imageAlt}
-        width={post.imageWidth}
-        height={post.imageHeight}
+        fill
         sizes={sizes}
         priority={priority}
         unoptimized
-        className="h-full w-full object-cover"
+        className="object-cover"
       />
     </div>
   );

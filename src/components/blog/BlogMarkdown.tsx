@@ -79,16 +79,16 @@ const markdownComponents: Components = {
   ),
   table: ({ children }) => (
     <div className="my-8 overflow-x-auto">
-      <table className="w-full min-w-[36rem] border-collapse text-left text-[1.05rem] leading-6 text-text">
+      <table className="w-full min-w-[36rem] border-collapse text-left text-[1.02rem] leading-6 text-text">
         {children}
       </table>
     </div>
   ),
-  thead: ({ children }) => <thead>{children}</thead>,
+  thead: ({ children }) => <thead className="border-border-strong border-b">{children}</thead>,
   tbody: ({ children }) => <tbody>{children}</tbody>,
-  tr: ({ children }) => <tr className="border-border border-b">{children}</tr>,
-  th: ({ children }) => <th className="py-2.5 pr-5 font-medium text-text align-bottom">{children}</th>,
-  td: ({ children }) => <td className="py-2.5 pr-5 align-top text-text">{children}</td>,
+  tr: ({ children }) => <tr className="border-border border-b last:border-b-0">{children}</tr>,
+  th: ({ children }) => <th className="py-2.5 pr-5 align-bottom font-semibold text-text">{children}</th>,
+  td: ({ children }) => <td className="py-3 pr-5 align-top text-text">{children}</td>,
   hr: () => <hr className="my-12 border-border border-t" />,
 };
 
