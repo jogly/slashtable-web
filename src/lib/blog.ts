@@ -50,12 +50,7 @@ export function postImageUrl(image: string): string {
   return canonical(image);
 }
 
-const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {
-  "/blog/click-through-foreign-keys.jpg": { width: 2400, height: 1800 },
-  "/blog/find-rows-that-reference-this-postgres-row.jpg": { width: 1600, height: 2133 },
-  "/blog/local-mcp-access-to-postgres-mysql-sqlite.jpg": { width: 2400, height: 3600 },
-  "/blog/ssh-tunnel-notes.jpg": { width: 2400, height: 1351 },
-};
+const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {};
 
 export function postImageSize(image: string): { width: number; height: number } {
   return KNOWN_IMAGE_SIZES[image] ?? { width: 2400, height: 1350 };
@@ -180,10 +175,10 @@ ${post.body}
 `.trim();
 }
 
-export function formatBlogIndexMarkdown(posts: BlogPost[] = getPublishedPosts()): string {
+export function formatBlogIndexMarkdown(posts: BlogPost[] = getAllPosts()): string {
   const list =
     posts.length === 0
-      ? "No published posts yet."
+      ? "No posts yet."
       : posts
           .map((post) => `- [${post.title}](${postUrl(post.slug)}): ${post.description}`)
           .join("\n");
@@ -208,7 +203,7 @@ ${list}
 }
 
 export function blogSitemapEntries() {
-  return getPublishedPosts().map((post) => ({
+  return getAllPosts().map((post) => ({
     url: postUrl(post.slug),
     lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: "monthly" as const,
@@ -238,7 +233,7 @@ export function blogPostingLd(post: BlogPost) {
   };
 }
 
-export function blogCollectionLd(posts: BlogPost[] = getPublishedPosts()) {
+export function blogCollectionLd(posts: BlogPost[] = getAllPosts()) {
   return {
     "@context": "https://schema.org",
     "@type": "Blog",

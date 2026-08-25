@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { getPublishedPosts } from "@/lib/blog";
+import { getAllPosts } from "@/lib/blog";
 
 export const dynamic = "force-static";
 
 const DISCORD = "https://discord.gg/xR2VdkfnJQ";
 
 export default function DevelopersPage() {
-  const posts = getPublishedPosts();
+  const posts = getAllPosts();
 
   return (
     <div className="mx-auto max-w-narrow px-6 pt-32 pb-20">
@@ -131,8 +131,7 @@ export default function DevelopersPage() {
           <h2 className="mb-3 font-display text-text text-xl">Blog</h2>
           <p className="mb-4 text-sm text-text-secondary leading-relaxed">
             Engineering notes for local MCP setup, foreign-key navigation, and scoped schema graphs.
-            The index lists published posts only. Drafts stay off the public URL until a human sets
-            published to true.
+            Posts that exist on the branch are on /blog. Merge to main is publish.
           </p>
           <ul className="mb-4 space-y-2">
             <li className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">

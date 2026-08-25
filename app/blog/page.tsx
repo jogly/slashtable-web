@@ -1,7 +1,7 @@
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BlogIndex } from "@/components/blog/BlogIndex";
 import { BLOG } from "@/lib/copy";
-import { blogCollectionLd, getPublishedPosts } from "@/lib/blog";
+import { blogCollectionLd, getAllPosts } from "@/lib/blog";
 import { breadcrumb, pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -13,7 +13,7 @@ export const metadata = pageMetadata({
 });
 
 export default function BlogIndexPage() {
-  const posts = getPublishedPosts();
+  const posts = getAllPosts();
 
   return (
     <div className="mx-auto max-w-content px-6 pt-32 pb-24 lg:px-8">

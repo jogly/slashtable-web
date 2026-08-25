@@ -630,7 +630,7 @@ export const BLOG = {
   heading: "Engineering notes",
   description:
     "Setup and workflow notes for the local /table desktop client. Postgres, MySQL, SQLite, Neon, and the MCP server that ships in the app.",
-  empty: "No published posts yet.",
+  empty: "No posts yet.",
   tldrLabel: "TL;DR",
   updatedLabel: "Updated",
   readPost: "Read",

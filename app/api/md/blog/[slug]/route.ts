@@ -1,5 +1,5 @@
 import { PAGE_LINK_HEADER } from "@/lib/link-headers";
-import { formatPostMarkdown, getAllPosts, getPublishedPost } from "@/lib/blog";
+import { formatPostMarkdown, getAllPosts, getPostBySlug } from "@/lib/blog";
 import { markdownNotFound } from "@/lib/markdown-negotiate";
 
 export const dynamic = "force-static";
@@ -11,7 +11,7 @@ export function generateStaticParams() {
 
 export async function GET(_request: Request, context: { params: Promise<{ slug: string }> }) {
   const { slug } = await context.params;
-  const post = getPublishedPost(slug);
+  const post = getPostBySlug(slug);
   if (!post) {
     return new Response(markdownNotFound(`/blog/${slug}`), {
       status: 404,

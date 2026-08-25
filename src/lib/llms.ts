@@ -1,4 +1,4 @@
-import { getPublishedPosts, postUrl } from "./blog";
+import { getAllPosts, postUrl } from "./blog";
 
 const PRODUCT_BRIEF = `# /table
 
@@ -73,16 +73,16 @@ Agents can explore tables, columns, types, and relationships, and can request a 
 - X: https://x.com/slashtable
 `;
 
-export function buildLlmsTxt(posts = getPublishedPosts()): string {
+export function buildLlmsTxt(posts = getAllPosts()): string {
   const blogSection =
     posts.length === 0
       ? `## Blog
 
-Engineering notes live at https://www.slashtable.dev/blog/. Unpublished drafts are omitted from this file.
+Engineering notes live at https://www.slashtable.dev/blog/.
 `
       : `## Blog
 
-Engineering notes for setup and product-engineer workflows. Unpublished drafts are omitted from this file.
+Engineering notes for setup and product-engineer workflows.
 
 - Index: https://www.slashtable.dev/blog/
 ${posts.map((post) => `- ${post.title}: ${postUrl(post.slug)}`).join("\n")}
