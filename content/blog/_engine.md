@@ -22,6 +22,10 @@ Required frontmatter on every post file:
 - `published` (boolean)
 - `tags` (optional list)
 - `tldr` (labelled opening summary on the public page)
+- `image` (site path to a downloaded JPEG in `public/blog/`)
+- `imageAlt` (accessible description)
+- `imageCredit` (`Photo by <name> on Unsplash`)
+- `imageCreditUrl` (Unsplash photo page)
 
 Rules:
 

@@ -12,6 +12,12 @@ export type BlogPost = {
   published: boolean;
   tags: string[];
   tldr: string;
+  image: string;
+  imageAlt: string;
+  imageCredit: string;
+  imageCreditUrl: string;
+  imageWidth: number;
+  imageHeight: number;
   body: string;
   path: string;
 };
@@ -38,6 +44,20 @@ export function postPath(slug: string): string {
 
 export function postUrl(slug: string): string {
   return canonical(postPath(slug));
+}
+
+export function postImageUrl(image: string): string {
+  return canonical(image);
+}
+
+const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {
+  "/blog/click-through-foreign-keys.jpg": { width: 2400, height: 1600 },
+  "/blog/local-mcp-access-to-postgres-mysql-sqlite.jpg": { width: 2400, height: 1347 },
+  "/blog/ssh-tunnel-notes.jpg": { width: 2400, height: 1351 },
+};
+
+export function postImageSize(image: string): { width: number; height: number } {
+  return KNOWN_IMAGE_SIZES[image] ?? { width: 2400, height: 1350 };
 }
 
 function requireString(data: Record<string, unknown>, key: string, slug: string): string {
@@ -72,6 +92,11 @@ export function parseBlogMarkdown(slug: string, raw: string): BlogPost {
   const description = requireString(data, "description", slug);
   const publishedAt = requireString(data, "publishedAt", slug);
   const tldr = requireString(data, "tldr", slug);
+  const image = requireString(data, "image", slug);
+  const imageAlt = requireString(data, "imageAlt", slug);
+  const imageCredit = requireString(data, "imageCredit", slug);
+  const imageCreditUrl = requireString(data, "imageCreditUrl", slug);
+  const { width: imageWidth, height: imageHeight } = postImageSize(image);
 
   if (!DATE_RE.test(publishedAt)) {
     throw new Error(`Post "${slug}" has invalid publishedAt "${publishedAt}"`);
@@ -95,6 +120,12 @@ export function parseBlogMarkdown(slug: string, raw: string): BlogPost {
     published: data.published,
     tags: parseTags(data.tags),
     tldr,
+    image,
+    imageAlt,
+    imageCredit,
+    imageCreditUrl,
+    imageWidth,
+    imageHeight,
     body: body.trim(),
     path: postPath(slug),
   };
@@ -202,6 +233,7 @@ export function blogPostingLd(post: BlogPost) {
     },
     publisher: { "@id": `${SITE_URL}#organization` },
     keywords: post.tags,
+    image: postImageUrl(post.image),
   };
 }
 
@@ -220,6 +252,7 @@ export function blogCollectionLd(posts: BlogPost[] = getPublishedPosts()) {
       url: postUrl(post.slug),
       datePublished: post.publishedAt,
       dateModified: post.updatedAt ?? post.publishedAt,
+      image: postImageUrl(post.image),
     })),
   };
 }

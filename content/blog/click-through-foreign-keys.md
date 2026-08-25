@@ -10,6 +10,10 @@ tags:
   - postgres
   - mysql
 tldr: Open the table for the feature, click a foreign key to follow the row, and use reverse lookups when inbound references matter. Open the schema graph from that same table, pin the roots, limit depth, and hide noise so the ER diagram stays small enough for an RFC.
+image: /blog/click-through-foreign-keys.jpg
+imageAlt: Manhattan streets at sunset, a gold path running through the city grid.
+imageCredit: Photo by ben o'bro on Unsplash
+imageCreditUrl: https://unsplash.com/photos/wpU4veNGnHg
 ---
 
 ## Start from the table the feature already uses

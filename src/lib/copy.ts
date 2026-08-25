@@ -634,5 +634,5 @@ export const BLOG = {
   tldrLabel: "TL;DR",
   tldrEyebrow: "Summary",
   updatedLabel: "Updated",
-  readPost: "Read",
+  readPost: "Read the note",
 };

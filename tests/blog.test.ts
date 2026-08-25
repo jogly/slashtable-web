@@ -1,12 +1,14 @@
 import { describe, expect, test } from "bun:test";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createElement } from "react";
 import sitemap from "../app/sitemap";
+import { BlogIndex } from "../src/components/blog/BlogIndex";
 import { BlogPostArticle } from "../src/components/blog/BlogPostArticle";
 import { BLOG_SOURCES } from "../src/lib/blog-data.generated";
 import {
+  blogPostingLd,
   formatBlogIndexMarkdown,
   formatPostMarkdown,
   getAllPosts,
@@ -14,6 +16,7 @@ import {
   getPublishedPost,
   getPublishedPosts,
   isSkippedBlogFile,
+  parseBlogMarkdown,
   postPath,
 } from "../src/lib/blog";
 import { buildLlmsTxt } from "../src/lib/llms";
@@ -21,7 +24,7 @@ import {
   blogMarkdownRewritePath,
   isBlogPath,
 } from "../src/lib/markdown-negotiate";
-import { canonical } from "../src/lib/seo";
+import { articleMetadata, canonical } from "../src/lib/seo";
 
 const PUBLISHED_SLUGS = [
   "local-mcp-access-to-postgres-mysql-sqlite",
@@ -95,6 +98,37 @@ describe("blog loader", () => {
       expect(post.path).toBe(postPath(post.slug));
     }
   });
+
+  test("every post including drafts has a downloaded feature image", () => {
+    const publicRoot = join(import.meta.dir, "../public");
+    const posts = getAllPosts();
+    expect(posts.length).toBeGreaterThan(0);
+    expect(posts.some((post) => post.slug === DRAFT_SLUG)).toBe(true);
+
+    for (const post of posts) {
+      expect(post.image).toBe(`/blog/${post.slug}.jpg`);
+      expect(post.imageAlt.length).toBeGreaterThan(0);
+      expect(post.imageCredit).toMatch(/^Photo by .+ on Unsplash$/);
+      expect(post.imageCreditUrl.startsWith("https://unsplash.com/photos/")).toBe(true);
+      expect(existsSync(join(publicRoot, post.image))).toBe(true);
+    }
+  });
+
+  test("missing image frontmatter fails parse", () => {
+    const raw = `---
+title: Missing image fixture
+description: A parse fixture with no feature image fields.
+publishedAt: 2026-08-25
+published: false
+tldr: Fixture only.
+---
+
+## Draft
+
+Body.
+`;
+    expect(() => parseBlogMarkdown("missing-image-fixture", raw)).toThrow(/image/);
+  });
 });
 
 describe("blog sitemap and llms.txt", () => {
@@ -133,7 +167,56 @@ describe("published posts render H1", () => {
       expect(headings).toHaveLength(1);
       expect(headings[0]).toContain(post.title);
       expect(html).toContain("TL;DR");
+      expect(html).toContain(post.image);
+      expect(html).toContain(post.imageCreditUrl);
+      expect(html).toContain("on Unsplash");
       expect(formatPostMarkdown(post).startsWith(`# ${post.title}`)).toBe(true);
+    }
+  });
+});
+
+describe("blog index magazine layout", () => {
+  test("renders one h1, an h2 per published post, and feature images", () => {
+    const posts = getPublishedPosts();
+    const html = renderToStaticMarkup(createElement(BlogIndex, { posts }));
+    const h2s = html.match(/<h2\b[^>]*>[\s\S]*?<\/h2>/g) ?? [];
+    expect(h2s).toHaveLength(posts.length);
+    expect(html).not.toContain("<h1");
+    expect(html).not.toContain(DRAFT_SLUG);
+    for (const post of posts) {
+      expect(html).toContain(post.image);
+      expect(html).toContain(post.title);
+      expect(html).toContain(post.imageCreditUrl);
+    }
+  });
+
+  test("index page source uses the wide content measure", () => {
+    const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
+    expect(src).toContain("max-w-content");
+    expect(src).not.toContain("max-w-narrow");
+  });
+});
+
+describe("blog image metadata", () => {
+  test("JSON-LD and article metadata include the feature image URL", () => {
+    for (const post of getPublishedPosts()) {
+      const ld = blogPostingLd(post);
+      expect(ld.image).toBe(canonical(post.image));
+      const meta = articleMetadata({
+        title: post.title,
+        description: post.description,
+        path: post.path,
+        publishedAt: post.publishedAt,
+        updatedAt: post.updatedAt,
+        tags: post.tags,
+        image: post.image,
+        imageAlt: post.imageAlt,
+        imageWidth: post.imageWidth,
+        imageHeight: post.imageHeight,
+      });
+      expect(meta.openGraph?.images).toEqual([
+        { url: canonical(post.image), alt: post.imageAlt, width: post.imageWidth, height: post.imageHeight },
+      ]);
     }
   });
 });

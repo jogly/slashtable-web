@@ -7,6 +7,10 @@ tags:
   - ssh
   - postgres
 tldr: Draft. Production behind a bastion is a normal connection in the app. This file stays unpublished until a human flips published to true.
+image: /blog/ssh-tunnel-notes.jpg
+imageAlt: A dark curved pedestrian tunnel lit by repeating ring lights.
+imageCredit: Photo by Maxime Lebrun on Unsplash
+imageCreditUrl: https://unsplash.com/photos/itllPhoHWeE
 ---
 
 ## Draft

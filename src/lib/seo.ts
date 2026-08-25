@@ -34,6 +34,10 @@ export function articleMetadata({
   publishedAt,
   updatedAt,
   tags,
+  image,
+  imageAlt,
+  imageWidth,
+  imageHeight,
 }: {
   title: string;
   description: string;
@@ -41,8 +45,14 @@ export function articleMetadata({
   publishedAt: string;
   updatedAt?: string;
   tags?: string[];
+  image: string;
+  imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
 }): Metadata {
   const url = canonical(path);
+  const imageUrl = canonical(image);
+  const images = [{ url: imageUrl, alt: imageAlt, width: imageWidth, height: imageHeight }];
   return {
     title,
     description,
@@ -55,8 +65,9 @@ export function articleMetadata({
       publishedTime: publishedAt,
       modifiedTime: updatedAt ?? publishedAt,
       tags,
+      images,
     },
-    twitter: { title, description },
+    twitter: { title, description, card: "summary_large_image", images: [imageUrl] },
   };
 }
 
