@@ -38,11 +38,7 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
         />
       </div>
 
-      <section className="mt-10 border border-border border-dashed bg-surface/50 p-5" aria-labelledby="tldr-heading">
-        <div className="mb-3 flex items-center gap-2">
-          <span className="h-2 w-2 flex-shrink-0 bg-accent" />
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{BLOG.tldrEyebrow}</span>
-        </div>
+      <section className="mt-10" aria-labelledby="tldr-heading">
         <h2 id="tldr-heading" className="font-display text-text text-xl">
           {BLOG.tldrLabel}
         </h2>

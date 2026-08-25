@@ -172,10 +172,13 @@ describe("published posts render H1", () => {
       expect(headings).toHaveLength(1);
       expect(headings[0]).toContain(post.title);
       expect(html).toContain("TL;DR");
+      expect(html).not.toContain("Summary");
+      expect(html).not.toMatch(/border-dashed/);
       expect(html).toContain(post.image);
       expect(html).toContain(post.imageCreditUrl);
       expect(html).toContain("on Unsplash");
       expect(formatPostMarkdown(post).startsWith(`# ${post.title}`)).toBe(true);
+      expect(post.body).not.toMatch(/^## TL;DR/m);
     }
   });
 });
@@ -209,6 +212,8 @@ describe("blog index magazine layout", () => {
     expect(article).not.toContain("max-w-content");
     expect(article).not.toContain("max-w-3xl");
     expect(article).not.toContain("max-w-narrow");
+    expect(article).not.toContain("tldrEyebrow");
+    expect(article).not.toContain("border-dashed");
   });
 });
 
@@ -259,6 +264,30 @@ describe("blog markdown negotiation paths", () => {
     expect(blogMarkdownRewritePath("/blog/click-through-foreign-keys/")).toBe(
       "/api/md/blog/click-through-foreign-keys",
     );
+  });
+});
+
+describe("published post depth", () => {
+  test("MCP post documents local HTTP on 27420, not a stdio command block", () => {
+    const post = getPublishedPost("local-mcp-access-to-postgres-mysql-sqlite");
+    expect(post).toBeTruthy();
+    expect(post?.description).toContain("local HTTP");
+    expect(post?.tldr).toContain("http://127.0.0.1:27420/mcp");
+    expect(post?.body).toContain('"type": "http"');
+    expect(post?.body).toContain("claude mcp add slashtable --transport http");
+    expect(post?.body).toContain("## FAQ");
+    expect(post?.body).toMatch(/^### /m);
+    expect(post?.body).toContain("Do not change `type` to `stdio` or add a `command` field.");
+  });
+
+  test("foreign-key post has nested setup, FAQ, and the scoped graph tool", () => {
+    const post = getPublishedPost("click-through-foreign-keys");
+    expect(post).toBeTruthy();
+    expect(post?.tldr).toContain("get_schema_graph");
+    expect(post?.body).toContain("## FAQ");
+    expect(post?.body).toMatch(/^### /m);
+    expect(post?.body).toContain("⌘Shift+G");
+    expect(post?.body).toContain("http://127.0.0.1:27420/mcp");
   });
 });
 

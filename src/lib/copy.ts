@@ -632,7 +632,6 @@ export const BLOG = {
     "Setup and workflow notes for the local /table desktop client. Postgres, MySQL, SQLite, Neon, and the MCP server that ships in the app.",
   empty: "No published posts yet.",
   tldrLabel: "TL;DR",
-  tldrEyebrow: "Summary",
   updatedLabel: "Updated",
   readPost: "Read",
 };
