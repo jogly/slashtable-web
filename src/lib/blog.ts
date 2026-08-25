@@ -165,8 +165,6 @@ export function formatPostMarkdown(post: BlogPost): string {
   const updated = post.updatedAt ? `\nUpdated: ${post.updatedAt}` : "";
   return `# ${post.title}
 
-${post.description}
-
 Published: ${post.publishedAt}${updated}${tags}
 
 ## TL;DR

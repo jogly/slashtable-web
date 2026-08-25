@@ -12,7 +12,6 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
         <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{BLOG.eyebrow}</span>
       </div>
       <h1 className="font-display text-4xl text-text md:text-5xl">{post.title}</h1>
-      <p className="mt-4 text-base text-text leading-7">{post.description}</p>
       <div className="mt-5 flex flex-wrap items-baseline gap-3">
         <time className="font-mono text-[10px] text-text-muted uppercase tracking-widest" dateTime={post.publishedAt}>
           {formatEntryDate(post.publishedAt)}

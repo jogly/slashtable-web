@@ -197,7 +197,13 @@ describe("posts render H1", () => {
       expect(html).toContain(post.image);
       expect(html).toContain(post.imageCreditUrl);
       expect(html).toContain("on Unsplash");
-      expect(formatPostMarkdown(post).startsWith(`# ${post.title}`)).toBe(true);
+      expect(html).toContain(post.tldr);
+      expect(html).not.toContain(post.description);
+      const md = formatPostMarkdown(post);
+      expect(md.startsWith(`# ${post.title}`)).toBe(true);
+      expect(md).toContain("## TL;DR");
+      expect(md).toContain(post.tldr);
+      expect(md).not.toContain(post.description);
       expect(post.body).not.toMatch(/^## TL;DR/m);
     }
   });
@@ -208,6 +214,8 @@ describe("posts render H1", () => {
     expect(html).toContain("Fixture post");
     expect(html).toContain("TL;DR");
     expect(html).toContain("text-base text-text leading-7");
+    expect(html).not.toContain("A parse fixture with required image fields.");
+    expect(formatPostMarkdown(post)).not.toContain("A parse fixture with required image fields.");
   });
 });
 
@@ -227,6 +235,7 @@ describe("blog index magazine layout", () => {
     for (const post of posts) {
       expect(html).toContain(post.image);
       expect(html).toContain(post.title);
+      expect(html).toContain(post.description);
       expect(html).toContain(post.imageCreditUrl);
     }
   });
@@ -247,6 +256,7 @@ describe("blog index magazine layout", () => {
     expect(article).not.toContain("max-w-narrow");
     expect(article).not.toContain("tldrEyebrow");
     expect(article).not.toContain("border-dashed");
+    expect(article).not.toContain("post.description");
   });
 });
 
@@ -303,6 +313,7 @@ describe("post voice", () => {
       expect(text).not.toMatch(/\bwe\b/i);
       expect(text).not.toMatch(/\bour\b/i);
       expect(text).not.toMatch(/SlashTable(?!\.app)/);
+      expect(text).not.toMatch(/v?0\.5\.\d+/);
     }
   });
 });

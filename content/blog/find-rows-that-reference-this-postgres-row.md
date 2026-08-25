@@ -1,9 +1,9 @@
 ---
 title: How do I find all rows that reference this Postgres row
-description: Postgres blocked a delete because something still points at 100 Main St. The usual answer is a UNION you write after you already know the child tables. /table 0.5.16 shows those rows on the address itself.
+description: See every row that still points at a Postgres address before you retry the delete.
 publishedAt: 2026-08-25
 published: false
-tldr: Postgres refused to delete 100 Main St because other rows still point at it. The ranking answers assume you already know which tables those are. On /table 0.5.16, open that address. The grid lists every incoming row (two people, one school, two tags). Click one list to see the records. Stay in catalog SQL when the answer has to be a script.
+tldr: Postgres refused to delete 100 Main St because other rows still point at it. The ranking answers assume you already know which tables those are. Open that address in /table. The grid lists every incoming row (two people, one school, two tags). Click one list to see the records. Stay in catalog SQL when the answer has to be a script.
 demand_query: how do I find all rows that reference this postgres row
 cluster: fk-navigation
 demand_urls:
@@ -58,7 +58,7 @@ None of those pages start on the stuck address and keep the incoming people, sch
 
 ## How do you see what still points at 100 Main St?
 
-Open /table 0.5.16 and open the address table. The stuck row is already there: id 1, street 100 Main St. After the grid has the relationship columns, that row also lists who points at it. In the recorded walk that is two people (Ada and Bea), one school, and two tags. The people and the school are ordinary child tables. The tags come through a join without opening that join as its own stop.
+Open /table and open the address table. The stuck row is already there: id 1, street 100 Main St. After the grid has the relationship columns, that row also lists who points at it. In the recorded walk that is two people (Ada and Bea), one school, and two tags. The people and the school are ordinary child tables. The tags come through a join without opening that join as its own stop.
 
 ### What do you click when you want the actual rows?
 
@@ -70,7 +70,7 @@ You can also arrive on 100 Main St by clicking an address on a person row. That 
 
 Right-click address in Explorer and choose Open Schema Graph. Depth 1 pins this table and shows a neighbor. In the recorded walk the neighbor is person, linked on the address key. That picture is for the next click. It is not a full-database ER diagram.
 
-If the address grid only shows street and id after an upgrade, refresh the tab so the incoming lists load. Opening a table reuses a cached schema (v0.5.15). Refresh fetches it again (v0.5.12).
+If the address grid only shows street and id after an upgrade, refresh the tab so the incoming lists load.
 
 ## When should you stay in SQL or another client?
 
@@ -78,7 +78,7 @@ Stay in catalog SQL when the answer has to run without a desktop: a script, CI, 
 
 ### Which tool for which job?
 
-| Job | Catalog SQL | DBeaver or DataGrip | /table 0.5.16 |
+| Job | Catalog SQL | DBeaver or DataGrip | /table |
 | --- | --- | --- | --- |
 | Script, CI, or no desktop | Use this | No | No |
 | Postgres already named one child table | Optional | References panel or Go To Related Rows | Works, more than needed |
@@ -113,7 +113,7 @@ No. On this walk the join stays collapsed under address. The two tags show on th
 
 ### Can this walk run on Linux?
 
-Linux is alpha. The recorded walk is on the 0.5.16 Linux build. Do not pick an architecture for someone else.
+Linux is alpha. The recorded walk is on Linux. Do not pick an architecture for someone else.
 
 ## Sources
 
