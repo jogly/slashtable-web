@@ -91,11 +91,12 @@ describe("MCP discovery", () => {
 });
 
 describe("SSR heading visibility (opacity)", () => {
-  test("FadeIn stays visible until client mount (no SSR opacity:0 wrapper)", () => {
+  test("FadeIn stays visible on first paint (no remount to opacity:0)", () => {
     const src = read("src/components/ui/FadeIn.tsx");
-    expect(src).toContain("useMounted");
-    expect(src).toMatch(/prefersReducedMotion \|\| !mounted/);
-    expect(src).toContain("if (prefersReducedMotion || !mounted)");
+    expect(src).toContain("initial={false}");
+    expect(src).not.toContain("useMounted");
+    expect(src).not.toMatch(/initial=\{\{\s*opacity:\s*0/);
+    expect(src).toContain("if (prefersReducedMotion)");
     expect(src).toContain("return <div className={className}>{children}</div>");
   });
 
@@ -104,5 +105,7 @@ describe("SSR heading visibility (opacity)", () => {
     expect(src).toContain("initial={false}");
     expect(src).toMatch(/<h1 className="[^"]*text-balance/);
     expect(src).not.toMatch(/<motion\.h1/);
+    expect(src).not.toContain('introControls.set("hidden")');
+    expect(src).not.toContain("useLayoutEffect");
   });
 });

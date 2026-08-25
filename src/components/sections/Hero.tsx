@@ -2,8 +2,8 @@
 
 import heroDark from "@screenshots/hero-dark.png";
 import heroLight from "@screenshots/hero-light.png";
-import { motion, useAnimationControls, useReducedMotion } from "motion/react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
 import { HERO } from "../../lib/copy";
 import { useTheme } from "../providers/ThemeProvider";
@@ -16,22 +16,6 @@ import { SkyParallax } from "../ui/SkyParallax";
 const tooltipColors = ["#44ff88", "#ffcc00", "#cc44ff", "#00d4ff"];
 const TOOLTIP_W = 320;
 const MARGIN = 12;
-
-const stagger = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
-  },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
-  },
-};
 
 function CtaDownload({ label }: { label: string }) {
   return (
@@ -64,8 +48,6 @@ export function Hero() {
   const { isLinux, linuxAvailable } = useDownload();
   const ctaLabel = isLinux && linuxAvailable ? HERO.ctaDownloadLinux : HERO.ctaDownload;
   const availability = linuxAvailable ? HERO.availabilityLinux : HERO.availability;
-  const prefersReducedMotion = useReducedMotion();
-  const introControls = useAnimationControls();
   const [open, setOpen] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -103,15 +85,6 @@ export function Hero() {
     };
   }, []);
 
-  // Keep SSR markup fully opaque (initial={false}). After hydrate, snap to
-  // hidden in useLayoutEffect and play the entrance so real users still get
-  // the stagger without crawlers seeing opacity:0 on the h1.
-  useLayoutEffect(() => {
-    if (prefersReducedMotion) return;
-    introControls.set("hidden");
-    void introControls.start("visible");
-  }, [introControls, prefersReducedMotion]);
-
   function computePosition() {
     if (!btnRef.current) return;
     const rect = btnRef.current.getBoundingClientRect();
@@ -143,16 +116,8 @@ export function Hero() {
         className="[mask-image:radial-gradient(ellipse_90%_70%_at_50%_40%,black,transparent)]"
       />
       <DotGrid className="opacity-[0.25] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,black,transparent)]" />
-      <motion.div
-        className="relative z-10 mx-auto max-w-narrow px-6 text-center"
-        variants={prefersReducedMotion ? undefined : stagger}
-        initial={false}
-        animate={prefersReducedMotion ? undefined : introControls}
-      >
-        <motion.div
-          variants={prefersReducedMotion ? undefined : fadeUp}
-          className="flex flex-wrap items-baseline justify-center gap-x-1"
-        >
+      <motion.div className="relative z-10 mx-auto max-w-narrow px-6 text-center" initial={false}>
+        <div className="flex flex-wrap items-baseline justify-center gap-x-1">
           <h1 className="text-balance font-semibold text-5xl text-text leading-snug sm:text-6xl">
             The database client for <span className="font-display italic">product engineers.</span>
           </h1>
@@ -170,18 +135,12 @@ export function Hero() {
           >
             <span className="cursor-pointer font-display text-4xl text-accent leading-none sm:text-5xl">*</span>
           </button>
-        </motion.div>
+        </div>
 
-        <motion.p
-          className="mx-auto mt-6 max-w-sm text-balance font-display text-text text-xl leading-relaxed md:max-w-lg"
-          variants={prefersReducedMotion ? undefined : fadeUp}
-        >
+        <p className="mx-auto mt-6 max-w-sm text-balance font-display text-text text-xl leading-relaxed md:max-w-lg">
           {HERO.leader}
-        </motion.p>
-        <motion.div
-          className="mt-8 flex flex-col items-center gap-4"
-          variants={prefersReducedMotion ? undefined : fadeUp}
-        >
+        </p>
+        <div className="mt-8 flex flex-col items-center gap-4">
           <div className="relative hidden sm:inline-block">
             <div
               aria-hidden="true"
@@ -214,7 +173,7 @@ export function Hero() {
             <CtaFeatures />
           </div>
           <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{availability}</p>
-        </motion.div>
+        </div>
       </motion.div>
 
       {/* Tooltip — fixed so it escapes any overflow context; position clamped to viewport */}
@@ -244,14 +203,7 @@ export function Hero() {
       </div>
 
       {/* Hero screenshot */}
-      <motion.div
-        className="relative z-10 mx-auto mt-16 max-w-5xl px-6 lg:mt-20"
-        initial={prefersReducedMotion ? undefined : { opacity: 0, y: 24 }}
-        animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-        transition={
-          prefersReducedMotion ? undefined : { duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] as const }
-        }
-      >
+      <div className="relative z-10 mx-auto mt-16 max-w-5xl px-6 lg:mt-20">
         <div className="relative overflow-hidden rounded-2xl shadow-[0_0_80px_-12px_var(--color-glow-soft),0_0_32px_-8px_var(--color-glow-soft)]">
           <div className="-mt-px">
             <ImageCompare
@@ -263,7 +215,7 @@ export function Hero() {
           {/* Inset ring masks 1px of image edges */}
           <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-border-strong ring-inset" />
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

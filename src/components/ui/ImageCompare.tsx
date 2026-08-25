@@ -44,19 +44,23 @@ export function ImageCompare({ dark, light, alt, className = "", initialPosition
     </div>
   );
 
+  const frameStyle =
+    dark && light ? { aspectRatio: `${dark.width} / ${dark.height}` } : undefined;
+
   return (
-    <div className={`relative touch-pan-y overflow-hidden ${className}`}>
+    <div className={`relative touch-pan-y overflow-hidden ${className}`} style={frameStyle}>
       {dark && light && !mounted ? (
         // Pre-hydration: render just the dark image (what the slider mostly
         // shows at initialPosition=70) so there's no visual flash when the
-        // slider takes over after mount.
+        // slider takes over after mount. Frame aspect-ratio is locked so the
+        // swap cannot restyle the box.
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={dark.src}
           width={dark.width}
           height={dark.height}
           alt={`${alt} — dark mode`}
-          className="block w-full"
+          className="absolute inset-0 block h-full w-full object-cover"
         />
       ) : dark && light ? (
         <ReactCompareSlider
@@ -78,7 +82,7 @@ export function ImageCompare({ dark, light, alt, className = "", initialPosition
           }
           defaultPosition={initialPosition}
           handle={handle}
-          style={{ width: "100%" }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
         />
       ) : (
         /* Placeholder shown until both screenshots are supplied */
