@@ -1,9 +1,9 @@
 ---
 title: How do I find all rows that reference this Postgres row
-description: Open the parent. The incoming lists are already on the row.
+description: Open the parent and walk. The incoming lists are already on the row.
 publishedAt: 2026-08-25
 published: false
-tldr: Click the parent. The lists on that row are the incoming set. Write the UNION when the answer has to be a script.
+tldr: Click through the parent. The lists on that row are the incoming set. Write the UNION when the answer has to be a script.
 demand_query: how do I find all rows that reference this postgres row
 cluster: fk-navigation
 demand_urls:
@@ -19,26 +19,24 @@ ERROR: update or delete on table "address" violates foreign key constraint "pers
 DETAIL: Key (id)=(1) is still referenced from table "person".
 ```
 
-The engine named one child and stopped. Open that parent in /table. The rest of the set is already listed on the row.
+You tried to delete an address. Postgres named a person and stopped. You cleaned the people, retried, and a school was still there. The error only ever names one table.
 
-## The address is a hop
+If the answer has to run later, ask every child. The [thread that owns this question](https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row) builds a UNION from the catalog so each child is asked once.
 
-On a person, the address is an orange `1 →`. Click it. The bar keeps the path.
+If you are on the address, the children are already on the row.
+
+## Walk from the parent
+
+A foreign key on a child is a hop. On a person the address is an orange `1 →`. Click it. The bar keeps the path from the row you came from.
 
 ![Two people pointing at the same address](/blog/find-rows-nav-outbound.png)
 
-## The parent lists who still points here
-
-The address lists the incoming set: two people, a school, two tags. Click people.
+The parent then lists who still points here. People, a school, tags. Each cell is a count. Click people and the next grid is those rows. The path stays on the bar, so the parent is still one hop back.
 
 ![Incoming people, tags, and a school on the parent](/blog/find-rows-nav-incoming.png)
 
-## The next grid is those rows
-
-The path is still on the bar. The next grid is the people who still point here.
-
 ![People reached from the parent](/blog/find-rows-nav-people.png)
 
-Tags reach this parent through a join. They show up as tags on this row.
+Tags reach this parent through a join. They still show up in the tag count on this row.
 
-Write the [UNION](https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row) when the answer has to be a script. When you are on the row, the lists are the set.
+Write the UNION when you need a script. When you are on the row, click the counts.

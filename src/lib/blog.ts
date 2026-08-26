@@ -52,6 +52,9 @@ export function postImageUrl(image: string): string {
 
 const KNOWN_IMAGE_SIZES: Record<string, { width: number; height: number }> = {
   "/blog/find-rows-that-reference-this-postgres-row.jpg": { width: 1600, height: 2133 },
+  "/blog/find-rows-nav-outbound.png": { width: 573, height: 297 },
+  "/blog/find-rows-nav-incoming.png": { width: 1047, height: 228 },
+  "/blog/find-rows-nav-people.png": { width: 724, height: 297 },
 };
 
 export function postImageSize(image: string): { width: number; height: number } {

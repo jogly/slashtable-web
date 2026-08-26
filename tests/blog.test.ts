@@ -125,7 +125,14 @@ describe("blog loader", () => {
       "find-rows-nav-incoming.png",
       "find-rows-nav-people.png",
     ]) {
-      expect(existsSync(join(import.meta.dir, "../public/blog", filename))).toBe(true);
+      const path = join(import.meta.dir, "../public/blog", filename);
+      expect(existsSync(path)).toBe(true);
+      const header = readFileSync(path);
+      const width = header.readUInt32BE(16);
+      const height = header.readUInt32BE(20);
+      expect(width).not.toBe(2400);
+      expect(height).not.toBe(1350);
+      expect(width / height).not.toBeCloseTo(16 / 9, 2);
     }
   });
 
@@ -218,14 +225,18 @@ describe("posts render H1", () => {
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain("font-mono");
       expect(html).toContain("rounded-[7px]");
+      expect(html).toContain("h-auto w-full");
+      expect(html).not.toContain("aspect-video");
+      expect(html).not.toContain("object-cover");
       expect(html).not.toContain("italic");
       expect(html).toContain("font-sans");
       expect(html).not.toContain("font-display");
       expect(html).not.toContain("font-serif");
       expect(html).toContain("scroll-mt-24");
-      expect(html).toContain("#the-address-is-a-hop");
-      expect(html).toContain("#the-parent-lists-who-still-points-here");
-      expect(html).toContain("#the-next-grid-is-those-rows");
+      expect(html).toContain("#walk-from-the-parent");
+      expect(html).not.toContain("#the-address-is-a-hop");
+      expect(html).not.toContain("#the-parent-lists-who-still-points-here");
+      expect(html).not.toContain("#the-next-grid-is-those-rows");
       expect(html).toContain("find-rows-nav-outbound.png");
       expect(html).toContain("find-rows-nav-incoming.png");
       expect(html).toContain("find-rows-nav-people.png");
@@ -425,20 +436,22 @@ describe("blog body as long-form type", () => {
     expect(html).toContain("<figure");
     expect(html).toContain("The delete is stuck on this address.");
     expect(html).toContain("rounded-[7px]");
-    expect(html).toContain("aspect-video");
-    expect(html).toContain("object-cover");
+    expect(html).toContain("h-auto w-full");
+    expect(html).not.toContain("aspect-video");
+    expect(html).not.toContain("object-cover");
     expect(html).not.toContain("italic");
     expect(html).not.toContain("on Unsplash");
   });
 
-  test("figures are a wide framed window, not the full 4:5 photo", () => {
+  test("figures keep the photo ratio and do not letterbox into 16:9", () => {
     const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogFigure.tsx"), "utf8");
     expect(src).toContain("rounded-[7px]");
     expect(src).toContain("border-border");
-    expect(src).toContain("aspect-video");
-    expect(src).toContain("object-cover");
-    expect(src).toContain("object-right");
-    expect(src).not.toContain("h-auto w-full");
+    expect(src).toContain("h-auto w-full");
+    expect(src).not.toContain("aspect-video");
+    expect(src).not.toContain("object-cover");
+    expect(src).not.toContain("object-right");
+    expect(src).not.toMatch(/\bfill\b/);
     expect(src).not.toContain("italic");
   });
 
@@ -479,6 +492,12 @@ describe("blog image metadata", () => {
         { url: canonical(post.image), alt: post.imageAlt, width: post.imageWidth, height: post.imageHeight },
       ]);
     }
+    const findRows = getAllPosts().find(
+      (post) => post.slug === "find-rows-that-reference-this-postgres-row",
+    );
+    expect(findRows?.image).toBe("/blog/find-rows-nav-incoming.png");
+    expect(findRows?.imageWidth).toBe(1047);
+    expect(findRows?.imageHeight).toBe(228);
   });
 });
 
