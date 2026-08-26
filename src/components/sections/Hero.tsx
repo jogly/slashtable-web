@@ -4,6 +4,7 @@ import heroDark from "@screenshots/hero-dark.png";
 import heroLight from "@screenshots/hero-light.png";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { useHeroDecorFade } from "../../hooks/useHeroDecorFade";
 import { HERO } from "../../lib/copy";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
 import { DotGrid } from "../ui/DotGrid";
@@ -49,6 +50,7 @@ export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const openTimerRef = useRef<number>(undefined);
   const closeTimerRef = useRef<number>(undefined);
+  const decorFade = useHeroDecorFade();
 
   // Close on outside click (for mobile tap-to-open flow)
   useEffect(() => {
@@ -103,13 +105,18 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden pt-36 pb-24 lg:pt-40 lg:pb-28">
-      <SkyParallax targetRef={sectionRef} />
-      <NoiseTexture
-        variant="grain"
-        opacity={0.4}
-        className="[mask-image:radial-gradient(ellipse_90%_70%_at_50%_40%,black,transparent)]"
-      />
-      <DotGrid className="opacity-[0.25] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,black,transparent)]" />
+      <SkyParallax targetRef={sectionRef} fadeIn={decorFade} />
+      <div
+        aria-hidden="true"
+        className={`hero-decor-fade pointer-events-none absolute inset-0${decorFade ? " hero-decor-fade--js" : ""}`}
+      >
+        <NoiseTexture
+          variant="grain"
+          opacity={0.4}
+          className="[mask-image:radial-gradient(ellipse_90%_70%_at_50%_40%,black,transparent)]"
+        />
+        <DotGrid className="opacity-[0.25] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,black,transparent)]" />
+      </div>
       <motion.div className="relative z-10 mx-auto max-w-narrow px-6 text-center" initial={false}>
         <div className="flex flex-wrap items-baseline justify-center gap-x-1">
           <h1 className="text-balance font-semibold text-5xl text-text leading-snug sm:text-6xl">
@@ -198,9 +205,11 @@ export function Hero() {
         </ul>
       </div>
 
-      {/* Hero screenshot */}
+      {/* Hero screenshot — img stays in the DOM with alt; fade runs after JS only */}
       <div className="relative z-10 mx-auto mt-16 max-w-5xl px-6 lg:mt-20">
-        <div className="relative overflow-hidden rounded-2xl shadow-[0_0_80px_-12px_var(--color-glow-soft),0_0_32px_-8px_var(--color-glow-soft)]">
+        <div
+          className={`hero-shot-fade relative overflow-hidden rounded-2xl shadow-[0_0_80px_-12px_var(--color-glow-soft),0_0_32px_-8px_var(--color-glow-soft)]${decorFade ? " hero-shot-fade--js" : ""}`}
+        >
           <div className="-mt-px">
             <ImageCompare dark={heroDark} light={heroLight} alt={HERO.screenshotAlt} />
           </div>

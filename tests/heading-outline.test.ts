@@ -105,8 +105,47 @@ describe("SSR heading visibility (opacity)", () => {
     expect(src).toContain("initial={false}");
     expect(src).toMatch(/<h1 className="[^"]*text-balance/);
     expect(src).not.toMatch(/<motion\.h1/);
+    expect(src).not.toMatch(/initial=\{\{\s*opacity:\s*0/);
     expect(src).not.toContain('introControls.set("hidden")');
     expect(src).not.toContain("useLayoutEffect");
+  });
+
+  test("sky/shot fade is JS-opt-in and does not apply to the h1", () => {
+    const hero = read("src/components/sections/Hero.tsx");
+    const sky = read("src/components/ui/SkyParallax.tsx");
+    const hook = read("src/hooks/useHeroDecorFade.ts");
+    const css = read("src/theme/base.css");
+
+    const h1 = hero.match(/<h1[\s\S]*?<\/h1>/)?.[0] ?? "";
+    expect(h1).toContain("text-balance");
+    expect(h1).not.toMatch(/opacity:\s*0/);
+    expect(h1).not.toContain("sky-layer");
+    expect(h1).not.toContain("hero-shot-fade");
+    expect(h1).not.toContain("hero-decor-fade");
+    expect(h1).not.toContain("initial=");
+    expect(h1).not.toMatch(/initial=\{\{\s*opacity:\s*0/);
+
+    expect(hero).toContain("useHeroDecorFade");
+    expect(hero).toContain("hero-shot-fade");
+    expect(hero).toContain("{HERO.availability}");
+    expect(hero).toContain("{HERO.ctaDownload}");
+    expect(sky).toContain("sky-layer--js-fade");
+    expect(hook).toContain("useReducedMotion");
+    expect(hook).toContain("setRun(true)");
+
+    expect(css).toContain("@keyframes hero-decor-in");
+    expect(css).toContain(".sky-layer--js-fade");
+    expect(css).toContain(".hero-shot-fade--js");
+    expect(css).toContain("prefers-reduced-motion: reduce");
+    expect(css).toMatch(/\.sky-layer\s*\{[^}]*opacity:\s*var\(--sky-opacity/);
+    expect(css).not.toMatch(/\.sky-layer\s*\{[^}]*opacity:\s*0/);
+    expect(css).toMatch(/\.hero-shot-fade\s*,?[\s\S]*?\{[^}]*opacity:\s*1/);
+
+    const fadeRules = css.match(/[^{}]+\{[^}]*hero-decor-in[^}]*\}/g) ?? [];
+    expect(fadeRules.length).toBeGreaterThan(0);
+    for (const rule of fadeRules) {
+      expect(rule).not.toMatch(/\bh1\b/);
+    }
   });
 });
 
