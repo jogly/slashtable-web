@@ -6,6 +6,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { LayoutGuides } from "@/components/ui/LayoutGuides";
 import { OG_IMAGE, SITE_URL } from "@/lib/constants";
+import { fontVariables } from "@/lib/fonts";
+import { SKY_DAY_SRC, SKY_NIGHT_SRC } from "@/lib/sky";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme-script";
 import { Providers } from "./providers";
 import "@/theme/base.css";
 
@@ -210,8 +213,21 @@ const softwareApplicationLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={fontVariables} data-theme="dark" suppressHydrationWarning>
       <head>
+        {/* Blocking: sets data-theme from st-theme / system before first paint. */}
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: theme bootstrap must run before paint
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
+        <link rel="preload" as="image" href={SKY_NIGHT_SRC} fetchPriority="high" />
+        <link rel="preload" as="image" href={SKY_DAY_SRC} />
+        <style
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: hashed sky URLs must be on :root before first paint
+          dangerouslySetInnerHTML={{
+            __html: `:root{--sky-night:url("${SKY_NIGHT_SRC}");--sky-day:url("${SKY_DAY_SRC}");--sky-image:var(--sky-night);--sky-opacity:0.11}html[data-theme=light]{--sky-image:var(--sky-day);--sky-opacity:0.2}`,
+          }}
+        />
         <link rel="preconnect" href="https://downloads.slashtable.dev" />
         <link rel="preconnect" href="https://tr.slashtable.dev" />
         <link

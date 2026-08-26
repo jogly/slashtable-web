@@ -91,11 +91,12 @@ describe("MCP discovery", () => {
 });
 
 describe("SSR heading visibility (opacity)", () => {
-  test("FadeIn stays visible until client mount (no SSR opacity:0 wrapper)", () => {
+  test("FadeIn stays visible on first paint (no remount to opacity:0)", () => {
     const src = read("src/components/ui/FadeIn.tsx");
-    expect(src).toContain("useMounted");
-    expect(src).toMatch(/prefersReducedMotion \|\| !mounted/);
-    expect(src).toContain("if (prefersReducedMotion || !mounted)");
+    expect(src).toContain("initial={false}");
+    expect(src).not.toContain("useMounted");
+    expect(src).not.toMatch(/initial=\{\{\s*opacity:\s*0/);
+    expect(src).toContain("if (prefersReducedMotion)");
     expect(src).toContain("return <div className={className}>{children}</div>");
   });
 
@@ -104,5 +105,65 @@ describe("SSR heading visibility (opacity)", () => {
     expect(src).toContain("initial={false}");
     expect(src).toMatch(/<h1 className="[^"]*text-balance/);
     expect(src).not.toMatch(/<motion\.h1/);
+    expect(src).not.toContain('introControls.set("hidden")');
+    expect(src).not.toContain("useLayoutEffect");
+  });
+});
+
+describe("first-paint theme / font / sky", () => {
+  test("blocking script sets data-theme and useTheme does not wait on useMounted", () => {
+    const script = read("src/lib/theme-script.ts");
+    expect(script).toContain('export const THEME_STORAGE_KEY = "st-theme"');
+    expect(script).toContain("data-theme");
+    expect(script).toContain("prefers-color-scheme");
+    const layout = read("app/layout.tsx");
+    expect(layout).toContain("THEME_BOOTSTRAP_SCRIPT");
+    expect(layout).toContain('data-theme="dark"');
+    const provider = read("src/components/providers/ThemeProvider.tsx");
+    expect(provider).toContain("disableTransitionOnChange");
+    expect(provider).toContain("themeFromDocument");
+    expect(provider).not.toContain("useMounted");
+  });
+
+  test("webfonts use real optional faces, not empty @font-face overrides", () => {
+    const css = read("src/theme/base.css");
+    expect(css).not.toContain("@fontsource-variable");
+    expect(css).not.toMatch(/@font-face\s*\{[^}]*font-display:\s*optional/);
+    expect(css).not.toMatch(/transition:\s*background-color 0\.3s ease/);
+    const fonts = read("src/lib/fonts.ts");
+    expect(fonts).toContain('display: "optional"');
+    expect(fonts).toContain("manrope-latin-wght-normal.woff2");
+    expect(fonts).toContain("playfair-display-latin-wght-italic.woff2");
+  });
+
+  test("sky is a CSS background with head preloads, not a late img", () => {
+    const sky = read("src/components/ui/SkyParallax.tsx");
+    expect(sky).toContain("sky-layer");
+    expect(sky).not.toMatch(/<img[\s>/]/);
+    expect(sky).not.toContain("from \"./Img\"");
+    expect(sky).not.toContain("useTheme");
+    const css = read("src/theme/base.css");
+    expect(css).toContain("background-image: var(--sky-image, var(--sky-night))");
+    expect(css).toContain("html[data-theme=\"light\"]");
+    expect(css).toContain("--sky-image: var(--sky-day)");
+    const layout = read("app/layout.tsx");
+    expect(layout).toContain('rel="preload"');
+    expect(layout).toContain("SKY_NIGHT_SRC");
+    expect(layout).toContain("SKY_DAY_SRC");
+    const assets = read("src/lib/sky.ts");
+    expect(assets).toContain("sky-night.webp");
+    expect(assets).toContain("sky-day.webp");
+  });
+
+  test("Hero availability is a static Linux-inclusive string", () => {
+    const hero = read("src/components/sections/Hero.tsx");
+    expect(hero).toContain("{HERO.availability}");
+    expect(hero).toContain("{HERO.ctaDownload}");
+    expect(hero).not.toContain("useDownload");
+    expect(hero).not.toContain("linuxAvailable");
+    expect(hero).not.toContain("ctaDownloadLinux");
+    const copy = read("src/lib/copy.ts");
+    expect(copy).toContain("Linux (alpha)");
+    expect(copy).toContain('availability: "macOS \\u00b7 Linux (alpha)');
   });
 });

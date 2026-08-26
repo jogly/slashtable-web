@@ -37,9 +37,9 @@
   --color-glow-soft: rgba(201, 74, 0, 0.06);
 
   /* ── Font families ── */
-  --font-sans: "Manrope Variable", "Manrope", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "Fira Code", "SF Mono", Menlo, monospace;
-  --font-display: "Playfair Display Variable", "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-manrope, "Manrope"), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains, "JetBrains Mono"), "Fira Code", "SF Mono", Menlo, monospace;
+  --font-display: var(--font-playfair, "Playfair Display"), Georgia, serif;
 
   /* ── Layout ── */
   --max-width-content: 68rem;
