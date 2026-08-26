@@ -82,7 +82,7 @@ export default function ContactPage() {
                 <Link href="/developers" className="text-accent underline underline-offset-2 transition-colors hover:text-text">
                   Developers
                 </Link>{" "}
-                portal for OpenAPI, llms.txt, and local MCP discovery
+                portal for OpenAPI, llms.txt, /blog, and local MCP discovery
               </span>
             </li>
             <li className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">

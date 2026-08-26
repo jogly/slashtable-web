@@ -43,6 +43,14 @@
     }
   },
   "files": {
-    "includes": ["src/**", "*.json", "*.ts", "vite.config.ts", "public/.well-known/**", "!src/routeTree.gen.ts"]
+    "includes": [
+      "src/**",
+      "*.json",
+      "*.ts",
+      "vite.config.ts",
+      "public/.well-known/**",
+      "!src/routeTree.gen.ts",
+      "!src/lib/blog-data.generated.ts"
+    ]
   }
 }

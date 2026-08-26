@@ -4,7 +4,7 @@
     "title": "/table",
     "summary": "Public HTTP surfaces for the /table website and agent discovery docs.",
     "description": "/table is a local desktop database client (macOS + Linux alpha) with a built-in MCP server over stdio. This OpenAPI document describes the public HTTP resources on www.slashtable.dev only. It is not a remote database or hosted MCP API. Developer portal: https://www.slashtable.dev/developers/",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "contact": {
       "name": "Make Toast LLC",
       "url": "https://www.slashtable.dev/contact/",
@@ -175,6 +175,104 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/blog": {
+      "get": {
+        "operationId": "getBlogIndex",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Blog index (HTML or markdown)",
+        "description": "Engineering notes index. Lists published posts only. Drafts with published:false are omitted and 404 on their slug.",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "text/html",
+                "text/markdown"
+              ],
+              "default": "text/html"
+            },
+            "description": "Prefer text/markdown for an agent-oriented markdown representation."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog index",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blog/{slug}": {
+      "get": {
+        "operationId": "getBlogPost",
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Published blog post (HTML or markdown)",
+        "description": "A published engineering post. Unpublished slugs return 404.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "text/html",
+                "text/markdown"
+              ],
+              "default": "text/html"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Published post",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Draft, underscore file, or unknown slug"
           }
         }
       }
@@ -796,6 +894,10 @@
                 "format": "uri"
               },
               "changelog": {
+                "type": "string",
+                "format": "uri"
+              },
+              "blog": {
                 "type": "string",
                 "format": "uri"
               }

@@ -16,6 +16,8 @@
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     scroll-behavior: smooth;
+    /* Fixed nav (~56–72px) plus 16–24px so hash targets sit below the bar. */
+    scroll-padding-top: 6rem;
   }
 
   html[data-theme="light"] {

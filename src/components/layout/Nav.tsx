@@ -157,6 +157,12 @@ export function Nav() {
             >
               {NAV.changelog}
             </Link>
+            <Link
+              href="/blog"
+              className="font-mono text-[11px] text-text-muted uppercase tracking-widest transition-colors hover:text-text"
+            >
+              {NAV.blog}
+            </Link>
           </div>
 
           {/* Right cluster: theme toggle + CTA (desktop) */}
@@ -244,6 +250,20 @@ export function Nav() {
                 <div>
                   <div className="font-display text-[14px] text-text">{NAV.changelog}</div>
                   <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">What's new and what's next.</div>
+                </div>
+              </Link>
+
+              <Link
+                href="/blog"
+                onClick={() => setMenuOpen(false)}
+                className="group flex items-start gap-3.5 border border-transparent px-3 py-3 transition-colors hover:border-border hover:border-dashed hover:bg-surface/50"
+              >
+                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted" aria-hidden="true" />
+                <div>
+                  <div className="font-display text-[14px] text-text">{NAV.blog}</div>
+                  <div className="mt-0.5 text-[11px] text-text-muted leading-relaxed">
+                    Engineering notes for the desktop client.
+                  </div>
                 </div>
               </Link>
             </div>

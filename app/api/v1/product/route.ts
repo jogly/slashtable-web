@@ -45,6 +45,7 @@ const PRODUCT = {
     contact: "https://www.slashtable.dev/contact/",
     pricing: "https://www.slashtable.dev/pricing/",
     changelog: "https://www.slashtable.dev/changelog/",
+    blog: "https://www.slashtable.dev/blog/",
   },
 } as const;
 

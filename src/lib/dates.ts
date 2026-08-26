@@ -44,3 +44,11 @@ export function formatEntryDate(input: string): string {
     day: "numeric",
   });
 }
+
+/** Journal stamp: 25 Aug 2026. Readable case, not a marketing uppercase label. */
+export function formatJournalDate(input: string): string {
+  const { date } = parseEntryDate(input);
+  const day = date.getDate();
+  const month = date.toLocaleDateString("en-GB", { month: "short" });
+  return `${day} ${month} ${date.getFullYear()}`;
+}

@@ -22,6 +22,10 @@ const pageSources = [
   "/about/",
   "/contact",
   "/contact/",
+  "/blog",
+  "/blog/",
+  "/blog/:slug",
+  "/blog/:slug/",
 ];
 
 const config: NextConfig = {

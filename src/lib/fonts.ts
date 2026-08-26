@@ -39,4 +39,22 @@ export const playfair = localFont({
   adjustFontFallback: "Times New Roman",
 });
 
-export const fontVariables = `${manrope.variable} ${jetbrainsMono.variable} ${playfair.variable}`;
+export const sourceSerif = localFont({
+  src: [
+    {
+      path: "../../node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2",
+      weight: "200 900",
+      style: "normal",
+    },
+    {
+      path: "../../node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-italic.woff2",
+      weight: "200 900",
+      style: "italic",
+    },
+  ],
+  display: "optional",
+  variable: "--font-source-serif",
+  adjustFontFallback: "Times New Roman",
+});
+
+export const fontVariables = `${manrope.variable} ${jetbrainsMono.variable} ${playfair.variable} ${sourceSerif.variable}`;

@@ -27,6 +27,50 @@ export function pageMetadata({
   };
 }
 
+export function articleMetadata({
+  title,
+  description,
+  path,
+  publishedAt,
+  updatedAt,
+  tags,
+  image,
+  imageAlt,
+  imageWidth,
+  imageHeight,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  publishedAt: string;
+  updatedAt?: string;
+  tags?: string[];
+  image: string;
+  imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
+}): Metadata {
+  const url = canonical(path);
+  const imageUrl = canonical(image);
+  const images = [{ url: imageUrl, alt: imageAlt, width: imageWidth, height: imageHeight }];
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      publishedTime: publishedAt,
+      modifiedTime: updatedAt ?? publishedAt,
+      tags,
+      images,
+    },
+    twitter: { title, description, card: "summary_large_image", images: [imageUrl] },
+  };
+}
+
 export function breadcrumb(items: { name: string; path: string }[]) {
   return {
     "@context": "https://schema.org",
