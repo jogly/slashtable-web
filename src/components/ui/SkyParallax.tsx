@@ -7,6 +7,8 @@ interface SkyParallaxProps {
   targetRef: RefObject<HTMLElement | null>;
   /** Opacity pair [light, dark]. Default [0.20, 0.11] matches the version card. */
   opacity?: [number, number];
+  /** After hydrate, play the CSS sky fade. First paint stays at --sky-opacity. */
+  fadeIn?: boolean;
 }
 
 const skyPaint: CSSProperties = {
@@ -24,7 +26,7 @@ const skyPaint: CSSProperties = {
  * `[data-theme=light]` swaps day/night via --sky-image — no image element, no swap.
  * Parallax only translates this same layer after hydrate.
  */
-export function SkyParallax({ targetRef, opacity = [0.2, 0.11] }: SkyParallaxProps) {
+export function SkyParallax({ targetRef, opacity = [0.2, 0.11], fadeIn = false }: SkyParallaxProps) {
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start end", "end start"],
@@ -43,7 +45,7 @@ export function SkyParallax({ targetRef, opacity = [0.2, 0.11] }: SkyParallaxPro
             "--sky-opacity-light": lightOp,
           } as CSSProperties
         }
-        className="sky-layer absolute inset-x-0 top-[-100%] h-[300%]"
+        className={`sky-layer absolute inset-x-0 top-[-100%] h-[300%]${fadeIn ? " sky-layer--js-fade" : ""}`}
       />
       <div
         className="absolute inset-0"

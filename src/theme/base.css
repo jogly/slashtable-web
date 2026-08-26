@@ -75,6 +75,53 @@
   opacity: var(--sky-opacity, var(--sky-opacity-dark, 0.11));
 }
 
+/* First paint stays fully visible. JS adds --js-fade / --js after hydrate. */
+@keyframes hero-decor-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--hero-decor-to, 1);
+  }
+}
+
+.sky-layer--js-fade {
+  --hero-decor-to: var(--sky-opacity, var(--sky-opacity-dark, 0.11));
+  animation: hero-decor-in 800ms ease-out both;
+}
+
+.hero-decor-fade,
+.hero-shot-fade {
+  opacity: 1;
+}
+
+.hero-decor-fade--js {
+  --hero-decor-to: 1;
+  animation: hero-decor-in 800ms ease-out both;
+}
+
+.hero-shot-fade--js {
+  --hero-decor-to: 1;
+  animation: hero-decor-in 500ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-layer--js-fade,
+  .hero-decor-fade--js,
+  .hero-shot-fade--js {
+    animation: none;
+  }
+
+  .sky-layer--js-fade {
+    opacity: var(--sky-opacity, var(--sky-opacity-dark, 0.11));
+  }
+
+  .hero-decor-fade--js,
+  .hero-shot-fade--js {
+    opacity: 1;
+  }
+}
+
 html[data-theme="light"] {
   --sky-image: var(--sky-day);
   --sky-opacity: var(--sky-opacity-light, 0.2);
