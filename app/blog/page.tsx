@@ -16,15 +16,15 @@ export default function BlogIndexPage() {
   const posts = getAllPosts();
 
   return (
-    <div className="mx-auto max-w-[52rem] px-6 pt-28 pb-28">
+    <div className="mx-auto max-w-[40rem] px-6 pt-28 pb-28">
       <JsonLd data={breadcrumb([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog/" }])} />
       <JsonLd data={blogCollectionLd(posts)} />
 
-      <header className="mx-auto max-w-[36rem] text-center">
-        <h1 className="font-display text-[2.5rem] text-text leading-[1.1] tracking-[-0.03em] md:text-[3.25rem]">
+      <header>
+        <h1 className="font-display text-[1.5rem] text-text leading-tight tracking-[-0.02em] md:text-[1.75rem]">
           {BLOG.heading}
         </h1>
-        <p className="mt-3 text-[16px] text-text-muted leading-6">{BLOG.description}</p>
+        <p className="mt-1.5 text-[14px] text-text-muted leading-5">{BLOG.description}</p>
       </header>
 
       <BlogIndex posts={posts} />

@@ -204,8 +204,8 @@ describe("posts render H1", () => {
       expect(html).not.toContain(post.description);
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain("font-mono");
-      expect(html).toContain("border-t");
-      expect(html).toContain("italic");
+      expect(html).toContain("rounded-[7px]");
+      expect(html).not.toContain("italic");
       expect(html).toContain("font-display");
       expect(html).toContain("scroll-mt-24");
       expect(html).toContain("#the-delete-is-stuck");
@@ -259,13 +259,13 @@ describe("blog index as a journal", () => {
     }
     if (posts[0]) {
       expect(html).toContain(posts[0].title);
-      expect(html).toContain(posts[0].description);
-      expect(html).toContain(posts[0].image);
-      expect(html).toContain("aspect-video");
-      expect(html).toContain("rounded-[6px]");
+      expect(html).toContain("flex-1");
+      expect(html).not.toContain(posts[0].description);
+      expect(html).not.toContain(posts[0].image);
       expect(html).not.toContain("Newest");
       expect(html).not.toContain("on Unsplash");
-      expect(html).not.toContain("flex-1");
+      expect(html).not.toContain("aspect-video");
+      expect(html).not.toContain("rounded-[6px]");
     }
     for (const post of posts) {
       expect(html).toContain(post.title);
@@ -273,42 +273,23 @@ describe("blog index as a journal", () => {
     }
   });
 
-  test("two posts stay full-width cards and do not grow a one-row archive", () => {
+  test("every post is a leader row, including the first", () => {
     const newest = parseBlogMarkdown("fixture-post", FIXTURE_RAW);
     const laterRaw = FIXTURE_RAW.replace("Fixture post", "Older fixture").replace(
       "A parse fixture with required image fields.",
-      "An older dek that still belongs on a second card.",
+      "An older dek that must not appear on the index.",
     );
     const later = parseBlogMarkdown("older-fixture", laterRaw.replace("fixture-post.jpg", "older-fixture.jpg"));
     const html = renderToStaticMarkup(createElement(BlogIndex, { posts: [newest, later] }));
     expect(html).toContain("Fixture post");
-    expect(html).toContain("A parse fixture with required image fields.");
     expect(html).toContain("Older fixture");
-    expect(html).toContain("An older dek that still belongs on a second card.");
-    expect(html).not.toContain("Newest");
-    expect(html).not.toContain("flex-1");
-    expect(html).not.toContain("grid-cols-3");
-    expect(html).toContain("/blog/fixture-post.jpg");
-    expect(html).toContain("aspect-video");
-    expect(html).not.toContain("aspect-[4/5]");
-  });
-
-  test("leader-rule rows wait until six posts", () => {
-    const posts = Array.from({ length: 6 }, (_, index) => {
-      const n = index + 1;
-      const raw = FIXTURE_RAW.replace("Fixture post", `Fixture ${n}`)
-        .replace("A parse fixture with required image fields.", `Dek for fixture ${n}.`)
-        .replace("fixture-post.jpg", `fixture-${n}.jpg`)
-        .replace("2026-08-25", `2026-08-${String(26 - n).padStart(2, "0")}`);
-      return parseBlogMarkdown(`fixture-${n}`, raw);
-    });
-    const html = renderToStaticMarkup(createElement(BlogIndex, { posts }));
-    expect(html).toContain("Dek for fixture 1.");
-    expect(html).toContain("Dek for fixture 3.");
-    expect(html).not.toContain("Dek for fixture 4.");
-    expect(html).toContain("Fixture 4");
     expect(html).toContain("flex-1");
-    expect(html).toContain("grid-cols-3");
+    expect(html).not.toContain("A parse fixture with required image fields.");
+    expect(html).not.toContain("An older dek that must not appear on the index.");
+    expect(html).not.toContain("Newest");
+    expect(html).not.toContain("grid-cols-3");
+    expect(html).not.toContain("/blog/fixture-post.jpg");
+    expect(html).not.toContain("aspect-video");
   });
 
   test("leader row is title, 1px rule, and mono date", () => {
@@ -326,33 +307,32 @@ describe("blog index as a journal", () => {
     expect(html).toContain(formatJournalDate("2026-08-25"));
   });
 
-  test("index page is a centered masthead and a featured card", () => {
+  test("index page is a small left heading and a compact list", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
-    expect(src).toContain("max-w-[52rem]");
-    expect(src).toContain("text-center");
+    expect(src).toContain("max-w-[40rem]");
     expect(src).toContain("font-display");
-    expect(src).toContain("text-[2.5rem]");
+    expect(src).toContain("text-[1.5rem]");
+    expect(src).not.toContain("text-center");
+    expect(src).not.toContain("text-[2.5rem]");
+    expect(src).not.toContain("text-[3.25rem]");
     expect(src).not.toContain("text-7xl");
-    expect(src).not.toContain("max-w-[70ch]");
+    expect(src).not.toContain("max-w-[52rem]");
     expect(src).not.toContain("max-w-content");
     expect(src).not.toContain("tracking-widest");
     expect(src).not.toContain("h-2 w-2");
     expect(src).not.toContain("BLOG.eyebrow");
-    const cover = readFileSync(join(import.meta.dir, "../src/components/blog/BlogCover.tsx"), "utf8");
-    expect(index).toContain("font-display");
-    expect(index).toContain("FeaturedCard");
-    expect(index).toContain("rounded-[6px]");
-    expect(index).toContain("BlogCoverImage");
-    expect(cover).toContain("aspect-video");
     expect(index).toContain("BlogLeaderRow");
-    expect(index).toContain("BLOG_ARCHIVE_AFTER");
+    expect(index).not.toContain("FeaturedCard");
+    expect(index).not.toContain("BLOG_ARCHIVE_AFTER");
+    expect(index).not.toContain("BlogCover");
     expect(index).not.toContain("Newest");
     expect(index).not.toContain("FeaturedStory");
     expect(index).not.toContain("grid-cols-12");
+    expect(index).not.toContain("grid-cols-3");
     expect(index).not.toContain("grid-cols-2");
+    expect(index).not.toContain("aspect-video");
     expect(index).not.toContain("aspect-[4/5]");
-    expect(index).not.toContain("aspect-[3/2]");
     expect(index).not.toContain("→");
   });
 
@@ -391,6 +371,8 @@ describe("blog body as long-form type", () => {
     expect(src).toContain("BlogHeadingHash");
     expect(src).toContain("scroll-mt-24");
     expect(hash).toContain("right-full");
+    expect(hash).toContain("text-[0.8em]");
+    expect(hash).toContain("opacity-55");
     expect(hash).toContain("Link to");
     expect(src).not.toContain("border-border-strong border-b pb-3");
     expect(src).toContain("BlogFigure");
@@ -402,7 +384,7 @@ describe("blog body as long-form type", () => {
     expect(base).toContain("scroll-padding-top: 6rem");
   });
 
-  test("a lone markdown image becomes a full-measure figure with a sentence caption", () => {
+  test("a lone markdown image becomes a framed figure with a sentence caption", () => {
     const post = parseBlogMarkdown(
       "fixture-post",
       `${FIXTURE_RAW.trim()}\n\n![The delete is stuck on this address.](/blog/fixture-post.jpg)\n`,
@@ -410,16 +392,20 @@ describe("blog body as long-form type", () => {
     const html = renderToStaticMarkup(createElement(BlogPostArticle, { post }));
     expect(html).toContain("<figure");
     expect(html).toContain("The delete is stuck on this address.");
-    expect(html).toContain("aspect-video");
-    expect(html).toContain("italic");
+    expect(html).toContain("rounded-[7px]");
+    expect(html).not.toContain("aspect-video");
+    expect(html).not.toContain("italic");
     expect(html).not.toContain("on Unsplash");
   });
 
-  test("covers are 16:9 frames, not rounded chips", () => {
-    const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogCover.tsx"), "utf8");
-    expect(src).toContain("aspect-video");
-    expect(src).not.toContain("rounded-[5px]");
-    expect(src).not.toContain("font-mono");
+  test("figures are framed embeds, not 16:9 crops", () => {
+    const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogFigure.tsx"), "utf8");
+    expect(src).toContain("rounded-[7px]");
+    expect(src).toContain("border-border");
+    expect(src).toContain("h-auto w-full");
+    expect(src).not.toContain("aspect-video");
+    expect(src).not.toContain("object-cover");
+    expect(src).not.toContain("italic");
   });
 });
 

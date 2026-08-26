@@ -5,33 +5,30 @@ export function BlogFigure({
   caption,
   alt,
   priority = false,
-  sizes = "(min-width: 48rem) 40rem, 100vw",
-  aspectClassName = "aspect-video",
+  sizes = "(min-width: 40rem) 40rem, 100vw",
 }: {
   src: string;
   caption: string;
   alt?: string;
   priority?: boolean;
   sizes?: string;
-  aspectClassName?: string;
 }) {
   return (
     <figure className="my-10">
-      <div className={`relative w-full overflow-hidden bg-surface-2 ${aspectClassName}`}>
+      <div className="overflow-hidden rounded-[7px] border border-border bg-surface-2">
         <Image
           src={src}
           alt={alt || caption}
-          fill
+          width={1600}
+          height={2133}
           sizes={sizes}
           priority={priority}
           unoptimized
-          className="object-cover object-right"
+          className="h-auto w-full"
         />
       </div>
       {caption ? (
-        <figcaption className="border-border-strong border-t pt-3 text-[13px] leading-[1.45] text-text-muted italic">
-          {caption}
-        </figcaption>
+        <figcaption className="mt-2.5 text-[13px] leading-[1.45] text-text-muted">{caption}</figcaption>
       ) : null}
     </figure>
   );
