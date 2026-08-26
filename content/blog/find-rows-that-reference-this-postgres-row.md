@@ -18,7 +18,14 @@ imageCredit: Photo by Haberdoedas on Unsplash
 imageCreditUrl: https://unsplash.com/photos/three-address-numbers-on-a-dark-wall-3eLWbag4MOE
 ---
 
-Postgres will not delete a row that other rows still point at. The error names one constraint and one child table. The parent looks the same as it did before the delete. A foreign key is a column on the child, plus a constraint that says the value must exist on the parent. Both live on the referencing table. Select the parent and you get the parent. The incoming set is stored somewhere else. The parent is mute.
+```text
+ERROR: update or delete on table "master" violates foreign key constraint
+DETAIL: Key (id)=(1) is still referenced from table "other".
+```
+
+Source: https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table
+
+Postgres named one child and stopped. The parent looks the same as it did before the delete. A foreign key is a column on the child, plus a constraint that says the value must exist on the parent. Both live on the referencing table. Select the parent and you get the parent. The incoming set is stored somewhere else. The parent is mute.
 
 ![The pointer lives on the child.](/blog/find-rows-that-reference-this-postgres-row.jpg)
 
@@ -29,13 +36,6 @@ When a person, a school, or an order stores an `address_id`, the pointer is writ
 That is why a delete of the parent can fail after you have been staring at it. The blocking rows are in other tables, and this row has no field that says which.
 
 `ON DELETE RESTRICT` and `NO ACTION` are the usual case. Postgres finds one referencing row, raises the error, and stops. The `DETAIL` line names that one table. Other tables can still point here. The error is a sample.
-
-```
-ERROR: update or delete on table "master" violates foreign key constraint
-DETAIL: Key (id)=(1) is still referenced from table "other".
-```
-
-Source: https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table
 
 The asker on that thread wanted the incoming set without raising the error. The engine will not volunteer it. The parent cannot.
 
