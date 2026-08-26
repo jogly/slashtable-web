@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "opennextjs-cloudflare build",
+    "build": "opennextjs-cloudflare build && bun scripts/wrap-worker-theme.mjs",
     "start": "next start",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && bun scripts/wrap-worker-theme.mjs && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && bun scripts/wrap-worker-theme.mjs && opennextjs-cloudflare deploy",
     "test": "bun test"
   },
   "dependencies": {

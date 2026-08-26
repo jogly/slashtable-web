@@ -213,13 +213,18 @@ const softwareApplicationLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={fontVariables} data-theme="dark" suppressHydrationWarning>
+    <html lang="en" className={fontVariables} suppressHydrationWarning>
+      {/*
+        First child of <html>, not <head>: Next/OpenNext hoists stylesheets to the
+        start of <head>, so a React head <script> still paints after CSS. Production
+        also prepends this same IIFE as the first <head> child via HTMLRewriter
+        (scripts/wrap-worker-theme.mjs).
+      */}
+      <script
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: theme bootstrap must run before paint
+        dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+      />
       <head>
-        {/* Blocking: sets data-theme from st-theme / system before first paint. */}
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: theme bootstrap must run before paint
-          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
-        />
         <link rel="preload" as="image" href={SKY_NIGHT_SRC} fetchPriority="high" />
         <link rel="preload" as="image" href={SKY_DAY_SRC} />
         <style

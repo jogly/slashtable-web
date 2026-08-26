@@ -116,13 +116,20 @@ describe("first-paint theme / font / sky", () => {
     expect(script).toContain('export const THEME_STORAGE_KEY = "st-theme"');
     expect(script).toContain("data-theme");
     expect(script).toContain("prefers-color-scheme");
+    expect(script).toContain("THEME_BOOTSTRAP_HEAD_TAG");
     const layout = read("app/layout.tsx");
     expect(layout).toContain("THEME_BOOTSTRAP_SCRIPT");
-    expect(layout).toContain('data-theme="dark"');
+    expect(layout).not.toContain('data-theme="dark"');
+    expect(layout).toContain("suppressHydrationWarning");
     const provider = read("src/components/providers/ThemeProvider.tsx");
     expect(provider).toContain("disableTransitionOnChange");
     expect(provider).toContain("themeFromDocument");
     expect(provider).not.toContain("useMounted");
+    const wrap = read("scripts/wrap-worker-theme.mjs");
+    expect(wrap).toContain("HTMLRewriter");
+    expect(wrap).toContain("THEME_BOOTSTRAP_HEAD_TAG");
+    const pkg = read("package.json");
+    expect(pkg).toContain("scripts/wrap-worker-theme.mjs");
   });
 
   test("webfonts use real optional faces, not empty @font-face overrides", () => {
