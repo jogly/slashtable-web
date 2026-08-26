@@ -1,36 +1,25 @@
 import Link from "next/link";
 import { BLOG } from "@/lib/copy";
 import type { BlogPost } from "@/lib/blog";
-import { readingTimeLabel } from "@/lib/blog";
-import { formatJournalDate } from "@/lib/dates";
+import { BlogDate } from "./BlogMeta";
+import { BlogLeaderRow } from "./BlogLeaderRow";
 
-function NewestStory({ post }: { post: BlogPost }) {
-  return (
-    <article className="border-border border-t py-8 first:border-t-0 first:pt-0">
-      <h2 className="font-display text-[1.65rem] text-text leading-[1.15] tracking-[-0.02em] md:text-[1.85rem]">
-        <Link href={post.path}>{post.title}</Link>
-      </h2>
-      <p className="mt-3 text-[1.0625rem] text-text leading-[1.5]">{post.description}</p>
-      <p className="mt-3 text-[14px] leading-6 text-text-muted">
-        <time dateTime={post.publishedAt}>{formatJournalDate(post.publishedAt)}</time>
-        <span aria-hidden> · </span>
-        <span>{readingTimeLabel(post)}</span>
-        <span aria-hidden> · </span>
-        <span>Newest</span>
-      </p>
-    </article>
-  );
-}
+/** Zed's archive list only earns its place once there are enough notes. */
+export const BLOG_ARCHIVE_AFTER = 6;
+const FEATURED_WHEN_ARCHIVED = 3;
 
-function StoryRow({ post }: { post: BlogPost }) {
+function StoryCard({ post }: { post: BlogPost }) {
   return (
-    <article className="border-border border-t py-6">
-      <h2 className="font-display text-[1.25rem] text-text leading-[1.2] tracking-[-0.015em] md:text-[1.35rem]">
-        <Link href={post.path}>{post.title}</Link>
-      </h2>
-      <p className="mt-2 text-[14px] leading-6 text-text-muted">
-        <time dateTime={post.publishedAt}>{formatJournalDate(post.publishedAt)}</time>
-      </p>
+    <article className="border-border border">
+      <Link href={post.path} className="block px-6 py-6 md:px-8 md:py-8">
+        <h2 className="font-display text-[1.65rem] text-text leading-[1.15] tracking-[-0.02em] md:text-[1.85rem]">
+          {post.title}
+        </h2>
+        <p className="mt-3 text-[1.05rem] text-text-muted leading-[1.5]">{post.description}</p>
+        <div className="mt-5">
+          <BlogDate publishedAt={post.publishedAt} updatedAt={post.updatedAt} />
+        </div>
+      </Link>
     </article>
   );
 }
@@ -40,14 +29,25 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
     return <p className="py-16 text-[14px] text-text-muted">{BLOG.empty}</p>;
   }
 
-  const [newest, ...rest] = posts;
+  const showArchive = posts.length >= BLOG_ARCHIVE_AFTER;
+  const featured = showArchive ? posts.slice(0, FEATURED_WHEN_ARCHIVED) : posts;
+  const archive = showArchive ? posts.slice(FEATURED_WHEN_ARCHIVED) : [];
+  const cardGrid = featured.length === FEATURED_WHEN_ARCHIVED;
 
   return (
     <div className="mt-10">
-      <NewestStory post={newest} />
-      {rest.map((post) => (
-        <StoryRow key={post.slug} post={post} />
-      ))}
+      <div className={cardGrid ? "grid gap-6 md:grid-cols-3" : undefined}>
+        {featured.map((post) => (
+          <StoryCard key={post.slug} post={post} />
+        ))}
+      </div>
+      {archive.length > 0 ? (
+        <div className="mt-12">
+          {archive.map((post) => (
+            <BlogLeaderRow key={post.slug} href={post.path} title={post.title} publishedAt={post.publishedAt} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function BlogIndexPage() {
   const posts = getAllPosts();
 
   return (
-    <div className="mx-auto max-w-[40rem] px-6 pt-28 pb-28">
+    <div className="mx-auto max-w-[70ch] px-6 pt-28 pb-28">
       <JsonLd data={breadcrumb([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog/" }])} />
       <JsonLd data={blogCollectionLd(posts)} />
 

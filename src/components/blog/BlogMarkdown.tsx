@@ -45,12 +45,18 @@ const markdownComponents: Components = {
   },
   // Body markdown must not introduce a second page-level H1.
   h1: ({ children }) => (
-    <h2 id={headingId(children)} className="mt-14 mb-4 font-display text-[1.75rem] text-text leading-[1.15] md:text-3xl">
+    <h2
+      id={headingId(children)}
+      className="mt-14 mb-6 border-border border-b pb-3 font-display text-[1.75rem] text-text leading-[1.15] md:text-3xl"
+    >
       {children}
     </h2>
   ),
   h2: ({ children }) => (
-    <h2 id={headingId(children)} className="mt-14 mb-4 font-display text-[1.75rem] text-text leading-[1.15] md:text-3xl">
+    <h2
+      id={headingId(children)}
+      className="mt-14 mb-6 border-border border-b pb-3 font-display text-[1.75rem] text-text leading-[1.15] md:text-3xl"
+    >
       {children}
     </h2>
   ),

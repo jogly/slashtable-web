@@ -1,33 +1,21 @@
-import type { BlogPost } from "@/lib/blog";
-import { readingTimeLabel } from "@/lib/blog";
 import { formatJournalDate } from "@/lib/dates";
 
-export function BlogMeta({
-  post,
-  showTags = false,
+export function BlogDate({
+  publishedAt,
+  updatedAt,
 }: {
-  post: BlogPost;
-  showTags?: boolean;
+  publishedAt: string;
+  updatedAt?: string;
 }) {
   return (
-    <p className="text-[14px] leading-6 text-text-muted">
-      <time dateTime={post.publishedAt}>{formatJournalDate(post.publishedAt)}</time>
-      {post.updatedAt && post.updatedAt !== post.publishedAt ? (
+    <p className="font-mono text-[12px] leading-5 text-text-muted">
+      <time dateTime={publishedAt}>{formatJournalDate(publishedAt)}</time>
+      {updatedAt && updatedAt !== publishedAt ? (
         <>
           <span aria-hidden> · </span>
-          <time dateTime={post.updatedAt}>Updated {formatJournalDate(post.updatedAt)}</time>
+          <time dateTime={updatedAt}>Updated {formatJournalDate(updatedAt)}</time>
         </>
       ) : null}
-      <span aria-hidden> · </span>
-      <span>{readingTimeLabel(post)}</span>
-      {showTags
-        ? post.tags.map((tag) => (
-            <span key={tag}>
-              <span aria-hidden> · </span>
-              {tag}
-            </span>
-          ))
-        : null}
     </p>
   );
 }

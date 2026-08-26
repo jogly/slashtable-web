@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { createElement } from "react";
 import sitemap from "../app/sitemap";
 import { BlogIndex } from "../src/components/blog/BlogIndex";
+import { BlogLeaderRow } from "../src/components/blog/BlogLeaderRow";
 import { BlogPostArticle } from "../src/components/blog/BlogPostArticle";
 import { BLOG_SOURCES } from "../src/lib/blog-data.generated";
 import {
@@ -16,7 +17,6 @@ import {
   isSkippedBlogFile,
   parseBlogMarkdown,
   postPath,
-  readingTimeLabel,
 } from "../src/lib/blog";
 import { formatJournalDate } from "../src/lib/dates";
 import { buildLlmsTxt } from "../src/lib/llms";
@@ -199,10 +199,10 @@ describe("posts render H1", () => {
       expect(html).not.toContain(post.image);
       expect(html).not.toContain("on Unsplash");
       expect(html).not.toContain("Sources");
-      expect(html).toContain(post.description);
-      expect(html).toContain("text-[1.05rem] leading-[1.45] text-text-muted");
+      expect(html).not.toContain(post.description);
       expect(html).toContain(formatJournalDate(post.publishedAt));
-      expect(html).toContain(readingTimeLabel(post));
+      expect(html).toContain("font-mono");
+      expect(html).toContain("border-t");
       expect(html).toContain("font-display");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
@@ -225,10 +225,10 @@ describe("posts render H1", () => {
     const html = renderToStaticMarkup(createElement(BlogPostArticle, { post }));
     expect(html).toContain("Fixture post");
     expect(html).not.toContain("TL;DR");
-    expect(html).toContain("A parse fixture with required image fields.");
-    expect(html).toContain("text-[1.05rem] leading-[1.45] text-text-muted");
+    expect(html).not.toContain("A parse fixture with required image fields.");
+    expect(html).toContain("Body copy.");
     expect(html).toContain(formatJournalDate(post.publishedAt));
-    expect(html).toContain(readingTimeLabel(post));
+    expect(html).toContain("font-mono");
     expect(formatPostMarkdown(post)).toContain("A parse fixture with required image fields.");
     expect(formatPostMarkdown(post)).not.toContain("TL;DR");
   });
@@ -253,40 +253,73 @@ describe("blog index as a journal", () => {
     if (posts[0]) {
       expect(html).toContain(posts[0].title);
       expect(html).toContain(posts[0].description);
-      expect(html).toContain("Newest");
+      expect(html).not.toContain("Newest");
       expect(html).not.toContain(posts[0].image);
       expect(html).not.toContain("on Unsplash");
+      expect(html).not.toContain("flex-1");
     }
     for (const post of posts) {
       expect(html).toContain(post.title);
       expect(html).toContain(formatJournalDate(post.publishedAt));
     }
-    for (const post of posts.slice(1)) {
-      expect(html).not.toContain(post.description);
-    }
   });
 
-  test("later rows are title and date only", () => {
+  test("two posts stay full-width cards and do not grow a one-row archive", () => {
     const newest = parseBlogMarkdown("fixture-post", FIXTURE_RAW);
     const laterRaw = FIXTURE_RAW.replace("Fixture post", "Older fixture").replace(
       "A parse fixture with required image fields.",
-      "An older dek that must not appear on a later row.",
+      "An older dek that still belongs on a second card.",
     );
     const later = parseBlogMarkdown("older-fixture", laterRaw.replace("fixture-post.jpg", "older-fixture.jpg"));
     const html = renderToStaticMarkup(createElement(BlogIndex, { posts: [newest, later] }));
     expect(html).toContain("Fixture post");
     expect(html).toContain("A parse fixture with required image fields.");
-    expect(html).toContain("Newest");
     expect(html).toContain("Older fixture");
-    expect(html).not.toContain("An older dek that must not appear on a later row.");
+    expect(html).toContain("An older dek that still belongs on a second card.");
+    expect(html).not.toContain("Newest");
+    expect(html).not.toContain("flex-1");
+    expect(html).not.toContain("grid-cols-3");
     expect(html).not.toContain("/blog/fixture-post.jpg");
     expect(html).not.toContain("aspect-[3/2]");
   });
 
-  test("index page is a small masthead and a list of notes", () => {
+  test("leader-rule rows wait until six posts", () => {
+    const posts = Array.from({ length: 6 }, (_, index) => {
+      const n = index + 1;
+      const raw = FIXTURE_RAW.replace("Fixture post", `Fixture ${n}`)
+        .replace("A parse fixture with required image fields.", `Dek for fixture ${n}.`)
+        .replace("fixture-post.jpg", `fixture-${n}.jpg`)
+        .replace("2026-08-25", `2026-08-${String(26 - n).padStart(2, "0")}`);
+      return parseBlogMarkdown(`fixture-${n}`, raw);
+    });
+    const html = renderToStaticMarkup(createElement(BlogIndex, { posts }));
+    expect(html).toContain("Dek for fixture 1.");
+    expect(html).toContain("Dek for fixture 3.");
+    expect(html).not.toContain("Dek for fixture 4.");
+    expect(html).toContain("Fixture 4");
+    expect(html).toContain("flex-1");
+    expect(html).toContain("grid-cols-3");
+  });
+
+  test("leader row is title, 1px rule, and mono date", () => {
+    const html = renderToStaticMarkup(
+      createElement(BlogLeaderRow, {
+        href: "/blog/fixture-post",
+        title: "Fixture post",
+        publishedAt: "2026-08-25",
+      }),
+    );
+    expect(html).toContain("Fixture post");
+    expect(html).toContain("flex-1");
+    expect(html).toContain("border-t");
+    expect(html).toContain("font-mono");
+    expect(html).toContain(formatJournalDate("2026-08-25"));
+  });
+
+  test("index page is a small masthead and a story card", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
-    expect(src).toContain("max-w-[40rem]");
+    expect(src).toContain("max-w-[70ch]");
     expect(src).toContain("font-display");
     expect(src).toContain("text-[1.5rem]");
     expect(src).not.toContain("text-[2rem]");
@@ -297,8 +330,10 @@ describe("blog index as a journal", () => {
     expect(src).not.toContain("h-2 w-2");
     expect(src).not.toContain("BLOG.eyebrow");
     expect(index).toContain("font-display");
-    expect(index).toContain("Newest");
-    expect(index).toContain("NewestStory");
+    expect(index).toContain("StoryCard");
+    expect(index).toContain("BlogLeaderRow");
+    expect(index).toContain("BLOG_ARCHIVE_AFTER");
+    expect(index).not.toContain("Newest");
     expect(index).not.toContain("BlogCover");
     expect(index).not.toContain("aspect-[3/2]");
     expect(index).not.toContain("FeaturedStory");
@@ -311,7 +346,7 @@ describe("blog index as a journal", () => {
   test("post pages use one reading measure and drop the eyebrow", () => {
     const page = readFileSync(join(import.meta.dir, "../app/blog/[slug]/page.tsx"), "utf8");
     const article = readFileSync(join(import.meta.dir, "../src/components/blog/BlogPostArticle.tsx"), "utf8");
-    expect(page).toContain("max-w-[65ch]");
+    expect(page).toContain("max-w-[70ch]");
     expect(page).not.toContain("max-w-content");
     expect(article).toContain("font-display");
     expect(article).not.toContain("max-w-content");
@@ -320,8 +355,7 @@ describe("blog index as a journal", () => {
     expect(article).not.toContain("border-dashed");
     expect(article).not.toContain("post.tldr");
     expect(article).not.toContain("TL;DR");
-    expect(article).toContain("post.description");
-    expect(article).toContain("text-[1.05rem] leading-[1.45] text-text-muted");
+    expect(article).not.toContain("post.description");
     expect(article).not.toContain("BlogCover");
     expect(article).not.toContain("tracking-widest");
     expect(article).not.toContain("h-2 w-2");
@@ -334,6 +368,7 @@ describe("blog body as long-form type", () => {
     const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogMarkdown.tsx"), "utf8");
     expect(src).toContain("text-[1.125rem] leading-[1.7] text-text");
     expect(src).toContain("font-display");
+    expect(src).toContain("border-b");
     expect(src).toContain("remarkGfm");
     expect(src).toContain("<table");
     expect(src).toContain("font-display text-[1.2rem] text-text italic");
@@ -344,6 +379,7 @@ describe("blog body as long-form type", () => {
   test("covers are flush editorial frames, not rounded chips", () => {
     const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogCover.tsx"), "utf8");
     expect(src).toContain("aspect-[3/2]");
+    expect(src).toContain("border-t");
     expect(src).not.toContain("rounded-[5px]");
     expect(src).not.toContain("font-mono");
   });

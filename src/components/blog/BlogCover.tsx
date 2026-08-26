@@ -29,7 +29,7 @@ export function BlogCoverImage({
 
 export function BlogCoverCredit({ post }: { post: BlogPost }) {
   return (
-    <p className="mt-2.5 text-[13px] leading-5 text-text-muted">
+    <p className="text-[13px] leading-5 text-text-muted">
       <a
         href={post.imageCreditUrl}
         target="_blank"
@@ -56,7 +56,7 @@ export function BlogCover({
   return (
     <figure className="m-0">
       <BlogCoverImage post={post} sizes={sizes} priority={priority} aspectClassName={aspectClassName} />
-      <figcaption>
+      <figcaption className="mt-0 border-border border-t pt-3">
         <BlogCoverCredit post={post} />
       </figcaption>
     </figure>
