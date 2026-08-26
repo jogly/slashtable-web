@@ -1,4 +1,3 @@
-import { BLOG } from "@/lib/copy";
 import type { BlogPost } from "@/lib/blog";
 import { BlogCover } from "./BlogCover";
 import { BlogMarkdown } from "./BlogMarkdown";
@@ -7,12 +6,15 @@ import { BlogMeta } from "./BlogMeta";
 export function BlogPostArticle({ post }: { post: BlogPost }) {
   return (
     <article>
-      <BlogMeta post={post} showTags />
-      <h1 className="mt-4 font-display text-[2.75rem] text-text leading-[1.04] tracking-[-0.03em] md:text-6xl md:leading-[1.02]">
+      <h1 className="font-display text-[2.4rem] text-text leading-[1.08] tracking-[-0.025em] md:text-5xl md:leading-[1.05]">
         {post.title}
       </h1>
+      <div className="mt-5">
+        <BlogMeta post={post} showTags />
+      </div>
+      <p className="mt-6 text-[1.125rem] leading-[1.7] text-text">{post.description}</p>
 
-      <div className="mt-10">
+      <div className="mt-8">
         <BlogCover
           post={post}
           priority
@@ -20,11 +22,6 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
           sizes="(min-width: 40rem) 40rem, 100vw"
         />
       </div>
-
-      <aside className="mt-12 mb-2 border-border border-l pl-5" aria-label={BLOG.tldrLabel}>
-        <p className="font-display text-[1.05rem] text-text italic">{BLOG.tldrLabel}</p>
-        <p className="mt-3 text-[1.125rem] leading-[1.7] text-text">{post.tldr}</p>
-      </aside>
 
       <div className="mt-10">
         <BlogMarkdown content={post.body} />

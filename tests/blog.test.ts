@@ -193,26 +193,27 @@ describe("posts render H1", () => {
       const headings = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/g) ?? [];
       expect(headings).toHaveLength(1);
       expect(headings[0]).toContain(post.title);
-      expect(html).toContain("TL;DR");
+      expect(html).not.toContain("TL;DR");
       expect(html).not.toContain("Summary");
       expect(html).not.toMatch(/border-dashed/);
       expect(html).toContain(post.image);
       expect(html).toContain(post.imageCreditUrl);
       expect(html).toContain("on Unsplash");
-      expect(html).toContain(post.tldr);
-      expect(html).not.toContain(post.description);
+      expect(html).toContain(post.description);
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain(readingTimeLabel(post));
       expect(html).toContain("font-display");
+      expect(post.body).not.toMatch(/^https?:\/\//m);
+      expect(post.body).not.toMatch(/^## .+\?$/m);
       if (post.body.includes("| Job |")) {
         expect(html).toContain("<table");
         expect(html).toContain("Catalog SQL");
       }
       const md = formatPostMarkdown(post);
       expect(md.startsWith(`# ${post.title}`)).toBe(true);
-      expect(md).toContain("## TL;DR");
-      expect(md).toContain(post.tldr);
-      expect(md).not.toContain(post.description);
+      expect(md).not.toContain("## TL;DR");
+      expect(md).not.toContain("TL;DR");
+      expect(md).toContain(post.description);
       expect(post.body).not.toMatch(/^## TL;DR/m);
     }
   });
@@ -221,12 +222,13 @@ describe("posts render H1", () => {
     const post = parseBlogMarkdown("fixture-post", FIXTURE_RAW);
     const html = renderToStaticMarkup(createElement(BlogPostArticle, { post }));
     expect(html).toContain("Fixture post");
-    expect(html).toContain("TL;DR");
+    expect(html).not.toContain("TL;DR");
+    expect(html).toContain("A parse fixture with required image fields.");
     expect(html).toContain("text-[1.125rem] leading-[1.7] text-text");
     expect(html).toContain(formatJournalDate(post.publishedAt));
     expect(html).toContain(readingTimeLabel(post));
-    expect(html).not.toContain("A parse fixture with required image fields.");
-    expect(formatPostMarkdown(post)).not.toContain("A parse fixture with required image fields.");
+    expect(formatPostMarkdown(post)).toContain("A parse fixture with required image fields.");
+    expect(formatPostMarkdown(post)).not.toContain("TL;DR");
   });
 });
 
@@ -239,6 +241,7 @@ describe("blog index as a journal", () => {
     expect(html).not.toContain("<h1");
     expect(html).not.toContain("→");
     expect(html).not.toContain("grid-cols-2");
+    expect(html).not.toContain("grid-cols-12");
     if (posts.length === 0) {
       expect(html).toContain("No posts yet.");
     }
@@ -259,16 +262,19 @@ describe("blog index as a journal", () => {
   test("index page is a type-led journal column, not marketing chrome", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
-    expect(src).toContain("max-w-[72rem]");
+    expect(src).toContain("max-w-[40rem]");
     expect(src).toContain("font-display");
+    expect(src).not.toContain("max-w-[72rem]");
     expect(src).not.toContain("max-w-content");
     expect(src).not.toContain("tracking-widest");
     expect(src).not.toContain("h-2 w-2");
     expect(src).not.toContain("BLOG.eyebrow");
     expect(index).toContain("font-display");
-    expect(index).toContain("aspect-[4/5]");
-    expect(index).toContain("md:grid-cols-12");
+    expect(index).toContain("aspect-[3/2]");
+    expect(index).not.toContain("FeaturedStory");
+    expect(index).not.toContain("grid-cols-12");
     expect(index).not.toContain("grid-cols-2");
+    expect(index).not.toContain("aspect-[4/5]");
     expect(index).not.toContain("→");
   });
 
@@ -282,7 +288,9 @@ describe("blog index as a journal", () => {
     expect(article).not.toContain("max-w-3xl");
     expect(article).not.toContain("tldrEyebrow");
     expect(article).not.toContain("border-dashed");
-    expect(article).not.toContain("post.description");
+    expect(article).not.toContain("post.tldr");
+    expect(article).not.toContain("TL;DR");
+    expect(article).toContain("post.description");
     expect(article).not.toContain("tracking-widest");
     expect(article).not.toContain("h-2 w-2");
     expect(article).not.toContain("BLOG.eyebrow");

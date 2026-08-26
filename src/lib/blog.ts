@@ -176,9 +176,7 @@ export function formatPostMarkdown(post: BlogPost): string {
 
 Published: ${post.publishedAt}${updated}${tags}
 
-## TL;DR
-
-${post.tldr}
+${post.description}
 
 ${post.body}
 `.trim();

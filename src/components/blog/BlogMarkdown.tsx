@@ -59,7 +59,13 @@ const markdownComponents: Components = {
       {children}
     </h3>
   ),
-  p: ({ children }) => <p className={`mb-5 ${body}`}>{children}</p>,
+  p: ({ children }) => {
+    const text = textFromNode(children).trim();
+    if (/^https?:\/\/\S+$/.test(text)) {
+      return null;
+    }
+    return <p className={`mb-5 ${body}`}>{children}</p>;
+  },
   strong: ({ children }) => <strong className="font-semibold text-text">{children}</strong>,
   em: ({ children }) => <em className="italic">{children}</em>,
   ul: ({ children }) => <ul className={`mb-5 list-disc space-y-2 pl-5 ${body}`}>{children}</ul>,
