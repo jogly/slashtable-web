@@ -1,16 +1,16 @@
 ---
 title: How do I find all rows that reference this Postgres row
-description: See every row that still points at a Postgres parent before you retry the delete.
+description: Postgres stores the pointer on the child. See every row that still points at a parent before you retry the delete.
 publishedAt: 2026-08-25
 published: false
-tldr: Postgres refused a delete because other rows still point at the parent. The catalog names the tables. The incoming list, including a join that is not its own hop, sits on that parent. Write the UNION only when the answer has to be a script.
+tldr: The parent is mute. A foreign key lives on the child. The catalog names tables. The delete needs the incoming rows on that parent, including through a join. Write the UNION when the answer has to be a script.
 demand_query: how do I find all rows that reference this postgres row
 cluster: fk-navigation
 demand_urls:
   - https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row
+  - https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table
   - https://dbeaver.com/docs/dbeaver/References-Panel/
   - https://www.jetbrains.com/help/datagrip/rows.html
-  - https://github.com/TablePlus/TablePlus/issues/660
 session_log: session.md
 image: /blog/find-rows-that-reference-this-postgres-row.jpg
 imageAlt: Metal house numbers on a dark exterior wall
@@ -18,28 +18,49 @@ imageCredit: Photo by Haberdoedas on Unsplash
 imageCreditUrl: https://unsplash.com/photos/three-address-numbers-on-a-dark-wall-3eLWbag4MOE
 ---
 
-Postgres will not delete a row that other rows still point at. The error sometimes names one child table. Sometimes it names nothing. It could be one of ten other tables. Either way the parent is still there, and the delete is still stuck.
+Postgres will not delete a row that other rows still point at. The error names one constraint and one child table. It does not name the rest. The parent looks the same as it did before the delete. That is not a missing screen. That is how a foreign key is stored.
 
-The catalog can list every table that is allowed to point here. It cannot list the rows that actually do.
+A foreign key is a column on the child, plus a constraint that says the value must exist on the parent. Both live on the referencing table. Select the parent and you get the parent. You do not get the incoming set. The parent is mute.
 
-![The parent is still in the table. The unknown is who still points at it.](/blog/find-rows-that-reference-this-postgres-row.jpg)
+![The parent row does not list who points at it. The pointer lives on the child.](/blog/find-rows-that-reference-this-postgres-row.jpg)
 
-## The catalog knows the tables. The delete needs the rows.
+## The pointer lives on the child
 
-A `UNION` of every table with a foreign key to this one is the right artifact once those tables are known. It is the wrong first move when they are not. You can list every incoming constraint and still not have the rows that block the delete.
+When a person, a school, or an order stores an `address_id`, the pointer is written on that child. Postgres records the constraint the same way. In `pg_constraint`, `conrelid` is the table that has the column. `confrelid` is the table being pointed at. Nothing is written onto the parent row.
 
-That is the Stack Overflow answer for this job: query each child you already know, or generate that UNION from the catalog. It answers which tables can point here. It does not answer which rows still do.
+That is why a delete of the parent can fail after you have been staring at it. The blocking rows are not in this table. They are somewhere else, and this row has no field that says where.
 
-A [References panel](https://dbeaver.com/docs/dbeaver/References-Panel/) or [Go To Related Rows](https://www.jetbrains.com/help/datagrip/rows.html) hops once. That is enough when Postgres already named the one child and that hop is the whole job. A script still wants the UNION. Neither shows the incoming rows while you are looking at the parent.
+`ON DELETE RESTRICT` and `NO ACTION` are the usual case. Postgres finds one referencing row, raises the error, and stops. The `DETAIL` line names that one table. Other tables can still point here. The error is a sample, not an inventory.
 
-## The incoming list sits on the parent
+```
+ERROR: update or delete on table "master" violates foreign key constraint
+DETAIL: Key (id)=(1) is still referenced from table "other".
+```
 
-Open that parent in /table. On the same row the grid lists who still points at it. Click a list. The next grid is those rows.
+Source: https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table
 
-Arriving on the parent from a child is how most people get here. That hop lands on the parent. It does not list who else still points at it. Do not treat that hop as the answer.
+The asker on that thread wanted the incoming set without raising the error. The engine will not volunteer it. The parent cannot.
 
-## A join is not a second hop
+## The catalog answers a different question
 
-Some of the incoming rows only reach this parent through a join. On this row they show up as that related set, not as a pivot you hop through and then hop again. Direct children are ordinary child tables. The join does not get a seat.
+`pg_constraint` and `information_schema` will list every table that is allowed to point at this one. That is the question the catalog can answer: which children exist. It is not the question the delete asks: which rows still do.
 
-That is the whole job: see the incoming rows, then retry the delete.
+The Stack Overflow thread for this job has been open since 2009. The accepted answer is still the same: query each child you already know, or generate a `UNION` from the catalog. That is asking every child, out loud. It is the right script. It does not put the incoming set on the parent you are looking at.
+
+A [References panel](https://dbeaver.com/docs/dbeaver/References-Panel/) or [Go To Related Rows](https://www.jetbrains.com/help/datagrip/rows.html) hops once. That is asking one child. Enough when the error already named that child and that hop is the whole job. A nightly cleanup, a migration, or a CI check still wants the UNION.
+
+Neither is a substitute for seeing the incoming rows while the parent is selected.
+
+## A join looks like another child
+
+The catalog will also show a join table: two foreign keys, no meaning of its own. Ask the catalog "who can point here" and the join is a first-class child. Ask the delete "who still points here" and the join is plumbing.
+
+The rows that matter are on the far side. Treat the join as a second hop and the incoming list becomes a path you walk. On the parent those far rows are just another incoming set. The join does not get a seat.
+
+## The parent can list who points at it
+
+Once the job is to make the mute parent speak, the object is the parent row. Open it in /table. The grid on that row lists who still points at it, including the far side of a join. Click a list. The next grid is those rows.
+
+Arriving on the parent from a child is how most people get here. That hop follows the pointer that already lives on the child. It lands on the parent. It does not list who else still points at it. Do not treat that hop as the answer.
+
+See the incoming rows. Then retry the delete. Write the UNION when the answer has to be a script.
