@@ -5,7 +5,7 @@ export function BlogHeadingHash({ id, label }: { id: string; label: string }) {
     <a
       href={`#${id}`}
       aria-label={`Link to ${label}`}
-      className="absolute top-0 right-full mr-2.5 font-mono text-[0.8em] leading-none text-text no-underline opacity-55 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+      className="absolute top-1/2 right-full mr-2.5 -translate-y-1/2 font-mono text-[0.5em] leading-none text-text no-underline opacity-[0.28] transition-opacity group-hover:opacity-70 focus-visible:opacity-70"
       onClick={() => {
         try {
           void navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${id}`);

@@ -371,14 +371,24 @@ describe("blog body as long-form type", () => {
     expect(src).toContain("BlogHeadingHash");
     expect(src).toContain("scroll-mt-24");
     expect(hash).toContain("right-full");
-    expect(hash).toContain("text-[0.8em]");
-    expect(hash).toContain("opacity-55");
+    expect(hash).toContain("top-1/2");
+    expect(hash).toContain("-translate-y-1/2");
+    expect(hash).toContain("text-[0.5em]");
+    expect(hash).toContain("opacity-[0.28]");
+    expect(hash).toContain("group-hover:opacity-70");
     expect(hash).toContain("Link to");
+    expect(hash).not.toContain("text-[0.8em]");
+    expect(hash).not.toContain("opacity-55");
     expect(src).not.toContain("border-border-strong border-b pb-3");
     expect(src).toContain("BlogFigure");
     expect(src).toContain("remarkGfm");
     expect(src).toContain("<table");
-    expect(src).toContain("font-display text-[1.2rem] text-text italic");
+    expect(src).toContain("font-serif text-[1rem] leading-[1.6] text-text");
+    expect(src).toContain("font-serif text-[1.2rem] text-text italic");
+    expect(src).toContain("font-sans text-[12px] font-normal text-text-muted");
+    expect(src).toContain("first:font-medium");
+    expect(src).not.toContain("border-l");
+    expect(src).not.toContain("<th className=\"bg-");
     expect(src).not.toContain("text-text-secondary");
     expect(src).not.toContain("font-mono text-sm");
     expect(base).toContain("scroll-padding-top: 6rem");
@@ -408,6 +418,19 @@ describe("blog body as long-form type", () => {
     expect(src).toContain("object-right");
     expect(src).not.toContain("h-auto w-full");
     expect(src).not.toContain("italic");
+  });
+
+  test("reading serif is article body only", () => {
+    const markdown = readFileSync(join(import.meta.dir, "../src/components/blog/BlogMarkdown.tsx"), "utf8");
+    const figure = readFileSync(join(import.meta.dir, "../src/components/blog/BlogFigure.tsx"), "utf8");
+    const index = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
+    const row = readFileSync(join(import.meta.dir, "../src/components/blog/BlogLeaderRow.tsx"), "utf8");
+    const hero = readFileSync(join(import.meta.dir, "../src/components/sections/Hero.tsx"), "utf8");
+    expect(markdown).toContain("font-serif");
+    expect(figure).not.toContain("font-serif");
+    expect(index).not.toContain("font-serif");
+    expect(row).not.toContain("font-serif");
+    expect(hero).not.toContain("font-serif");
   });
 });
 

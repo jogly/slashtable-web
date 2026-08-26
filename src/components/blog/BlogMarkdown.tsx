@@ -26,7 +26,7 @@ function imageFromChildren(children: ReactNode): { src: string; alt: string } | 
   return { src: props.src, alt: typeof props.alt === "string" ? props.alt : "" };
 }
 
-const body = "text-[1rem] leading-[1.6] text-text";
+const body = "font-serif text-[1rem] leading-[1.6] text-text";
 const inkLink =
   "text-text underline decoration-border-strong underline-offset-[0.18em] transition-colors hover:decoration-accent";
 
@@ -100,20 +100,26 @@ const markdownComponents: Components = {
     <pre className="mb-6 overflow-x-auto border border-border bg-surface-2/70 px-4 py-3.5 text-text">{children}</pre>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="my-8 font-display text-[1.2rem] text-text italic leading-[1.55]">{children}</blockquote>
+    <blockquote className="my-8 font-serif text-[1.2rem] text-text italic leading-[1.55]">{children}</blockquote>
   ),
   table: ({ children }) => (
     <div className="my-8 overflow-x-auto">
-      <table className="w-full min-w-[36rem] border-collapse text-left text-[1.02rem] leading-6 text-text">
+      <table className="w-full min-w-[36rem] border-collapse text-left">
         {children}
       </table>
     </div>
   ),
-  thead: ({ children }) => <thead className="border-border-strong border-b">{children}</thead>,
+  thead: ({ children }) => <thead>{children}</thead>,
   tbody: ({ children }) => <tbody>{children}</tbody>,
   tr: ({ children }) => <tr className="border-border border-b last:border-b-0">{children}</tr>,
-  th: ({ children }) => <th className="py-2.5 pr-5 align-bottom font-semibold text-text">{children}</th>,
-  td: ({ children }) => <td className="py-3 pr-5 align-top text-text">{children}</td>,
+  th: ({ children }) => (
+    <th className="py-3 pr-6 align-bottom font-sans text-[12px] font-normal text-text-muted">{children}</th>
+  ),
+  td: ({ children }) => (
+    <td className="py-3.5 pr-6 align-top font-serif text-[1rem] leading-[1.55] text-text first:font-medium">
+      {children}
+    </td>
+  ),
   hr: () => <hr className="my-12 border-border border-t" />,
 };
 

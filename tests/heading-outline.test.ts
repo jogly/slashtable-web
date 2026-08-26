@@ -134,6 +134,8 @@ describe("first-paint theme / font / sky", () => {
     expect(fonts).toContain('display: "optional"');
     expect(fonts).toContain("manrope-latin-wght-normal.woff2");
     expect(fonts).toContain("playfair-display-latin-wght-italic.woff2");
+    expect(fonts).toContain("source-serif-4-latin-wght-normal.woff2");
+    expect(fonts).toContain('variable: "--font-source-serif"');
   });
 
   test("sky is a CSS background with head preloads, not a late img", () => {
