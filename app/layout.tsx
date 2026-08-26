@@ -225,7 +225,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <style
           // biome-ignore lint/security/noDangerouslySetInnerHtml: hashed sky URLs must be on :root before first paint
           dangerouslySetInnerHTML={{
-            __html: `:root{--sky-night:url("${SKY_NIGHT_SRC}");--sky-day:url("${SKY_DAY_SRC}");}`,
+            __html: `:root{--sky-night:url("${SKY_NIGHT_SRC}");--sky-day:url("${SKY_DAY_SRC}");--sky-image:var(--sky-night);--sky-opacity:0.11}html[data-theme=light]{--sky-image:var(--sky-day);--sky-opacity:0.2}`,
           }}
         />
         <link rel="preconnect" href="https://downloads.slashtable.dev" />

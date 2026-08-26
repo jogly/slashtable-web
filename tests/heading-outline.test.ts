@@ -139,11 +139,13 @@ describe("first-paint theme / font / sky", () => {
   test("sky is a CSS background with head preloads, not a late img", () => {
     const sky = read("src/components/ui/SkyParallax.tsx");
     expect(sky).toContain("sky-layer");
-    expect(sky).not.toContain("<img");
+    expect(sky).not.toMatch(/<img[\s>/]/);
+    expect(sky).not.toContain("from \"./Img\"");
     expect(sky).not.toContain("useTheme");
     const css = read("src/theme/base.css");
-    expect(css).toContain("background-image: var(--sky-night)");
-    expect(css).toContain("html[data-theme=\"light\"] .sky-layer");
+    expect(css).toContain("background-image: var(--sky-image, var(--sky-night))");
+    expect(css).toContain("html[data-theme=\"light\"]");
+    expect(css).toContain("--sky-image: var(--sky-day)");
     const layout = read("app/layout.tsx");
     expect(layout).toContain('rel="preload"');
     expect(layout).toContain("SKY_NIGHT_SRC");

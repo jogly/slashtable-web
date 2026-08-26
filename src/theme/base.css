@@ -62,31 +62,20 @@
       transform: translateY(0);
     }
   }
+}
 
-  /* First-paint sky: CSS background (preloaded), not a late <img> decode.
-     --sky-night / --sky-day are set from the hashed asset URLs in layout. */
-  .sky-layer {
-    background-color: var(--color-bg);
-    background-image: var(--sky-night);
-    background-position: center;
-    background-size: cover;
-    filter: saturate(0.55);
-    opacity: var(--sky-opacity-dark, 0.11);
-  }
+/* Unlayered so Tailwind cannot drop these from @layer base.
+   --sky-night / --sky-day are set from hashed URLs in layout. */
+.sky-layer {
+  background-color: var(--color-bg);
+  background-image: var(--sky-image, var(--sky-night));
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.55);
+  opacity: var(--sky-opacity, var(--sky-opacity-dark, 0.11));
+}
 
-  html[data-theme="light"] .sky-layer {
-    background-image: var(--sky-day);
-    opacity: var(--sky-opacity-light, 0.2);
-  }
-
-  .sky-vignette {
-    background: linear-gradient(
-      to bottom,
-      var(--color-surface) 0%,
-      transparent 40%,
-      transparent 60%,
-      var(--color-surface) 100%
-    );
-    opacity: 0.85;
-  }
+html[data-theme="light"] {
+  --sky-image: var(--sky-day);
+  --sky-opacity: var(--sky-opacity-light, 0.2);
 }
