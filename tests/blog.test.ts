@@ -205,27 +205,29 @@ describe("posts render H1", () => {
       expect(html).not.toContain("Ada");
       expect(html).not.toContain("Bea");
       expect(html).not.toContain("Linux is alpha");
-      expect(html).not.toContain("pg_constraint");
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain("font-mono");
       expect(html).toContain("rounded-[7px]");
       expect(html).not.toContain("italic");
       expect(html).toContain("font-display");
       expect(html).toContain("scroll-mt-24");
-      expect(html).toContain("#you-already-know-the-address");
-      expect(html).toContain("Link to You already know the address");
-      expect(html).toContain("#that-row-already-lists-them");
-      expect(html).toContain("Link to That row already lists them");
-      expect(html).not.toContain("#open-that-row");
+      expect(html).toContain("#the-union-needs-a-list-you-do-not-have");
+      expect(html).toContain("Link to The UNION needs a list you do not have");
+      expect(html).toContain("#the-parent-row-is-the-list");
+      expect(html).toContain("Link to The parent row is the list");
+      expect(html).toContain("#write-sql-when-this-has-to-run-without-a-desktop");
       expect(html).toContain("neighbor picture");
+      expect(html).not.toContain("#you-already-know-the-address");
+      expect(html).not.toContain("#that-row-already-lists-them");
+      expect(html).not.toContain("#open-that-row");
       expect(html).not.toContain("<hr");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
       expect(post.body).not.toMatch(/^## Sources$/m);
       if (post.body.includes("| Job |")) {
         expect(html).toContain("<table");
-        expect(html).toContain("Stay in SQL");
-        expect(html).toContain("Other client");
+        expect(html).toContain("Write SQL");
+        expect(html).toContain("One-hop panel");
       }
       const md = formatPostMarkdown(post);
       expect(md.startsWith(`# ${post.title}`)).toBe(true);
