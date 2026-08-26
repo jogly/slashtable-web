@@ -15,16 +15,15 @@ export function BlogFigure({
 }) {
   return (
     <figure className="my-10">
-      <div className="overflow-hidden rounded-[7px] border border-border bg-surface-2">
+      <div className="relative aspect-video w-full overflow-hidden rounded-[7px] border border-border bg-surface-2">
         <Image
           src={src}
           alt={alt || caption}
-          width={1600}
-          height={2133}
+          fill
           sizes={sizes}
           priority={priority}
           unoptimized
-          className="h-auto w-full"
+          className="object-cover object-right"
         />
       </div>
       {caption ? (

@@ -393,18 +393,20 @@ describe("blog body as long-form type", () => {
     expect(html).toContain("<figure");
     expect(html).toContain("The delete is stuck on this address.");
     expect(html).toContain("rounded-[7px]");
-    expect(html).not.toContain("aspect-video");
+    expect(html).toContain("aspect-video");
+    expect(html).toContain("object-cover");
     expect(html).not.toContain("italic");
     expect(html).not.toContain("on Unsplash");
   });
 
-  test("figures are framed embeds, not 16:9 crops", () => {
+  test("figures are a wide framed window, not the full 4:5 photo", () => {
     const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogFigure.tsx"), "utf8");
     expect(src).toContain("rounded-[7px]");
     expect(src).toContain("border-border");
-    expect(src).toContain("h-auto w-full");
-    expect(src).not.toContain("aspect-video");
-    expect(src).not.toContain("object-cover");
+    expect(src).toContain("aspect-video");
+    expect(src).toContain("object-cover");
+    expect(src).toContain("object-right");
+    expect(src).not.toContain("h-auto w-full");
     expect(src).not.toContain("italic");
   });
 });
