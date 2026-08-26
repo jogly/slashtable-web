@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
-import { useMounted } from "../../hooks/useMounted";
 
 interface FadeInProps {
   children: ReactNode;
@@ -11,20 +10,20 @@ interface FadeInProps {
   y?: number;
 }
 
-export function FadeIn({ children, className, delay = 0, y = 20 }: FadeInProps) {
+export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
   const prefersReducedMotion = useReducedMotion();
-  const mounted = useMounted();
 
-  // SSR + first client paint stay fully visible so crawlers that skip
-  // opacity:0 nodes still see nested h2/h3. Entrance animation runs only
-  // after mount (when `mounted` flips and this becomes a motion node).
-  if (prefersReducedMotion || !mounted) {
+  if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
+  // Motion from the first paint with initial={false}: SSR stays fully
+  // visible (no opacity:0 in HTML) and hydrate does not remount into a
+  // hidden node. Already-on-screen copy is left as-is because we never
+  // start from hidden. Off-screen whileInView only eases toward visible.
   return (
     <motion.div
-      initial={{ opacity: 0, y }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] as const }}
