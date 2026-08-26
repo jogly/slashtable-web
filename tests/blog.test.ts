@@ -207,6 +207,10 @@ describe("posts render H1", () => {
       expect(html).toContain("border-t");
       expect(html).toContain("italic");
       expect(html).toContain("font-display");
+      expect(html).toContain("scroll-mt-24");
+      expect(html).toContain("#the-delete-is-stuck");
+      expect(html).toContain("Link to The delete is stuck");
+      expect(html).not.toContain("<hr");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
       expect(post.body).not.toMatch(/^## Sources$/m);
@@ -372,21 +376,30 @@ describe("blog index as a journal", () => {
     expect(article).not.toContain("tracking-widest");
     expect(article).not.toContain("h-2 w-2");
     expect(article).not.toContain("BLOG.eyebrow");
+    expect(article).not.toContain("<hr");
+    expect(article).toContain("scroll-mt-24");
   });
 });
 
 describe("blog body as long-form type", () => {
-  test("markdown body uses 16px type, display H2 rules, and designed tables", () => {
+  test("markdown body uses 16px type, gutter hashes, and designed tables", () => {
     const src = readFileSync(join(import.meta.dir, "../src/components/blog/BlogMarkdown.tsx"), "utf8");
+    const hash = readFileSync(join(import.meta.dir, "../src/components/blog/BlogHeadingHash.tsx"), "utf8");
+    const base = readFileSync(join(import.meta.dir, "../src/theme/base.css"), "utf8");
     expect(src).toContain("text-[1rem] leading-[1.6] text-text");
     expect(src).toContain("font-display");
-    expect(src).toContain("border-b");
+    expect(src).toContain("BlogHeadingHash");
+    expect(src).toContain("scroll-mt-24");
+    expect(hash).toContain("right-full");
+    expect(hash).toContain("Link to");
+    expect(src).not.toContain("border-border-strong border-b pb-3");
     expect(src).toContain("BlogFigure");
     expect(src).toContain("remarkGfm");
     expect(src).toContain("<table");
     expect(src).toContain("font-display text-[1.2rem] text-text italic");
     expect(src).not.toContain("text-text-secondary");
     expect(src).not.toContain("font-mono text-sm");
+    expect(base).toContain("scroll-padding-top: 6rem");
   });
 
   test("a lone markdown image becomes a full-measure figure with a sentence caption", () => {

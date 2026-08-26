@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import { blogHeadingId } from "@/lib/blog-headings";
 import { BlogFigure } from "./BlogFigure";
+import { BlogHeadingHash } from "./BlogHeadingHash";
 
 function textFromNode(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -29,6 +30,22 @@ const body = "text-[1rem] leading-[1.6] text-text";
 const inkLink =
   "text-text underline decoration-border-strong underline-offset-[0.18em] transition-colors hover:decoration-accent";
 
+function BlogSectionHeading({ as: Tag, children }: { as: "h2" | "h3"; children: ReactNode }) {
+  const label = textFromNode(children);
+  const id = blogHeadingId(label);
+  const type =
+    Tag === "h2"
+      ? "mt-16 mb-6 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
+      : "mt-9 mb-3 font-medium text-[1.125rem] text-text leading-snug";
+
+  return (
+    <Tag id={id} className={`group relative scroll-mt-24 ${type}`}>
+      <BlogHeadingHash id={id} label={label} />
+      {children}
+    </Tag>
+  );
+}
+
 const markdownComponents: Components = {
   a: ({ href, children }) => {
     if (href?.startsWith("/")) {
@@ -50,27 +67,9 @@ const markdownComponents: Components = {
     );
   },
   // Body markdown must not introduce a second page-level H1.
-  h1: ({ children }) => (
-    <h2
-      id={blogHeadingId(textFromNode(children))}
-      className="mt-16 mb-6 border-border-strong border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
-    >
-      {children}
-    </h2>
-  ),
-  h2: ({ children }) => (
-    <h2
-      id={blogHeadingId(textFromNode(children))}
-      className="mt-16 mb-6 border-border-strong border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
-    >
-      {children}
-    </h2>
-  ),
-  h3: ({ children }) => (
-    <h3 id={blogHeadingId(textFromNode(children))} className="mt-9 mb-3 font-medium text-[1.125rem] text-text leading-snug">
-      {children}
-    </h3>
-  ),
+  h1: ({ children }) => <BlogSectionHeading as="h2">{children}</BlogSectionHeading>,
+  h2: ({ children }) => <BlogSectionHeading as="h2">{children}</BlogSectionHeading>,
+  h3: ({ children }) => <BlogSectionHeading as="h3">{children}</BlogSectionHeading>,
   img: ({ src, alt }) => {
     if (!src) return null;
     return <img src={src} alt={alt ?? ""} />;
