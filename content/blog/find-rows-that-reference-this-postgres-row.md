@@ -54,13 +54,3 @@ Stay in catalog SQL when the answer has to run without a desktop: a script, CI, 
 | Many-to-many through a join | Join SQL you write | Often the pivot as an extra hop | Tags on the address; the join stays collapsed |
 
 Do not use the grid when the output has to run without a desktop. The Stack Overflow `pg_constraint` answers are the right artifact there. Do not open a schema graph of the whole database and call that the answer. Depth 1 from the stuck table is a neighbor picture. Do not start on a person row and treat the click to the parent address as the answer. That lands on 100 Main St. It does not list who still points at it.
-
-## Sources
-
-- [How do I find all references from other tables to a specific row](https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row)
-- [PostgreSQL: list dependent rows](https://stackoverflow.com/questions/12748752/postgresql-list-dependent-rows)
-- [Get all the rows referencing via foreign keys a particular row](https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table)
-- [DBeaver References panel](https://dbeaver.com/docs/dbeaver/References-Panel/)
-- [DataGrip: rows, Go To Related Rows](https://www.jetbrains.com/help/datagrip/rows.html)
-- [TablePlus issue 660, reverse foreign keys](https://github.com/TablePlus/TablePlus/issues/660)
-- [Changelog](https://www.slashtable.dev/changelog/)

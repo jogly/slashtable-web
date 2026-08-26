@@ -628,8 +628,7 @@ export const CHANGELOG = {
 export const BLOG = {
   eyebrow: "Blog",
   heading: "Engineering notes",
-  description:
-    "Setup and workflow notes for the local /table desktop client. Postgres, MySQL, SQLite, Neon, and the MCP server that ships in the app.",
+  description: "Setup and workflow notes for the local /table desktop client.",
   empty: "No posts yet.",
   updatedLabel: "Updated",
   readPost: "Read",

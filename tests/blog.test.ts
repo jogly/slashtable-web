@@ -196,15 +196,17 @@ describe("posts render H1", () => {
       expect(html).not.toContain("TL;DR");
       expect(html).not.toContain("Summary");
       expect(html).not.toMatch(/border-dashed/);
-      expect(html).toContain(post.image);
-      expect(html).toContain(post.imageCreditUrl);
-      expect(html).toContain("on Unsplash");
+      expect(html).not.toContain(post.image);
+      expect(html).not.toContain("on Unsplash");
+      expect(html).not.toContain("Sources");
       expect(html).toContain(post.description);
+      expect(html).toContain("text-[1.05rem] leading-[1.45] text-text-muted");
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain(readingTimeLabel(post));
       expect(html).toContain("font-display");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
+      expect(post.body).not.toMatch(/^## Sources$/m);
       if (post.body.includes("| Job |")) {
         expect(html).toContain("<table");
         expect(html).toContain("Catalog SQL");
@@ -224,7 +226,7 @@ describe("posts render H1", () => {
     expect(html).toContain("Fixture post");
     expect(html).not.toContain("TL;DR");
     expect(html).toContain("A parse fixture with required image fields.");
-    expect(html).toContain("text-[1.125rem] leading-[1.7] text-text");
+    expect(html).toContain("text-[1.05rem] leading-[1.45] text-text-muted");
     expect(html).toContain(formatJournalDate(post.publishedAt));
     expect(html).toContain(readingTimeLabel(post));
     expect(formatPostMarkdown(post)).toContain("A parse fixture with required image fields.");
@@ -249,28 +251,56 @@ describe("blog index as a journal", () => {
       expect(html).not.toContain(slug);
     }
     if (posts[0]) {
-      expect(html).toContain(posts[0].image);
-      expect(html).toContain(posts[0].imageCreditUrl);
+      expect(html).toContain(posts[0].title);
+      expect(html).toContain(posts[0].description);
+      expect(html).toContain("Newest");
+      expect(html).not.toContain(posts[0].image);
+      expect(html).not.toContain("on Unsplash");
     }
     for (const post of posts) {
       expect(html).toContain(post.title);
-      expect(html).toContain(post.description);
       expect(html).toContain(formatJournalDate(post.publishedAt));
+    }
+    for (const post of posts.slice(1)) {
+      expect(html).not.toContain(post.description);
     }
   });
 
-  test("index page is a type-led journal column, not marketing chrome", () => {
+  test("later rows are title and date only", () => {
+    const newest = parseBlogMarkdown("fixture-post", FIXTURE_RAW);
+    const laterRaw = FIXTURE_RAW.replace("Fixture post", "Older fixture").replace(
+      "A parse fixture with required image fields.",
+      "An older dek that must not appear on a later row.",
+    );
+    const later = parseBlogMarkdown("older-fixture", laterRaw.replace("fixture-post.jpg", "older-fixture.jpg"));
+    const html = renderToStaticMarkup(createElement(BlogIndex, { posts: [newest, later] }));
+    expect(html).toContain("Fixture post");
+    expect(html).toContain("A parse fixture with required image fields.");
+    expect(html).toContain("Newest");
+    expect(html).toContain("Older fixture");
+    expect(html).not.toContain("An older dek that must not appear on a later row.");
+    expect(html).not.toContain("/blog/fixture-post.jpg");
+    expect(html).not.toContain("aspect-[3/2]");
+  });
+
+  test("index page is a small masthead and a list of notes", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
     expect(src).toContain("max-w-[40rem]");
     expect(src).toContain("font-display");
+    expect(src).toContain("text-[1.5rem]");
+    expect(src).not.toContain("text-[2rem]");
+    expect(src).not.toContain("text-7xl");
     expect(src).not.toContain("max-w-[72rem]");
     expect(src).not.toContain("max-w-content");
     expect(src).not.toContain("tracking-widest");
     expect(src).not.toContain("h-2 w-2");
     expect(src).not.toContain("BLOG.eyebrow");
     expect(index).toContain("font-display");
-    expect(index).toContain("aspect-[3/2]");
+    expect(index).toContain("Newest");
+    expect(index).toContain("NewestStory");
+    expect(index).not.toContain("BlogCover");
+    expect(index).not.toContain("aspect-[3/2]");
     expect(index).not.toContain("FeaturedStory");
     expect(index).not.toContain("grid-cols-12");
     expect(index).not.toContain("grid-cols-2");
@@ -291,6 +321,8 @@ describe("blog index as a journal", () => {
     expect(article).not.toContain("post.tldr");
     expect(article).not.toContain("TL;DR");
     expect(article).toContain("post.description");
+    expect(article).toContain("text-[1.05rem] leading-[1.45] text-text-muted");
+    expect(article).not.toContain("BlogCover");
     expect(article).not.toContain("tracking-widest");
     expect(article).not.toContain("h-2 w-2");
     expect(article).not.toContain("BLOG.eyebrow");

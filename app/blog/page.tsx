@@ -21,10 +21,10 @@ export default function BlogIndexPage() {
       <JsonLd data={blogCollectionLd(posts)} />
 
       <header>
-        <h1 className="font-display text-[2rem] text-text leading-tight tracking-[-0.02em] md:text-[2.35rem]">
+        <h1 className="font-display text-[1.5rem] text-text leading-tight tracking-[-0.02em] md:text-[1.75rem]">
           {BLOG.heading}
         </h1>
-        <p className="mt-3 text-[15px] text-text-muted leading-6">{BLOG.description}</p>
+        <p className="mt-2 text-[15px] text-text-muted leading-6">{BLOG.description}</p>
       </header>
 
       <BlogIndex posts={posts} />
