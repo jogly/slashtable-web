@@ -62,4 +62,31 @@
       transform: translateY(0);
     }
   }
+
+  /* First-paint sky: CSS background (preloaded), not a late <img> decode.
+     --sky-night / --sky-day are set from the hashed asset URLs in layout. */
+  .sky-layer {
+    background-color: var(--color-bg);
+    background-image: var(--sky-night);
+    background-position: center;
+    background-size: cover;
+    filter: saturate(0.55);
+    opacity: var(--sky-opacity-dark, 0.11);
+  }
+
+  html[data-theme="light"] .sky-layer {
+    background-image: var(--sky-day);
+    opacity: var(--sky-opacity-light, 0.2);
+  }
+
+  .sky-vignette {
+    background: linear-gradient(
+      to bottom,
+      var(--color-surface) 0%,
+      transparent 40%,
+      transparent 60%,
+      var(--color-surface) 100%
+    );
+    opacity: 0.85;
+  }
 }

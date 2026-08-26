@@ -7,6 +7,7 @@ import { CookieConsent } from "@/components/ui/CookieConsent";
 import { LayoutGuides } from "@/components/ui/LayoutGuides";
 import { OG_IMAGE, SITE_URL } from "@/lib/constants";
 import { fontVariables } from "@/lib/fonts";
+import { SKY_DAY_SRC, SKY_NIGHT_SRC } from "@/lib/sky";
 import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme-script";
 import { Providers } from "./providers";
 import "@/theme/base.css";
@@ -218,6 +219,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: theme bootstrap must run before paint
           dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
+        <link rel="preload" as="image" href={SKY_NIGHT_SRC} fetchPriority="high" />
+        <link rel="preload" as="image" href={SKY_DAY_SRC} />
+        <style
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: hashed sky URLs must be on :root before first paint
+          dangerouslySetInnerHTML={{
+            __html: `:root{--sky-night:url("${SKY_NIGHT_SRC}");--sky-day:url("${SKY_DAY_SRC}");}`,
+          }}
         />
         <link rel="preconnect" href="https://downloads.slashtable.dev" />
         <link rel="preconnect" href="https://tr.slashtable.dev" />

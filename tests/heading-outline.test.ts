@@ -136,12 +136,32 @@ describe("first-paint theme / font / sky", () => {
     expect(fonts).toContain("playfair-display-latin-wght-italic.woff2");
   });
 
-  test("SkyParallax paints both skies and CSS-selects by data-theme", () => {
-    const src = read("src/components/ui/SkyParallax.tsx");
-    expect(src).toContain("skyNight");
-    expect(src).toContain("skyDay");
-    expect(src).toContain("[[data-theme=light]_&]:hidden");
-    expect(src).toContain("[[data-theme=light]_&]:block");
-    expect(src).not.toContain("useTheme");
+  test("sky is a CSS background with head preloads, not a late img", () => {
+    const sky = read("src/components/ui/SkyParallax.tsx");
+    expect(sky).toContain("sky-layer");
+    expect(sky).not.toContain("<img");
+    expect(sky).not.toContain("useTheme");
+    const css = read("src/theme/base.css");
+    expect(css).toContain("background-image: var(--sky-night)");
+    expect(css).toContain("html[data-theme=\"light\"] .sky-layer");
+    const layout = read("app/layout.tsx");
+    expect(layout).toContain('rel="preload"');
+    expect(layout).toContain("SKY_NIGHT_SRC");
+    expect(layout).toContain("SKY_DAY_SRC");
+    const assets = read("src/lib/sky.ts");
+    expect(assets).toContain("sky-night.webp");
+    expect(assets).toContain("sky-day.webp");
+  });
+
+  test("Hero availability is a static Linux-inclusive string", () => {
+    const hero = read("src/components/sections/Hero.tsx");
+    expect(hero).toContain("{HERO.availability}");
+    expect(hero).toContain("{HERO.ctaDownload}");
+    expect(hero).not.toContain("useDownload");
+    expect(hero).not.toContain("linuxAvailable");
+    expect(hero).not.toContain("ctaDownloadLinux");
+    const copy = read("src/lib/copy.ts");
+    expect(copy).toContain("Linux (alpha)");
+    expect(copy).toContain('availability: "macOS \\u00b7 Linux (alpha)');
   });
 });

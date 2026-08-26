@@ -21,7 +21,7 @@ export const HERO = {
   ctaDownload: "Download for macOS",
   ctaDownloadLinux: "Download for Linux (alpha)",
   ctaFeatures: "See features",
-  availability: "macOS \u00b7 Postgres \u00b7 MySQL \u00b7 SQLite \u00b7 Neon",
+  availability: "macOS \u00b7 Linux (alpha) \u00b7 Postgres \u00b7 MySQL \u00b7 SQLite \u00b7 Neon",
   availabilityLinux: "macOS \u00b7 Linux (alpha) \u00b7 Postgres \u00b7 MySQL \u00b7 SQLite \u00b7 Neon",
   screenshotAlt:
     "SlashTable main window showing a data table with foreign key relationships highlighted and breadcrumb navigation \u2014 dark mode left, light mode right",

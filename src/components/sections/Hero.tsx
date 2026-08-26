@@ -4,7 +4,6 @@ import heroDark from "@screenshots/hero-dark.png";
 import heroLight from "@screenshots/hero-light.png";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { useDownload } from "../../hooks/useDownload";
 import { HERO } from "../../lib/copy";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
 import { DotGrid } from "../ui/DotGrid";
@@ -43,9 +42,6 @@ function CtaFeatures() {
 }
 
 export function Hero() {
-  const { isLinux, linuxAvailable } = useDownload();
-  const ctaLabel = isLinux && linuxAvailable ? HERO.ctaDownloadLinux : HERO.ctaDownload;
-  const availability = linuxAvailable ? HERO.availabilityLinux : HERO.availability;
   const [open, setOpen] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -154,7 +150,7 @@ export function Hero() {
             <div className="relative flex items-stretch">
               {/*<BlueprintRule orientation="vertical" />*/}
               <div className="flex items-center p-4">
-                <CtaDownload label={ctaLabel} />
+                <CtaDownload label={HERO.ctaDownload} />
               </div>
               {/*<BlueprintRule orientation="vertical" />*/}
               <div className="flex items-center p-4">
@@ -167,10 +163,12 @@ export function Hero() {
           </div>
           {/* Mobile: plain button stack, no frame */}
           <div className="mx-auto flex max-w-xs flex-col items-stretch gap-3 sm:hidden [&>a]:w-full">
-            <CtaDownload label={ctaLabel} />
+            <CtaDownload label={HERO.ctaDownload} />
             <CtaFeatures />
           </div>
-          <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">{availability}</p>
+          <p className="min-h-[1rem] font-mono text-[10px] text-text-muted uppercase tracking-widest">
+            {HERO.availability}
+          </p>
         </div>
       </motion.div>
 
