@@ -1,9 +1,9 @@
 ---
 title: How do I find all rows that reference this Postgres row
-description: Postgres stores the pointer on the child. See every row that still points at a parent before you retry the delete.
+description: The FK delete error names one child. The incoming set is larger.
 publishedAt: 2026-08-25
 published: false
-tldr: The parent is mute. A foreign key lives on the child. The catalog names tables. The delete needs the incoming rows on that parent, including through a join. Write the UNION when the answer has to be a script.
+tldr: The DETAIL line is a sample. Ask every child, including the far side of a join, before you retry the delete. Write the UNION when the answer has to be a script.
 demand_query: how do I find all rows that reference this postgres row
 cluster: fk-navigation
 demand_urls:
@@ -23,38 +23,34 @@ ERROR: update or delete on table "master" violates foreign key constraint
 DETAIL: Key (id)=(1) is still referenced from table "other".
 ```
 
-The [Stack Overflow asker](https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table) wanted the incoming set without raising this error. Postgres named one child and stopped. The parent looks the same as it did before the delete. A foreign key is a column on the child, plus a constraint that says the value must exist on the parent. Both live on the referencing table. Select the parent and you get the parent. The incoming set is stored somewhere else. The parent is mute.
+The [Stack Overflow asker](https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table) wanted every row that still pointed at the parent, without raising this error. The engine named one child and stopped. That DETAIL line is a sample. The incoming set is larger, and the engine did not list it.
 
-![The pointer lives on the child.](/blog/find-rows-that-reference-this-postgres-row.jpg)
+People treat the named table as the inventory. They re-point or delete those rows, retry, and get the same error from a different table. The question is still open because the first answer the engine volunteers is the wrong size.
 
-## The pointer lives on the child
+![The error named one child. Other tables can still point here.](/blog/find-rows-that-reference-this-postgres-row.jpg)
 
-When a person, a school, or an order stores an `address_id`, the pointer is written on that child. Postgres records the constraint the same way. In `pg_constraint`, `conrelid` is the table that has the column. `confrelid` is the table being pointed at. Nothing is written onto the parent row.
+## The engine stops at the first row
 
-That is why a delete of the parent can fail after you have been staring at it. The blocking rows are in other tables, and this row has no field that says which.
+`ON DELETE RESTRICT` and `NO ACTION` look for a referencing row, raise, and stop. The `DETAIL` line names that one table. Other tables can still point here. The pointer lives on the child, so the parent row you are staring at has no field that lists the rest.
 
-`ON DELETE RESTRICT` and `NO ACTION` are the usual case. Postgres finds one referencing row, raises the error, and stops. The `DETAIL` line names that one table. Other tables can still point here. The error is a sample.
+The engine will not volunteer the set. It volunteered a blocker.
 
-The engine will not volunteer the rest of the incoming set. The parent cannot.
+## Asking the catalog still leaves you short
 
-## The catalog answers a different question
+`pg_constraint` and `information_schema` list every table that is allowed to point at this parent. That is which children exist. The delete asks which rows still do.
 
-`pg_constraint` and `information_schema` will list every table that is allowed to point at this one. That is the question the catalog can answer: which children exist. The delete asks which rows still do.
+The [2009 Stack Overflow thread](https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row) is still the same answer: query each child you already know, or generate a `UNION` from the catalog. That is the right script. It asks every child. It does not start from the named child and call it done.
 
-The [2009 Stack Overflow thread](https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row) for this job is still the same answer: query each child you already know, or generate a `UNION` from the catalog. That is asking every child, out loud. It is the right script. It leaves the incoming set off the parent you are looking at.
+A [References panel](https://dbeaver.com/docs/dbeaver/References-Panel/) or [Go To Related Rows](https://www.jetbrains.com/help/datagrip/rows.html) hops once. That is the sample again, with a nicer door. Enough when the error named the only child that matters. A nightly cleanup, a migration, or a CI check still wants the UNION.
 
-A [References panel](https://dbeaver.com/docs/dbeaver/References-Panel/) or [Go To Related Rows](https://www.jetbrains.com/help/datagrip/rows.html) hops once. That is asking one child. Enough when the error already named that child and that hop is the whole job. A nightly cleanup, a migration, or a CI check still wants the UNION.
+## The join is in the set
 
-## A join looks like another child
+The catalog will also show a join table as a first-class child. The rows that block the delete are on the far side. They belong in the incoming set, not as a second hop you take after you think you are done.
 
-The catalog will also show a join table: two foreign keys, no meaning of its own. Ask the catalog who can point here and the join is a first-class child. Ask the delete who still points here and the join is plumbing.
+Treat the join as extra plumbing and those rows stay invisible until the next failed delete.
 
-The rows that matter are on the far side. Treat the join as a second hop and the incoming list becomes a path you walk. On the parent those far rows are just another incoming set. The join stays plumbing.
+## Get the set before you retry
 
-## The parent can list who points at it
+You are still looking at the parent. Open it in /table. The lists on that row are the incoming set, including the far side of the join. Click a list. The next grid is those rows. Then retry the delete.
 
-Once the job is to make the mute parent speak, the object is the parent row. Open it in /table. The grid on that row lists who still points at it, including the far side of a join. Click a list. The next grid is those rows.
-
-Arriving on the parent from a child is how most people get here. That hop follows the pointer that already lives on the child. It lands on the parent. The incoming lists are already on this row.
-
-See the incoming rows. Then retry the delete. Write the UNION when the answer has to be a script. Do not start with the UNION while you are looking at the parent.
+Write the UNION when the answer has to be a script. Do not start from the named child and call it the inventory.
