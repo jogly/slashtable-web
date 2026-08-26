@@ -12,7 +12,7 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
         <div className="mt-5">
           <BlogDate publishedAt={post.publishedAt} updatedAt={post.updatedAt} />
         </div>
-        <hr className="mt-6 mb-10 border-0 border-border border-t" />
+        <hr className="mt-6 mb-10 border-0 border-border-strong border-t" />
       </header>
       <BlogMarkdown content={post.body} />
     </article>

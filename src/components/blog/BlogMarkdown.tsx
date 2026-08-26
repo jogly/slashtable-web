@@ -53,7 +53,7 @@ const markdownComponents: Components = {
   h1: ({ children }) => (
     <h2
       id={blogHeadingId(textFromNode(children))}
-      className="mt-16 mb-6 border-border border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
+      className="mt-16 mb-6 border-border-strong border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
     >
       {children}
     </h2>
@@ -61,7 +61,7 @@ const markdownComponents: Components = {
   h2: ({ children }) => (
     <h2
       id={blogHeadingId(textFromNode(children))}
-      className="mt-16 mb-6 border-border border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
+      className="mt-16 mb-6 border-border-strong border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
     >
       {children}
     </h2>

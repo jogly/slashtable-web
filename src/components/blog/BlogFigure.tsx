@@ -29,7 +29,7 @@ export function BlogFigure({
         />
       </div>
       {caption ? (
-        <figcaption className="border-border border-t pt-3 text-[13px] leading-[1.45] text-text-muted italic">
+        <figcaption className="border-border-strong border-t pt-3 text-[13px] leading-[1.45] text-text-muted italic">
           {caption}
         </figcaption>
       ) : null}
