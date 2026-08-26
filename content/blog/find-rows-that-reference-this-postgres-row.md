@@ -23,9 +23,7 @@ ERROR: update or delete on table "master" violates foreign key constraint
 DETAIL: Key (id)=(1) is still referenced from table "other".
 ```
 
-Source: https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table
-
-Postgres named one child and stopped. The parent looks the same as it did before the delete. A foreign key is a column on the child, plus a constraint that says the value must exist on the parent. Both live on the referencing table. Select the parent and you get the parent. The incoming set is stored somewhere else. The parent is mute.
+The [Stack Overflow asker](https://stackoverflow.com/questions/14357121/get-all-the-rows-referencing-via-foreign-keys-a-particular-row-in-a-table) wanted the incoming set without raising this error. Postgres named one child and stopped. The parent looks the same as it did before the delete. A foreign key is a column on the child, plus a constraint that says the value must exist on the parent. Both live on the referencing table. Select the parent and you get the parent. The incoming set is stored somewhere else. The parent is mute.
 
 ![The pointer lives on the child.](/blog/find-rows-that-reference-this-postgres-row.jpg)
 
@@ -37,7 +35,7 @@ That is why a delete of the parent can fail after you have been staring at it. T
 
 `ON DELETE RESTRICT` and `NO ACTION` are the usual case. Postgres finds one referencing row, raises the error, and stops. The `DETAIL` line names that one table. Other tables can still point here. The error is a sample.
 
-The asker on that thread wanted the incoming set without raising the error. The engine will not volunteer it. The parent cannot.
+The engine will not volunteer the rest of the incoming set. The parent cannot.
 
 ## The catalog answers a different question
 
