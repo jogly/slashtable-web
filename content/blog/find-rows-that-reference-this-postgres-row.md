@@ -28,13 +28,15 @@ You do not already know the children. That is the hole.
 
 The usual answer is a UNION of every table with a foreign key to this one. That UNION is the right artifact once those tables are known. It is the wrong first move when they are not. The [Stack Overflow thread](https://stackoverflow.com/questions/558283/how-do-i-find-all-references-from-other-tables-to-a-specific-row) that asks this is the same hole: one address row, and no list of who still points at it.
 
-## Open that row
+## That row already lists them
 
 Open the address table in /table. 100 Main St is already there. On that same row the grid lists who still points at it: two people, a school, two tags. The people and the school are ordinary child tables. The tags come through a join that does not become its own stop.
 
 Click the people list. The next grid is the two people who still live at 100 Main St. Click the school or the tags the same way. Each click is show me those records.
 
 Arriving on 100 Main St from a person row is how you got here. It is not the answer. That hop lands on the address. It does not list who else still points at it.
+
+A depth-1 schema graph from this table is a neighbor picture, not the list of incoming rows.
 
 ## When to stay in SQL
 

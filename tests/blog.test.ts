@@ -214,6 +214,10 @@ describe("posts render H1", () => {
       expect(html).toContain("scroll-mt-24");
       expect(html).toContain("#you-already-know-the-address");
       expect(html).toContain("Link to You already know the address");
+      expect(html).toContain("#that-row-already-lists-them");
+      expect(html).toContain("Link to That row already lists them");
+      expect(html).not.toContain("#open-that-row");
+      expect(html).toContain("neighbor picture");
       expect(html).not.toContain("<hr");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
