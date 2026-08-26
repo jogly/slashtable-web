@@ -5,7 +5,7 @@ import { THEME_BOOTSTRAP_HEAD_TAG } from "../src/lib/theme-script.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const workerPath = join(root, ".open-next", "worker.js");
-const src = readFileSync(workerPath, "utf8");
+let src = readFileSync(workerPath, "utf8");
 
 if (src.includes("data-st-theme-bootstrap")) {
   console.log("theme bootstrap already wrapped into .open-next/worker.js");
@@ -36,8 +36,9 @@ function __stWithThemeBootstrap(response) {
 }
 `;
 
-const wrapped = `${inject}
-const __stOpenNextWorker = {${src.split("export default {")[1]}
+// Keep imports / named exports. Only rename the default worker object, then wrap fetch.
+src = src.replace("export default {", `${inject}\nconst __stOpenNextWorker = {`);
+src += `
 
 export default {
   async fetch(request, env, ctx) {
@@ -47,5 +48,5 @@ export default {
 };
 `;
 
-writeFileSync(workerPath, wrapped);
+writeFileSync(workerPath, src);
 console.log("wrapped .open-next/worker.js so theme bootstrap is the first <head> child");
