@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import { BlogOnThisPage } from "@/components/blog/BlogOnThisPage";
 import { BlogPostArticle } from "@/components/blog/BlogPostArticle";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { extractBlogH2s } from "@/lib/blog-headings";
 import { blogPostingLd, getAllPosts, getPostBySlug } from "@/lib/blog";
 import { articleMetadata, breadcrumb } from "@/lib/seo";
 
@@ -37,9 +39,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+  const headings = extractBlogH2s(post.body);
 
   return (
-    <div className="mx-auto max-w-[70ch] px-6 pt-32 pb-28">
+    <div className="mx-auto flex max-w-[64rem] justify-center gap-16 px-6 pt-32 pb-28">
       <JsonLd
         data={breadcrumb([
           { name: "Home", path: "/" },
@@ -48,7 +51,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         ])}
       />
       <JsonLd data={blogPostingLd(post)} />
-      <BlogPostArticle post={post} />
+      <div className="w-full max-w-[70ch]">
+        <BlogPostArticle post={post} />
+      </div>
+      <BlogOnThisPage headings={headings} />
     </div>
   );
 }

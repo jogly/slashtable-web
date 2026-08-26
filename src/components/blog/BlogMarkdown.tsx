@@ -1,9 +1,11 @@
 import type { Components } from "react-markdown";
 import type { ReactNode } from "react";
-import { isValidElement } from "react";
+import { Children, isValidElement } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
+import { blogHeadingId } from "@/lib/blog-headings";
+import { BlogFigure } from "./BlogFigure";
 
 function textFromNode(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -12,14 +14,18 @@ function textFromNode(node: ReactNode): string {
   return "";
 }
 
-function headingId(children: ReactNode): string {
-  return textFromNode(children)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+function imageFromChildren(children: ReactNode): { src: string; alt: string } | null {
+  const items = Children.toArray(children).filter((child) => {
+    if (typeof child === "string") return child.trim() !== "";
+    return true;
+  });
+  if (items.length !== 1 || !isValidElement(items[0])) return null;
+  const props = items[0].props as { src?: unknown; alt?: unknown };
+  if (typeof props.src !== "string" || props.src === "") return null;
+  return { src: props.src, alt: typeof props.alt === "string" ? props.alt : "" };
 }
 
-const body = "text-[1.125rem] leading-[1.7] text-text";
+const body = "text-[1rem] leading-[1.6] text-text";
 const inkLink =
   "text-text underline decoration-border-strong underline-offset-[0.18em] transition-colors hover:decoration-accent";
 
@@ -46,26 +52,34 @@ const markdownComponents: Components = {
   // Body markdown must not introduce a second page-level H1.
   h1: ({ children }) => (
     <h2
-      id={headingId(children)}
-      className="mt-14 mb-6 border-border border-b pb-3 font-display text-[1.75rem] text-text leading-[1.15] md:text-3xl"
+      id={blogHeadingId(textFromNode(children))}
+      className="mt-16 mb-6 border-border border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
     >
       {children}
     </h2>
   ),
   h2: ({ children }) => (
     <h2
-      id={headingId(children)}
-      className="mt-14 mb-6 border-border border-b pb-3 font-display text-[1.75rem] text-text leading-[1.15] md:text-3xl"
+      id={blogHeadingId(textFromNode(children))}
+      className="mt-16 mb-6 border-border border-b pb-3 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
     >
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 id={headingId(children)} className="mt-9 mb-3 font-medium text-[1.125rem] text-text leading-snug">
+    <h3 id={blogHeadingId(textFromNode(children))} className="mt-9 mb-3 font-medium text-[1.125rem] text-text leading-snug">
       {children}
     </h3>
   ),
+  img: ({ src, alt }) => {
+    if (!src) return null;
+    return <img src={src} alt={alt ?? ""} />;
+  },
   p: ({ children }) => {
+    const figure = imageFromChildren(children);
+    if (figure) {
+      return <BlogFigure src={figure.src} caption={figure.alt} />;
+    }
     const text = textFromNode(children).trim();
     if (/^https?:\/\/\S+$/.test(text)) {
       return null;

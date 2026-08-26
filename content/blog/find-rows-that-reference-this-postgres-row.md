@@ -20,6 +20,8 @@ imageCreditUrl: https://unsplash.com/photos/three-address-numbers-on-a-dark-wall
 
 Postgres refused to delete 100 Main St. The error says the key is still referenced. Sometimes it names one child table. Sometimes it does not. The job is to see every row that still points here before trying the delete again.
 
+![The delete is stuck on this address. Incoming people, a school, and tags still point at it.](/blog/find-rows-that-reference-this-postgres-row.jpg)
+
 ## The delete is stuck
 
 A UNION only works after those tables are already known. That is the hole the ranking pages leave.
