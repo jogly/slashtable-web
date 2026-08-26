@@ -117,8 +117,15 @@ describe("blog loader", () => {
       expect(post.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(typeof post.published).toBe("boolean");
       expect(post.path).toBe(postPath(post.slug));
-      expect(post.image).toBe(`/blog/${post.slug}.jpg`);
+      expect(post.image.startsWith("/blog/")).toBe(true);
       expect(existsSync(join(import.meta.dir, "../public", post.image))).toBe(true);
+    }
+    for (const filename of [
+      "find-rows-nav-outbound.png",
+      "find-rows-nav-incoming.png",
+      "find-rows-nav-people.png",
+    ]) {
+      expect(existsSync(join(import.meta.dir, "../public/blog", filename))).toBe(true);
     }
   });
 
@@ -197,7 +204,9 @@ describe("posts render H1", () => {
       expect(html).not.toContain("Summary");
       expect(html).not.toMatch(/border-dashed/);
       expect(html).toContain(post.image);
-      expect(html).toContain("The stuck address. People, a school, and tags still point at it.");
+      expect(html).toContain("Two people pointing at the same address");
+      expect(html).toContain("Incoming people, tags, and a school on the parent");
+      expect(html).toContain("People reached from the parent");
       expect(html).not.toContain("on Unsplash");
       expect(html).not.toContain("Photo by Haberdoedas");
       expect(html).not.toContain("Sources");
@@ -205,26 +214,24 @@ describe("posts render H1", () => {
       expect(html).not.toContain("Ada");
       expect(html).not.toContain("Bea");
       expect(html).not.toContain("Linux is alpha");
+      expect(html).not.toContain("100 Main St");
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain("font-mono");
       expect(html).toContain("rounded-[7px]");
       expect(html).not.toContain("italic");
-      expect(html).toContain("font-display");
+      expect(html).toContain("font-sans");
+      expect(html).not.toContain("font-display");
+      expect(html).not.toContain("font-serif");
       expect(html).toContain("scroll-mt-24");
-      expect(html).toContain("#the-catalog-knows-the-tables-the-delete-needs-the-rows");
-      expect(html).toContain("Link to The catalog knows the tables. The delete needs the rows.");
-      expect(html).toContain("#the-incoming-list-is-on-100-main-st");
-      expect(html).toContain("#the-tags-are-not-a-stop-of-their-own");
-      expect(html).toContain("the five rows");
-      expect(html).not.toContain("#the-union-needs-a-list-you-do-not-have");
-      expect(html).not.toContain("#the-parent-row-is-the-list");
-      expect(html).not.toContain("#you-already-know-the-address");
-      expect(html).not.toContain("#that-row-already-lists-them");
-      expect(html).not.toContain("#open-that-row");
+      expect(html).toContain("#the-address-is-a-hop");
+      expect(html).toContain("#the-parent-lists-who-still-points-here");
+      expect(html).toContain("#the-next-grid-is-those-rows");
+      expect(html).toContain("find-rows-nav-outbound.png");
+      expect(html).toContain("find-rows-nav-incoming.png");
+      expect(html).toContain("find-rows-nav-people.png");
       expect(html).not.toContain("<hr");
       expect(html).not.toContain("<table");
-      expect(html).not.toContain("Write SQL");
-      expect(html).not.toContain("One-hop panel");
+      expect(html).not.toContain("Source:");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
       expect(post.body).not.toMatch(/^## Sources$/m);
@@ -322,7 +329,8 @@ describe("blog index as a journal", () => {
     const src = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../src/components/blog/BlogIndex.tsx"), "utf8");
     expect(src).toContain("max-w-[40rem]");
-    expect(src).toContain("font-display");
+    expect(src).toContain("font-sans");
+    expect(src).not.toContain("font-display");
     expect(src).toContain("text-[1.5rem]");
     expect(src).not.toContain("text-center");
     expect(src).not.toContain("text-[2.5rem]");
@@ -356,7 +364,8 @@ describe("blog index as a journal", () => {
     expect(rail).toContain("lg:block");
     expect(rail).toContain("On this page");
     expect(page).not.toContain("max-w-content");
-    expect(article).toContain("font-display");
+    expect(article).toContain("font-sans");
+    expect(article).not.toContain("font-display");
     expect(article).not.toContain("max-w-content");
     expect(article).not.toContain("max-w-3xl");
     expect(article).not.toContain("tldrEyebrow");
@@ -378,7 +387,9 @@ describe("blog body as long-form type", () => {
     const hash = readFileSync(join(import.meta.dir, "../src/components/blog/BlogHeadingHash.tsx"), "utf8");
     const base = readFileSync(join(import.meta.dir, "../src/theme/base.css"), "utf8");
     expect(src).toContain("text-[1rem] leading-[1.6] text-text");
-    expect(src).toContain("font-display");
+    expect(src).toContain("font-sans");
+    expect(src).not.toContain("font-display");
+    expect(src).not.toContain("font-serif");
     expect(src).toContain("BlogHeadingHash");
     expect(src).toContain("scroll-mt-24");
     expect(hash).toContain("right-full");
@@ -394,8 +405,8 @@ describe("blog body as long-form type", () => {
     expect(src).toContain("BlogFigure");
     expect(src).toContain("remarkGfm");
     expect(src).toContain("<table");
-    expect(src).toContain("font-serif text-[1rem] leading-[1.6] text-text");
-    expect(src).toContain("font-serif text-[1.2rem] text-text italic");
+    expect(src).toContain("font-sans text-[1rem] leading-[1.6] text-text");
+    expect(src).toContain("font-sans text-[1.2rem] text-text italic");
     expect(src).toContain("font-sans text-[12px] font-normal text-text-muted");
     expect(src).toContain("first:font-medium");
     expect(src).not.toContain("border-l");
@@ -431,17 +442,19 @@ describe("blog body as long-form type", () => {
     expect(src).not.toContain("italic");
   });
 
-  test("reading serif is article body only", () => {
+  test("blog surfaces use brand sans, not Playfair or a reading serif", () => {
     const markdown = readFileSync(join(import.meta.dir, "../src/components/blog/BlogMarkdown.tsx"), "utf8");
-    const figure = readFileSync(join(import.meta.dir, "../src/components/blog/BlogFigure.tsx"), "utf8");
+    const article = readFileSync(join(import.meta.dir, "../src/components/blog/BlogPostArticle.tsx"), "utf8");
     const index = readFileSync(join(import.meta.dir, "../app/blog/page.tsx"), "utf8");
-    const row = readFileSync(join(import.meta.dir, "../src/components/blog/BlogLeaderRow.tsx"), "utf8");
     const hero = readFileSync(join(import.meta.dir, "../src/components/sections/Hero.tsx"), "utf8");
-    expect(markdown).toContain("font-serif");
-    expect(figure).not.toContain("font-serif");
-    expect(index).not.toContain("font-serif");
-    expect(row).not.toContain("font-serif");
-    expect(hero).not.toContain("font-serif");
+    expect(markdown).toContain("font-sans");
+    expect(markdown).not.toContain("font-serif");
+    expect(markdown).not.toContain("font-display");
+    expect(article).toContain("font-sans");
+    expect(article).not.toContain("font-display");
+    expect(index).toContain("font-sans");
+    expect(index).not.toContain("font-display");
+    expect(hero).toContain("font-display");
   });
 });
 

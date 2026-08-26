@@ -92,8 +92,8 @@ export function parseBlogMarkdown(slug: string, raw: string): BlogPost {
   const tldr = requireString(data, "tldr", slug);
   const image = requireString(data, "image", slug);
   const imageAlt = requireString(data, "imageAlt", slug);
-  const imageCredit = requireString(data, "imageCredit", slug);
-  const imageCreditUrl = requireString(data, "imageCreditUrl", slug);
+  const imageCredit = typeof data.imageCredit === "string" ? data.imageCredit.trim() : "";
+  const imageCreditUrl = typeof data.imageCreditUrl === "string" ? data.imageCreditUrl.trim() : "";
   const { width: imageWidth, height: imageHeight } = postImageSize(image);
 
   if (!DATE_RE.test(publishedAt)) {

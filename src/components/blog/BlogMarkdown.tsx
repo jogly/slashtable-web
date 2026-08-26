@@ -26,7 +26,7 @@ function imageFromChildren(children: ReactNode): { src: string; alt: string } | 
   return { src: props.src, alt: typeof props.alt === "string" ? props.alt : "" };
 }
 
-const body = "font-serif text-[1rem] leading-[1.6] text-text";
+const body = "font-sans text-[1rem] leading-[1.6] text-text";
 const inkLink =
   "text-text underline decoration-border-strong underline-offset-[0.18em] transition-colors hover:decoration-accent";
 
@@ -35,7 +35,7 @@ function BlogSectionHeading({ as: Tag, children }: { as: "h2" | "h3"; children: 
   const id = blogHeadingId(label);
   const type =
     Tag === "h2"
-      ? "mt-16 mb-6 font-display text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
+      ? "mt-16 mb-6 font-sans text-[1.85rem] text-text leading-[1.15] md:text-[2rem]"
       : "mt-9 mb-3 font-medium text-[1.125rem] text-text leading-snug";
 
   return (
@@ -100,7 +100,7 @@ const markdownComponents: Components = {
     <pre className="mb-6 overflow-x-auto border border-border bg-surface-2/70 px-4 py-3.5 text-text">{children}</pre>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="my-8 font-serif text-[1.2rem] text-text italic leading-[1.55]">{children}</blockquote>
+    <blockquote className="my-8 font-sans text-[1.2rem] text-text italic leading-[1.55]">{children}</blockquote>
   ),
   table: ({ children }) => (
     <div className="my-8 overflow-x-auto">
@@ -116,7 +116,7 @@ const markdownComponents: Components = {
     <th className="py-3 pr-6 align-bottom font-sans text-[12px] font-normal text-text-muted">{children}</th>
   ),
   td: ({ children }) => (
-    <td className="py-3.5 pr-6 align-top font-serif text-[1rem] leading-[1.55] text-text first:font-medium">
+    <td className="py-3.5 pr-6 align-top font-sans text-[1rem] leading-[1.55] text-text first:font-medium">
       {children}
     </td>
   ),

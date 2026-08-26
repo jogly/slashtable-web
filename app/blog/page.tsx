@@ -21,7 +21,7 @@ export default function BlogIndexPage() {
       <JsonLd data={blogCollectionLd(posts)} />
 
       <header>
-        <h1 className="font-display text-[1.5rem] text-text leading-tight tracking-[-0.02em] md:text-[1.75rem]">
+        <h1 className="font-sans text-[1.5rem] text-text leading-tight tracking-[-0.02em] md:text-[1.75rem]">
           {BLOG.heading}
         </h1>
         <p className="mt-1.5 text-[14px] text-text-muted leading-5">{BLOG.description}</p>

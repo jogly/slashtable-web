@@ -6,7 +6,7 @@ export function BlogPostArticle({ post }: { post: BlogPost }) {
   return (
     <article>
       <header className="mb-10">
-        <h1 className="scroll-mt-24 font-display text-[2.75rem] text-text leading-[1.08] tracking-[-0.03em] md:text-5xl md:leading-[1.05]">
+        <h1 className="scroll-mt-24 font-sans text-[2.75rem] text-text leading-[1.08] tracking-[-0.03em] md:text-5xl md:leading-[1.05]">
           {post.title}
         </h1>
         <div className="mt-5">
