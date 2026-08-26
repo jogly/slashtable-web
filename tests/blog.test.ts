@@ -211,24 +211,24 @@ describe("posts render H1", () => {
       expect(html).not.toContain("italic");
       expect(html).toContain("font-display");
       expect(html).toContain("scroll-mt-24");
-      expect(html).toContain("#the-union-needs-a-list-you-do-not-have");
-      expect(html).toContain("Link to The UNION needs a list you do not have");
-      expect(html).toContain("#the-parent-row-is-the-list");
-      expect(html).toContain("Link to The parent row is the list");
-      expect(html).toContain("#write-sql-when-this-has-to-run-without-a-desktop");
-      expect(html).toContain("neighbor picture");
+      expect(html).toContain("#the-catalog-knows-the-tables-the-delete-needs-the-rows");
+      expect(html).toContain("Link to The catalog knows the tables. The delete needs the rows.");
+      expect(html).toContain("#the-incoming-list-is-on-100-main-st");
+      expect(html).toContain("#the-tags-are-not-a-stop-of-their-own");
+      expect(html).toContain("the five rows");
+      expect(html).not.toContain("#the-union-needs-a-list-you-do-not-have");
+      expect(html).not.toContain("#the-parent-row-is-the-list");
       expect(html).not.toContain("#you-already-know-the-address");
       expect(html).not.toContain("#that-row-already-lists-them");
       expect(html).not.toContain("#open-that-row");
       expect(html).not.toContain("<hr");
+      expect(html).not.toContain("<table");
+      expect(html).not.toContain("Write SQL");
+      expect(html).not.toContain("One-hop panel");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
       expect(post.body).not.toMatch(/^## Sources$/m);
-      if (post.body.includes("| Job |")) {
-        expect(html).toContain("<table");
-        expect(html).toContain("Write SQL");
-        expect(html).toContain("One-hop panel");
-      }
+      expect(post.body).not.toContain("| Job |");
       const md = formatPostMarkdown(post);
       expect(md.startsWith(`# ${post.title}`)).toBe(true);
       expect(md).not.toContain("## TL;DR");
