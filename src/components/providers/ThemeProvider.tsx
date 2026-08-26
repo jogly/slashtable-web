@@ -42,10 +42,14 @@ function themeFromDocument(resolvedTheme?: string): Theme {
 
 export function useTheme(): { theme: Theme; toggle: () => void } {
   const { resolvedTheme, setTheme } = useNextTheme();
+  // Live attribute, not next-themes' unresolved "dark" default before mount.
   const theme = themeFromDocument(resolvedTheme);
   const toggle = useCallback(() => {
-    setTheme(themeFromDocument(resolvedTheme) === "dark" ? "light" : "dark");
-  }, [resolvedTheme, setTheme]);
+    const next = themeFromDocument() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    document.documentElement.style.colorScheme = next;
+    setTheme(next);
+  }, [setTheme]);
 
   return { theme, toggle };
 }
