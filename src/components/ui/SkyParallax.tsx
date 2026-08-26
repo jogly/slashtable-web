@@ -4,7 +4,6 @@ import skyDay from "@assets/sky-day.png";
 import skyNight from "@assets/sky-night.png";
 import { motion, useScroll, useTransform } from "motion/react";
 import type { RefObject } from "react";
-import { useTheme } from "../providers/ThemeProvider";
 import { Img } from "./Img";
 
 interface SkyParallaxProps {
@@ -15,12 +14,10 @@ interface SkyParallaxProps {
 
 /**
  * Subtle sky parallax background.
- * - Day image in light mode, night image in dark mode.
- * - Image translates gently as the user scrolls past `targetRef`.
- * - Wrap this inside a `relative overflow-hidden` container; place content at z-10.
+ * Both day and night assets are in the SSR tree; CSS picks which one is
+ * visible from `[data-theme]` so the sky is present on first paint.
  */
 export function SkyParallax({ targetRef, opacity = [0.2, 0.11] }: SkyParallaxProps) {
-  const { theme } = useTheme();
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start end", "end start"],
@@ -34,14 +31,25 @@ export function SkyParallax({ targetRef, opacity = [0.2, 0.11] }: SkyParallaxPro
           (≈96% of container height) never exposes the container edges. */}
       <motion.div style={{ y }} className="absolute inset-x-0 top-[-100%] h-[300%]">
         <Img
-          image={theme === "light" ? skyDay : skyNight}
+          image={skyNight}
           alt=""
           draggable={false}
           loading="eager"
-          className="h-full w-full select-none object-cover"
+          className="h-full w-full select-none object-cover [[data-theme=light]_&]:hidden"
           style={{
             filter: "saturate(0.55)",
-            opacity: theme === "light" ? lightOp : darkOp,
+            opacity: darkOp,
+          }}
+        />
+        <Img
+          image={skyDay}
+          alt=""
+          draggable={false}
+          loading="eager"
+          className="hidden h-full w-full select-none object-cover [[data-theme=light]_&]:block"
+          style={{
+            filter: "saturate(0.55)",
+            opacity: lightOp,
           }}
         />
       </motion.div>

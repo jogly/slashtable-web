@@ -109,3 +109,39 @@ describe("SSR heading visibility (opacity)", () => {
     expect(src).not.toContain("useLayoutEffect");
   });
 });
+
+describe("first-paint theme / font / sky", () => {
+  test("blocking script sets data-theme and useTheme does not wait on useMounted", () => {
+    const script = read("src/lib/theme-script.ts");
+    expect(script).toContain('export const THEME_STORAGE_KEY = "st-theme"');
+    expect(script).toContain("data-theme");
+    expect(script).toContain("prefers-color-scheme");
+    const layout = read("app/layout.tsx");
+    expect(layout).toContain("THEME_BOOTSTRAP_SCRIPT");
+    expect(layout).toContain('data-theme="dark"');
+    const provider = read("src/components/providers/ThemeProvider.tsx");
+    expect(provider).toContain("disableTransitionOnChange");
+    expect(provider).toContain("themeFromDocument");
+    expect(provider).not.toContain("useMounted");
+  });
+
+  test("webfonts use real optional faces, not empty @font-face overrides", () => {
+    const css = read("src/theme/base.css");
+    expect(css).not.toContain("@fontsource-variable");
+    expect(css).not.toMatch(/@font-face\s*\{[^}]*font-display:\s*optional/);
+    expect(css).not.toMatch(/transition:\s*background-color 0\.3s ease/);
+    const fonts = read("src/lib/fonts.ts");
+    expect(fonts).toContain('display: "optional"');
+    expect(fonts).toContain("manrope-latin-wght-normal.woff2");
+    expect(fonts).toContain("playfair-display-latin-wght-italic.woff2");
+  });
+
+  test("SkyParallax paints both skies and CSS-selects by data-theme", () => {
+    const src = read("src/components/ui/SkyParallax.tsx");
+    expect(src).toContain("skyNight");
+    expect(src).toContain("skyDay");
+    expect(src).toContain("[[data-theme=light]_&]:hidden");
+    expect(src).toContain("[[data-theme=light]_&]:block");
+    expect(src).not.toContain("useTheme");
+  });
+});

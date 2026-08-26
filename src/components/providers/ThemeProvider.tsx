@@ -1,8 +1,8 @@
 "use client";
 
 import { ThemeProvider as NextThemesProvider, useTheme as useNextTheme } from "next-themes";
-import { useCallback, useEffect } from "react";
-import { useMounted } from "../../hooks/useMounted";
+import { useCallback, useLayoutEffect } from "react";
+import { THEME_STORAGE_KEY } from "../../lib/theme-script";
 
 type Theme = "dark" | "light";
 
@@ -12,7 +12,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       attribute="data-theme"
       defaultTheme="dark"
       enableSystem
-      storageKey="st-theme"
+      disableTransitionOnChange
+      storageKey={THEME_STORAGE_KEY}
       themes={["dark", "light"]}
     >
       <ThemeColorMeta />
@@ -23,23 +24,28 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 function ThemeColorMeta() {
   const { resolvedTheme } = useNextTheme();
-  useEffect(() => {
-    if (!resolvedTheme) return;
+  useLayoutEffect(() => {
+    const theme = themeFromDocument(resolvedTheme);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", resolvedTheme === "dark" ? "#111114" : "#f5f3ef");
+    if (meta) meta.setAttribute("content", theme === "dark" ? "#111114" : "#f5f3ef");
   }, [resolvedTheme]);
   return null;
 }
 
-// Returns "dark" during SSR and first client paint, then the real resolved
-// theme after mount. Gating on `mounted` is what avoids hydration mismatches
-// for consumers that branch on theme.
+function themeFromDocument(resolvedTheme?: string): Theme {
+  if (typeof document !== "undefined") {
+    const attr = document.documentElement.getAttribute("data-theme");
+    if (attr === "light" || attr === "dark") return attr;
+  }
+  return resolvedTheme === "light" ? "light" : "dark";
+}
+
 export function useTheme(): { theme: Theme; toggle: () => void } {
   const { resolvedTheme, setTheme } = useNextTheme();
-  const mounted = useMounted();
-
-  const theme: Theme = mounted && resolvedTheme === "light" ? "light" : "dark";
-  const toggle = useCallback(() => setTheme(theme === "dark" ? "light" : "dark"), [theme, setTheme]);
+  const theme = themeFromDocument(resolvedTheme);
+  const toggle = useCallback(() => {
+    setTheme(themeFromDocument(resolvedTheme) === "dark" ? "light" : "dark");
+  }, [resolvedTheme, setTheme]);
 
   return { theme, toggle };
 }

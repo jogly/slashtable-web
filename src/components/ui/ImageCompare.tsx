@@ -50,18 +50,28 @@ export function ImageCompare({ dark, light, alt, className = "", initialPosition
   return (
     <div className={`relative touch-pan-y overflow-hidden ${className}`} style={frameStyle}>
       {dark && light && !mounted ? (
-        // Pre-hydration: render just the dark image (what the slider mostly
-        // shows at initialPosition=70) so there's no visual flash when the
-        // slider takes over after mount. Frame aspect-ratio is locked so the
-        // swap cannot restyle the box.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={dark.src}
-          width={dark.width}
-          height={dark.height}
-          alt={`${alt} — dark mode`}
-          className="absolute inset-0 block h-full w-full object-cover"
-        />
+        // Both screenshots are in the first paint; CSS picks the one that
+        // matches [data-theme] so light-mode users do not see a dark frame
+        // until mount. Aspect-ratio is locked so the slider cannot restyle
+        // the box.
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={dark.src}
+            width={dark.width}
+            height={dark.height}
+            alt={`${alt} — dark mode`}
+            className="absolute inset-0 block h-full w-full object-cover [[data-theme=light]_&]:hidden"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={light.src}
+            width={light.width}
+            height={light.height}
+            alt={`${alt} — light mode`}
+            className="absolute inset-0 hidden h-full w-full object-cover [[data-theme=light]_&]:block"
+          />
+        </>
       ) : dark && light ? (
         <ReactCompareSlider
           itemOne={

@@ -6,6 +6,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { LayoutGuides } from "@/components/ui/LayoutGuides";
 import { OG_IMAGE, SITE_URL } from "@/lib/constants";
+import { fontVariables } from "@/lib/fonts";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme-script";
 import { Providers } from "./providers";
 import "@/theme/base.css";
 
@@ -210,8 +212,13 @@ const softwareApplicationLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={fontVariables} data-theme="dark" suppressHydrationWarning>
       <head>
+        {/* Blocking: sets data-theme from st-theme / system before first paint. */}
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: theme bootstrap must run before paint
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
         <link rel="preconnect" href="https://downloads.slashtable.dev" />
         <link rel="preconnect" href="https://tr.slashtable.dev" />
         <link

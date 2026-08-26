@@ -6,7 +6,6 @@ import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useDownload } from "../../hooks/useDownload";
 import { HERO } from "../../lib/copy";
-import { useTheme } from "../providers/ThemeProvider";
 import { ButtonOverlays } from "../ui/ButtonOverlays";
 import { DotGrid } from "../ui/DotGrid";
 import { ImageCompare } from "../ui/ImageCompare";
@@ -44,7 +43,6 @@ function CtaFeatures() {
 }
 
 export function Hero() {
-  const { theme } = useTheme();
   const { isLinux, linuxAvailable } = useDownload();
   const ctaLabel = isLinux && linuxAvailable ? HERO.ctaDownloadLinux : HERO.ctaDownload;
   const availability = linuxAvailable ? HERO.availabilityLinux : HERO.availability;
@@ -206,11 +204,7 @@ export function Hero() {
       <div className="relative z-10 mx-auto mt-16 max-w-5xl px-6 lg:mt-20">
         <div className="relative overflow-hidden rounded-2xl shadow-[0_0_80px_-12px_var(--color-glow-soft),0_0_32px_-8px_var(--color-glow-soft)]">
           <div className="-mt-px">
-            <ImageCompare
-              dark={theme === "dark" ? heroDark : heroLight}
-              light={theme === "dark" ? heroLight : heroDark}
-              alt={HERO.screenshotAlt}
-            />
+            <ImageCompare dark={heroDark} light={heroLight} alt={HERO.screenshotAlt} />
           </div>
           {/* Inset ring masks 1px of image edges */}
           <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-border-strong ring-inset" />
