@@ -197,26 +197,31 @@ describe("posts render H1", () => {
       expect(html).not.toContain("Summary");
       expect(html).not.toMatch(/border-dashed/);
       expect(html).toContain(post.image);
-      expect(html).toContain("The delete is stuck on this address.");
+      expect(html).toContain("The stuck address. People, a school, and tags still point at it.");
       expect(html).not.toContain("on Unsplash");
       expect(html).not.toContain("Photo by Haberdoedas");
       expect(html).not.toContain("Sources");
       expect(html).not.toContain(post.description);
+      expect(html).not.toContain("Ada");
+      expect(html).not.toContain("Bea");
+      expect(html).not.toContain("Linux is alpha");
+      expect(html).not.toContain("pg_constraint");
       expect(html).toContain(formatJournalDate(post.publishedAt));
       expect(html).toContain("font-mono");
       expect(html).toContain("rounded-[7px]");
       expect(html).not.toContain("italic");
       expect(html).toContain("font-display");
       expect(html).toContain("scroll-mt-24");
-      expect(html).toContain("#the-delete-is-stuck");
-      expect(html).toContain("Link to The delete is stuck");
+      expect(html).toContain("#you-already-know-the-address");
+      expect(html).toContain("Link to You already know the address");
       expect(html).not.toContain("<hr");
       expect(post.body).not.toMatch(/^https?:\/\//m);
       expect(post.body).not.toMatch(/^## .+\?$/m);
       expect(post.body).not.toMatch(/^## Sources$/m);
       if (post.body.includes("| Job |")) {
         expect(html).toContain("<table");
-        expect(html).toContain("Catalog SQL");
+        expect(html).toContain("Stay in SQL");
+        expect(html).toContain("Other client");
       }
       const md = formatPostMarkdown(post);
       expect(md.startsWith(`# ${post.title}`)).toBe(true);
